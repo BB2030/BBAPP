@@ -115,69 +115,6 @@ table.mx{width:100%;font-size:9px;border-collapse:collapse;text-align:center}
 </div>
 </div>
 
-<!-- PROGRESSION -->
-<div class="sec">
-<div class="sec-l">No necesitas todo — sube lo que tengas</div>
-<div style="display:flex;flex-direction:column;gap:6px">
-<div style="padding:10px 14px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;display:flex;align-items:center;gap:10px">
-<div style="font-size:11px;font-weight:800;color:#16A34A;white-space:nowrap">Solo SO</div>
-<div style="font-size:10px;color:#4A4845;line-height:1.4">→ Forecast de venta, alerta de precio, stock fantasma, demanda futura. <b>Con 1 archivo + las 12 fuentes de BBAPP ya generas valor.</b></div>
-</div>
-<div style="padding:10px 14px;background:white;border:1.5px solid #E8E5D8;border-radius:8px;display:flex;align-items:center;gap:10px">
-<div style="font-size:11px;font-weight:800;color:#D97706;white-space:nowrap">SO + SI</div>
-<div style="font-size:10px;color:#4A4845;line-height:1.4">→ + Sobrestock, forecast sell in, cuánto despachar a cada retailer.</div>
-</div>
-<div style="padding:10px 14px;background:white;border:1.5px solid #E8E5D8;border-radius:8px;display:flex;align-items:center;gap:10px">
-<div style="font-size:11px;font-weight:800;color:#D97706;white-space:nowrap">+ Inv. Retail</div>
-<div style="font-size:10px;color:#4A4845;line-height:1.4">→ + Venta perdida, stock parado, plan reposición semanal, margen real.</div>
-</div>
-<div style="padding:10px 14px;background:white;border:1.5px solid #E8E5D8;border-radius:8px;display:flex;align-items:center;gap:10px">
-<div style="font-size:11px;font-weight:800;color:#D97706;white-space:nowrap">+ Inv. Distrib.</div>
-<div style="font-size:10px;color:#4A4845;line-height:1.4">→ + Quiebre futuro, OC sugerida a fábrica, lead time alert.</div>
-</div>
-<div style="padding:10px 14px;background:#FEFCE8;border:1.5px solid #F5DF4D;border-radius:8px;display:flex;align-items:center;gap:10px">
-<div style="font-size:11px;font-weight:800;color:#1A1A18;white-space:nowrap">Todos 🔥</div>
-<div style="font-size:10px;color:#4A4845;line-height:1.4">→ Monday Briefing completo. Todas las alertas priorizadas. Cada lunes 8AM.</div>
-</div>
-</div>
-</div>
-
-<!-- OUTPUTS -->
-<div class="sec">
-<div class="sec-l">Qué reportes genera</div>
-
-<div class="out"><div class="out-i grn">📊</div><div><div class="out-n">Forecast de venta</div><div class="out-d">Proyección de sell-out por SKU × retailer × mes. Basada en tu histórico + estacionalidad + Google Trends + clima.</div><div class="out-src">SO + Trends + Clima + Calendario</div></div></div>
-
-<div class="out"><div class="out-i grn">📦</div><div><div class="out-n">Forecast Sell In + OC sugerida</div><div class="out-d">Cuánto despachar a cada retailer. Cuánto pedir a fábrica. Considerando demanda + stock + lead time + tipo de cambio.</div><div class="out-src">SO + SI + Inv. Distrib. + Banco Central</div></div></div>
-
-<div class="out"><div class="out-i grn">🔄</div><div><div class="out-n">Plan de reposición semanal</div><div class="out-d">Cuánto mandar a cada retailer esta semana. Por SKU × tienda. Maximiza venta, minimiza sobrestock.</div><div class="out-src">SO + SI + Inv. Retail</div></div></div>
-
-<div class="out"><div class="out-i red">🔴</div><div><div class="out-n">Venta que estás perdiendo</div><div class="out-d">SKUs con demanda real pero sin stock en góndola. Cuánta plata pierdes por día y en qué tienda.</div><div class="out-src">SO + Inv. Retail + Disponibilidad web</div></div></div>
-
-<div class="out"><div class="out-i red">🔴</div><div><div class="out-n">Te vas a quedar sin stock</div><div class="out-d">La demanda crece pero no hay nada en tránsito. Te avisa semanas antes para que hagas la OC a tiempo.</div><div class="out-src">SO + Inv. Distribuidor + Google Trends</div></div></div>
-
-<div class="out"><div class="out-i org">🟡</div><div><div class="out-n">Plata atrapada</div><div class="out-d">SKUs donde mandaste más de lo que se vende. Cuánta plata hay congelada, en qué retailer, hace cuánto no rota.</div><div class="out-src">SO + SI</div></div></div>
-
-<div class="out"><div class="out-i org">🟡</div><div><div class="out-n">Te bajaron el precio</div><div class="out-d">Competencia bajó precio en un retailer. Te dice si tiene sentido reaccionar o mantener, y por qué.</div><div class="out-src">SO + Precios web</div></div></div>
-
-<div class="out"><div class="out-i org">🟡</div><div><div class="out-n">Pierdes mercado sin saberlo</div><div class="out-d">Tu sell-out sube pero el mercado sube más. Dónde y contra quién estás perdiendo.</div><div class="out-src">SO + GfK</div></div></div>
-
-<div class="out" style="border-color:#F5DF4D;border-width:2px;background:#FEFCE8"><div class="out-i blk" style="width:42px;height:42px">🔥</div><div><div class="out-n" style="font-size:15px">Monday Briefing</div><div class="out-d">Todas las alertas de la semana priorizadas por plata en juego. Cada lunes a las 8AM. Tu equipo sabe exactamente qué hacer antes de la primera reunión.</div><div class="out-src">Todas las fuentes → máximo poder</div></div></div>
-</div>
-
-<!-- PM HUMANO -->
-<div class="sec">
-<div style="padding:14px;background:white;border:1.5px solid #E8E5D8;border-radius:10px;display:flex;gap:12px;align-items:flex-start">
-<div style="font-size:24px;flex-shrink:0">👁️</div>
-<div>
-<div style="font-size:13px;font-weight:700">Cada reporte es revisado por un humano</div>
-<div style="font-size:11px;color:#6B6967;margin-top:4px;line-height:1.6">PM senior con 15+ años en consumer goods LATAM. No es solo AI — es AI + el criterio de alguien que conoce tu mercado, tus retailers y tus competidores. El Monday Briefing parece redactado por McKinsey, no por un bot.</div>
-</div>
-</div>
-</div>
-
-</div>
-
 <div style="text-align:center;padding:20px 0">
 <a href="demo.html" target="_blank" style="display:inline-block;padding:14px 32px;background:#1A1A18;color:#F5DF4D;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;font-family:'Outfit',sans-serif">Probar con mi data →</a>
 </div>
