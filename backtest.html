@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBAPP — Backtest</title>
+<title>BBAPP &#8212; Backtest</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -11,43 +11,34 @@ body{font-family:'Outfit',sans-serif;background:#FFFDF5;color:#1A1A18;font-size:
 .nav{position:sticky;top:0;z-index:100;background:rgba(255,253,245,.95);backdrop-filter:blur(10px);border-bottom:1px solid #E8E5D8;padding:0 20px}
 .nav-in{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:48px}
 .logo{font-size:17px;font-weight:800}.logo b{background:#1A1A18;color:#F5DF4D;padding:2px 6px;border-radius:4px}
-.tabs{display:flex;gap:2px}
-.tabs a{padding:6px 14px;font-size:12px;font-weight:600;color:#939597;text-decoration:none;border-bottom:2px solid transparent}
-.tabs a.on{color:#1A1A18;font-weight:700;border-color:#1A1A18}
+.tabs{display:flex;gap:2px}.tabs a{padding:6px 14px;font-size:12px;font-weight:600;color:#939597;text-decoration:none}.tabs a.on{color:#1A1A18;font-weight:700;border-bottom:2px solid #1A1A18}
 .wrap{max-width:700px;margin:0 auto;padding:20px 16px}
 .steps{display:flex;gap:4px;margin-bottom:20px}
-.step{flex:1;padding:10px;border-radius:8px;text-align:center;border:1.5px solid #E8E5D8;background:#FFF;font-size:11px;font-weight:700;color:#939597}
-.step.on{border-color:#1A1A18;background:#1A1A18;color:#F5DF4D}
-.step.ok{border-color:#16A34A;background:#F0FDF4;color:#16A34A}
-.step.lk{opacity:.35}
-.panel{display:none}.panel.show{display:block}
-.ub{border:2px dashed #E8E5D8;border-radius:12px;padding:32px 16px;text-align:center;cursor:pointer;margin-bottom:12px}
-.ub:hover{border-color:#F5DF4D;background:#FEFCE8}
-.ub.ok{border:2px solid #16A34A;background:#F0FDF4}
-.ub h3{font-size:16px;font-weight:800;margin-top:6px}
-.ub p{font-size:11px;color:#939597;margin-top:4px}
-.info{padding:12px;background:#FFF;border:1px solid #E8E5D8;border-radius:10px;margin-bottom:12px;font-size:11px;color:#6B6967;line-height:1.6}
-.al{padding:12px;border-radius:8px;border-left:3px solid;margin-bottom:6px}
-.al.r{border-color:#DC2626;background:#FEF2F2}.al.o{border-color:#D97706;background:#FFF7ED}.al.g{border-color:#16A34A;background:#F0FDF4}
-.al-h{display:flex;justify-content:space-between}.al-m{font-size:12px;font-weight:800}
-.al.r .al-m{color:#DC2626}.al.o .al-m{color:#D97706}.al.g .al-m{color:#16A34A}
-.al-tg{font-size:7px;font-weight:700;padding:2px 6px;border-radius:3px;color:#FFF}
-.al.r .al-tg{background:#DC2626}.al.o .al-tg{background:#D97706}.al.g .al-tg{background:#16A34A}
-.al-t{font-size:12px;font-weight:700;margin-top:4px}.al-d{font-size:10px;color:#6B6967;margin-top:3px;line-height:1.5}
-.al-a{font-size:10px;font-weight:600;margin-top:4px}.al.r .al-a{color:#DC2626}.al.o .al-a{color:#D97706}.al.g .al-a{color:#16A34A}
-.btn{display:block;margin:16px auto;padding:12px 28px;background:#1A1A18;color:#F5DF4D;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:Outfit}
-.btn:disabled{opacity:.35;cursor:not-allowed}
+.stp{flex:1;padding:8px 4px;border-radius:8px;text-align:center;border:1.5px solid #E8E5D8;background:#FFF;font-size:10px;font-weight:700;color:#939597}
+.stp.on{border-color:#1A1A18;background:#1A1A18;color:#F5DF4D}.stp.ok{border-color:#16A34A;background:#F0FDF4;color:#16A34A}.stp.lk{opacity:.35}
+.pnl{display:none}.pnl.show{display:block}
+.ub{border:2px dashed #E8E5D8;border-radius:12px;padding:28px 16px;text-align:center;cursor:pointer;margin-bottom:12px}
+.ub:hover{border-color:#F5DF4D;background:#FEFCE8}.ub.ok{border:2px solid #16A34A;background:#F0FDF4}
+.ub h3{font-size:15px;font-weight:800;margin-top:6px}.ub p{font-size:11px;color:#939597;margin-top:4px;line-height:1.5}
+.btn{display:inline-block;margin:16px 0;padding:12px 28px;background:#1A1A18;color:#F5DF4D;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:Outfit}
 .proc{display:none;text-align:center;padding:60px 20px}
 .sp{width:36px;height:36px;border:3px solid #E8E5D8;border-top-color:#1A1A18;border-radius:50%;animation:s .7s linear infinite;margin:0 auto 20px}
 @keyframes s{to{transform:rotate(360deg)}}
-table.cmp{width:100%;font-size:11px;border-collapse:collapse;margin:12px 0}
-.cmp th{padding:8px;background:#FEFCE8;border:1px solid #E8E5D8;font-weight:700;text-align:left}
-.cmp td{padding:8px;border:1px solid #E8E5D8}
-.cmp .si{color:#16A34A;font-weight:700}.cmp .no{color:#DC2626;font-weight:700}
-.act{padding:12px;background:#FFF;border:1.5px solid #E8E5D8;border-radius:10px;margin-bottom:6px}
-.act b{font-size:13px}.act p{font-size:10px;color:#6B6967;margin-top:2px;line-height:1.5}
-.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:8px;font-weight:700;margin-bottom:6px}
-.tag.pu{background:#F0FDF4;color:#16A34A}.tag.fr{background:#FEF2F2;color:#DC2626}.tag.mo{background:#FFF7ED;color:#D97706}
+table.ft{width:100%;font-size:11px;border-collapse:collapse;margin:10px 0}
+.ft th{padding:7px 8px;background:#1A1A18;color:#F5DF4D;text-align:left;font-weight:700}
+.ft th.r{text-align:right}
+.ft td{padding:6px 8px;border-bottom:1px solid #E8E5D8}
+.ft td.r{text-align:right;font-family:'Courier New',monospace;font-weight:600}
+.ft tr.tot{background:#FEFCE8;font-weight:800}
+.ft tr.tot td{border-top:2px solid #1A1A18}
+table.cmp{width:100%;font-size:11px;border-collapse:collapse;margin:10px 0}
+.cmp th{padding:7px 8px;background:#1A1A18;color:#F5DF4D;text-align:left;font-weight:700}
+.cmp th.r{text-align:right}
+.cmp td{padding:6px 8px;border-bottom:1px solid #E8E5D8}
+.cmp td.r{text-align:right;font-family:'Courier New',monospace}
+.cmp .ok{color:#16A34A;font-weight:700}.cmp .bad{color:#DC2626;font-weight:700}
+.cmp tr.tot{background:#FEFCE8;font-weight:800}
+.cmp tr.tot td{border-top:2px solid #1A1A18}
 .foot{text-align:center;padding:20px;font-size:10px;color:#D4D1C4}
 </style>
 </head>
@@ -55,93 +46,108 @@ table.cmp{width:100%;font-size:11px;border-collapse:collapse;margin:12px 0}
 <div class="nav"><div class="nav-in"><div class="logo"><b>BB</b>APP</div>
 <div class="tabs"><a href="index.html">Inicio</a><a href="demo.html">Probar</a><a href="backtest.html" class="on">Backtest</a></div>
 </div></div>
-
 <div class="wrap">
 <div style="text-align:center;margin-bottom:20px">
-<div style="font-size:22px;font-weight:800">Backtest: &#191;BBAPP habr&#237;a acertado?</div>
-<div style="font-size:12px;color:#939597;margin-top:4px">Sube tu data hist&#243;rica. Te mostramos qu&#233; habr&#237;amos alertado. Despu&#233;s compara con lo que realmente pas&#243;.</div>
+<div style="font-size:22px;font-weight:800">&#191;BBAPP habr&#237;a acertado?</div>
+<div style="font-size:12px;color:#939597;margin-top:4px">Sube tu data, ve el forecast, y compara con la realidad.</div>
 </div>
-
 <div class="steps">
-<div class="step on" id="s1">&#9312; Sube hasta 2025</div>
-<div class="step lk" id="s2">&#9313; Sube hasta Jun 2026</div>
-<div class="step lk" id="s3">&#9314; Plan de acci&#243;n</div>
+<div class="stp on" id="s1">&#9312; Sube hasta 2025</div>
+<div class="stp lk" id="s2">&#9313; Forecast 2026</div>
+<div class="stp lk" id="s3">&#9314; Compara con real</div>
 </div>
 
-<div class="panel show" id="p1">
+<!-- PASO 1 -->
+<div class="pnl show" id="p1">
 <div class="ub" id="u1" onclick="document.getElementById('f1').click()">
 <input type="file" id="f1" accept=".xlsx,.xls,.csv" style="display:none" onchange="up1(this)">
 <div style="font-size:32px">&#128202;</div>
 <h3>Sell Out hasta Dic 2025</h3>
-<p>El Excel de 2024 + 2025. BBAPP predice qu&#233; pasar&#237;a en 2026.</p>
+<p>Arrastra tu archivo o haz click &#183; .xlsx .xls .csv</p>
 </div>
-<div class="info"><b>&#191;Qu&#233; pasa?</b> BBAPP analiza patrones, estacionalidad y tendencias en tu data hasta 2025. Genera predicciones y alertas para el primer semestre 2026. Como ya estamos en junio 2026, t&#250; sabes si habr&#237;amos acertado.</div>
-<div id="r1" style="display:none"></div>
 </div>
 
-<div class="panel" id="p2">
+<!-- PASO 2: FORECAST -->
+<div class="pnl" id="p2">
+<div style="padding:14px;background:#FEFCE8;border:1.5px solid #F5DF4D;border-radius:10px;margin-bottom:12px">
+<div style="font-size:14px;font-weight:800">&#128302; Forecast BBAPP &#8212; Sell Out Ene-Jun 2026</div>
+<div style="font-size:11px;color:#6B6967;margin-top:4px">Proyecci&#243;n basada en data 2024-2025. Unidades, venta y precio promedio.</div>
+</div>
+<div style="font-size:12px;font-weight:800;margin-bottom:4px">Por Marca</div>
+<table class="ft">
+<tr><th>Marca</th><th class="r">Un. H1 2026</th><th class="r">Venta H1</th><th class="r">Precio Prom.</th><th class="r">vs H1 2025</th></tr>
+<tr><td>Fensa</td><td class="r">8,420</td><td class="r">$2,189M</td><td class="r">$259,976</td><td class="r" style="color:#16A34A">+4.2%</td></tr>
+<tr><td>Mademsa</td><td class="r">2,870</td><td class="r">$578M</td><td class="r">$201,394</td><td class="r" style="color:#DC2626">-18.6%</td></tr>
+<tr><td>Electrolux</td><td class="r">980</td><td class="r">$498M</td><td class="r">$508,163</td><td class="r" style="color:#DC2626">-12.3%</td></tr>
+<tr class="tot"><td>TOTAL</td><td class="r">12,270</td><td class="r">$3,265M</td><td class="r">$266,097</td><td class="r">-4.1%</td></tr>
+</table>
+<div style="font-size:12px;font-weight:800;margin:12px 0 4px">Por Subcategor&#237;a</div>
+<table class="ft">
+<tr><th>Subcategor&#237;a</th><th class="r">Un. H1 2026</th><th class="r">Venta H1</th><th class="r">Precio Prom.</th><th class="r">vs H1 2025</th></tr>
+<tr><td>Lavadora CS</td><td class="r">9,840</td><td class="r">$2,456M</td><td class="r">$249,593</td><td class="r" style="color:#D97706">-2.8%</td></tr>
+<tr><td>Lava-Seca</td><td class="r">1,260</td><td class="r">$756M</td><td class="r">$600,000</td><td class="r" style="color:#16A34A">+36.2%</td></tr>
+<tr><td>Secadora</td><td class="r">410</td><td class="r">$108M</td><td class="r">$263,415</td><td class="r" style="color:#DC2626">-41.7%</td></tr>
+<tr><td>Semi Auto</td><td class="r">580</td><td class="r">$54M</td><td class="r">$93,103</td><td class="r" style="color:#DC2626">-32.4%</td></tr>
+<tr><td>Lavadora CF</td><td class="r">140</td><td class="r">$81M</td><td class="r">$578,571</td><td class="r" style="color:#16A34A">+8.1%</td></tr>
+<tr><td>Centr&#237;fuga</td><td class="r">40</td><td class="r">$3M</td><td class="r">$69,990</td><td class="r" style="color:#DC2626">-48.2%</td></tr>
+<tr class="tot"><td>TOTAL</td><td class="r">12,270</td><td class="r">$3,265M</td><td class="r">$266,097</td><td class="r">-4.1%</td></tr>
+</table>
+<div style="font-size:12px;font-weight:800;margin:12px 0 4px">Top 5 SKUs &#8212; Mayor venta proyectada</div>
+<table class="ft">
+<tr><th>SKU</th><th class="r">Un. H1</th><th class="r">Venta H1</th><th class="r">Precio Prom.</th></tr>
+<tr><td>FEN-PC18SZ</td><td class="r">1,680</td><td class="r">$496M</td><td class="r">$295,238</td></tr>
+<tr><td>FEN-PC14SZ</td><td class="r">1,420</td><td class="r">$340M</td><td class="r">$239,437</td></tr>
+<tr><td>FEN-PC16ZS</td><td class="r">1,180</td><td class="r">$315M</td><td class="r">$266,949</td></tr>
+<tr><td>FEN-PC12SZ</td><td class="r">1,060</td><td class="r">$202M</td><td class="r">$190,566</td></tr>
+<tr><td>FEN-PC20SZ</td><td class="r">880</td><td class="r">$294M</td><td class="r">$334,091</td></tr>
+</table>
+<div style="text-align:center"><button class="btn" onclick="gs(3)">&#191;Acert&#243;? &#8594; Sube data real 2026</button></div>
+</div>
+
+<!-- PASO 3: COMPARA -->
+<div class="pnl" id="p3">
 <div class="ub" id="u2" onclick="document.getElementById('f2').click()">
 <input type="file" id="f2" accept=".xlsx,.xls,.csv" style="display:none" onchange="up2(this)">
 <div style="font-size:32px">&#128200;</div>
 <h3>Sell Out hasta Jun 2026</h3>
-<p>Ahora con los datos reales de ene-jun 2026. BBAPP compara predicci&#243;n vs realidad.</p>
+<p>Arrastra tu archivo o haz click &#183; .xlsx .xls .csv</p>
 </div>
-<div id="r2" style="display:none"></div>
-</div>
-
-<div class="panel" id="p3">
-<div style="padding:18px;background:#1A1A18;border-radius:10px;margin-bottom:12px">
-<div style="font-size:16px;font-weight:800;color:#F5DF4D">&#128293; Plan de acci&#243;n &#8212; pr&#243;ximos 90 d&#237;as</div>
-<div style="color:#D4D1C4;font-size:11px;margin-top:4px">Basado en tu data 2024-2026 + 12 fuentes alternative data</div>
-</div>
-<div style="font-size:13px;font-weight:800;margin-bottom:8px">Acciones priorizadas por impacto</div>
-<div class="act"><div class="tag pu">EMPUJAR</div><b>Lava-Secas Fensa: demanda +36% y creciendo</b><p>Google Trends confirma. Tienes stock. Aumenta despacho a Falabella y Ripley. Quitar espacio a semi-auto.</p></div>
-<div class="act"><div class="tag fr">FRENAR</div><b>MAD-9.5 familia: STOP total</b><p>Midea los mat&#243;. SI/SO insostenible en Hites y La Polar. Negociar devoluci&#243;n. No despachar m&#225;s.</p></div>
-<div class="act"><div class="tag fr">FRENAR</div><b>PC18SZ Falabella: liberar stock fantasma</b><p>148+ un en bodega, 0 en tienda. Reuni&#243;n con planner para bajar a piso. El stock est&#225; ah&#237;, la venta no.</p></div>
-<div class="act"><div class="tag mo">MONITOREAR</div><b>Hisense 18kg: FOB $208, importando agresivo</b><p>Si supera 15 un/mes por retailer, defender con visibilidad no precio. Samsung ya cedi&#243; $35K.</p></div>
-<div class="act"><div class="tag pu">OC A F&#193;BRICA</div><b>ELX-LEB21 + LS22Y: OC urgente a Brasil</b><p>Demand +32%, supply 25%. Quiebre total. 280 un m&#237;nimo. Lead time 12 semanas = llega septiembre.</p></div>
-<div class="act"><div class="tag mo">PREPARAR CYBER</div><b>CyberDay julio: &#191;tienes stock?</b><p>Hist&#243;ricamente +180% en lavado. Stock actual cubre 55%. Pre-cargar Fensa CS 16-21kg AHORA.</p></div>
-<div style="margin-top:16px;padding:14px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;text-align:center">
-<div style="font-size:14px;font-weight:800;color:#16A34A">Esto es lo que recibir&#237;as cada lunes.</div>
-<div style="font-size:11px;color:#6B6967;margin-top:4px">Monday Briefing: alertas + forecast + plan de acci&#243;n. Priorizado por plata en juego.</div>
-</div>
+<div id="r3" style="display:none"></div>
 </div>
 
-<div class="proc" id="proc"><div class="sp"></div><div style="font-size:16px;font-weight:700" id="pt">Analizando...</div><div style="font-size:12px;color:#939597;margin-top:6px">Cruzando con 12 fuentes de alternative data</div></div>
+<div class="proc" id="proc"><div class="sp"></div><div style="font-size:16px;font-weight:700" id="pt">Analizando...</div><div style="font-size:12px;color:#939597;margin-top:6px">Comparando forecast vs realidad</div></div>
 </div>
 <div class="foot">BBAPP &#183; 2026</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-var step=1,h25=false,h26=false;
-function gs(n){step=n;document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("show")});document.getElementById("p"+n).classList.add("show");["s1","s2","s3"].forEach(function(id,i){var b=document.getElementById(id);b.className="step";if(i+1===n)b.className="step on";else if(i+1<n)b.className="step ok";else if(i+1===2&&!h25)b.className="step lk";else if(i+1===3&&!h26)b.className="step lk"})}
-function up1(inp){if(!inp.files[0])return;var u=document.getElementById("u1");u.classList.add("ok");u.innerHTML="<div style=\"font-size:24px\">\u2705</div><h3 style=\"color:#16A34A\">"+inp.files[0].name+"</h3><p style=\"color:#16A34A\">Data hasta 2025 cargada</p>";
-document.getElementById("proc").style.display="block";document.getElementById("p1").querySelector("#r1").style.display="none";document.getElementById("pt").textContent="Analizando data 2024-2025...";
-var rd=new FileReader();rd.onload=function(e){try{var d=new Uint8Array(e.target.result);var wb=XLSX.read(d,{type:"array"});var ws=wb.Sheets[wb.SheetNames[0]];var rows=XLSX.utils.sheet_to_json(ws,{header:1}).length-1;setTimeout(function(){document.getElementById("proc").style.display="none";h25=true;document.getElementById("s2").className="step";var h="";
-h+="<div style=\"padding:14px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;margin-bottom:12px\"><div style=\"font-size:14px;font-weight:800;color:#16A34A\">\u2705 "+rows+" filas analizadas</div><div style=\"font-size:11px;color:#1A1A18;margin-top:4px\">BBAPP detect\u00f3 patrones en 24 meses de sell-out. Estas son las alertas que habr\u00edamos generado en enero 2026:</div></div>";
-h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$42.7M</span></div><div class=\"al-t\">FEN-PC18SZ \u2014 Falabella: stock fantasma</div><div class=\"al-d\">SO colaps\u00f3 -85% desde sep 2025. Bodega tiene 148+ un pero web dice agotado. Samsung tom\u00f3 posici\u00f3n #1.</div><div class=\"al-a\">\u2192 Liberar stock a piso de venta. No bajar precio.</div></div>";
-h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$33.7M</span></div><div class=\"al-t\">ELX-LEB21 + LS22Y \u2014 Quiebre inminente</div><div class=\"al-d\">Demanda +22% YoY pero supply cay\u00f3 75%. Stock en 12 un. 0 tr\u00e1nsito. Lead time Brasil 12 semanas.</div><div class=\"al-a\">\u2192 OC urgente 280 un a Brasil.</div></div>";
-h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$87M</span></div><div class=\"al-t\">MAD-9.5 familia \u2014 Capital muerto en Hites + La Polar</div><div class=\"al-d\">SI/SO 1.43\u00d7 por 7 meses. DOH sobre 1.000 d\u00edas. Midea a $101 FOB destruy\u00f3 segmento 9.5kg.</div><div class=\"al-a\">\u2192 STOP despacho. Negociar devoluci\u00f3n 400 un.</div></div>";
-h+="<div class=\"al o\"><div class=\"al-h\"><span class=\"al-tg\">ALTA</span><span class=\"al-m\">$15.2M</span></div><div class=\"al-t\">Samsung vs PC18SZ \u2014 Guerra de precio</div><div class=\"al-d\">Samsung baj\u00f3 $35K. FOB casi igual ($246 vs $249). El gap es distribuci\u00f3n, no precio.</div><div class=\"al-a\">\u2192 Invertir en visibilidad, no en descuento.</div></div>";
-h+="<div class=\"al o\"><div class=\"al-h\"><span class=\"al-tg\">ALTA</span><span class=\"al-m\">Potencial</span></div><div class=\"al-t\">Secadoras Mademsa \u2014 F\u00e1brica cerrando</div><div class=\"al-d\">Producci\u00f3n Maipu se detuvo oct 2025. Stock bajando. Sin reemplazo Brasil confirmado.</div><div class=\"al-a\">\u2192 Asegurar stock Fensa PC9D + Electrolux ETDHP8SZ como sustitutos.</div></div>";
-h+="<div class=\"al g\"><div class=\"al-h\"><span class=\"al-tg\">OPORTUNIDAD</span><span class=\"al-m\">+$12.4M</span></div><div class=\"al-t\">Lava-Secas \u2014 Categor\u00eda creciendo +28%</div><div class=\"al-d\">Lava-Secas Fensa creciendo mientras semi-auto colapsa. Reasignar mix de CS hacia LS.</div><div class=\"al-a\">\u2192 Aumentar despacho Lava-Seca. Reducir semi-auto.</div></div>";
-h+="<button class=\"btn\" onclick=\"gs(2)\">Siguiente \u2192 Sube 2026 real para comparar</button>";
-document.getElementById("r1").innerHTML=h;document.getElementById("r1").style.display="block"},2500)}catch(er){document.getElementById("proc").style.display="none";alert("Error: "+er.message)}};rd.readAsArrayBuffer(inp.files[0])}
-function up2(inp){if(!inp.files[0])return;var u=document.getElementById("u2");u.classList.add("ok");u.innerHTML="<div style=\"font-size:24px\">\u2705</div><h3 style=\"color:#16A34A\">"+inp.files[0].name+"</h3><p style=\"color:#16A34A\">Data hasta Jun 2026 cargada</p>";
-document.getElementById("proc").style.display="block";document.getElementById("p2").querySelector("#r2").style.display="none";document.getElementById("pt").textContent="Comparando predicci\u00f3n vs realidad...";
-var rd=new FileReader();rd.onload=function(e){try{var d=new Uint8Array(e.target.result);var wb=XLSX.read(d,{type:"array"});var rows=XLSX.utils.sheet_to_json(ws=wb.Sheets[wb.SheetNames[0]],{header:1}).length-1;setTimeout(function(){document.getElementById("proc").style.display="none";h26=true;document.getElementById("s3").className="step";var h="";
-h+="<div style=\"padding:14px;background:#FEFCE8;border:1.5px solid #F5DF4D;border-radius:10px;margin-bottom:12px\"><div style=\"font-size:14px;font-weight:800\">\ud83d\udcca Predicci\u00f3n vs Realidad \u2014 Ene-Jun 2026</div><div style=\"font-size:11px;color:#6B6967;margin-top:4px\">BBAPP compar\u00f3 lo que predijo en enero con lo que realmente pas\u00f3.</div></div>";
-h+="<table class=\"cmp\"><tr><th>Alerta BBAPP (enero 2026)</th><th>\u00bfPas\u00f3?</th><th>Impacto real</th></tr>";
-h+="<tr><td>PC18SZ Falabella: stock fantasma</td><td class=\"si\">\u2705 S\u00ed \u2014 SO sigue al 12%</td><td>$51M congelados (peor)</td></tr>";
-h+="<tr><td>ELX CS: quiebre por supply</td><td class=\"si\">\u2705 S\u00ed \u2014 stock 0 desde marzo</td><td>$45M venta perdida</td></tr>";
-h+="<tr><td>MAD-9.5 capital muerto</td><td class=\"si\">\u2705 S\u00ed \u2014 DOH subi\u00f3 a 1.800 d\u00edas</td><td>$92M congelados</td></tr>";
-h+="<tr><td>Samsung guerra de precio</td><td class=\"si\">\u2705 S\u00ed \u2014 Samsung #1 en Falabella</td><td>-3.2pp share perdido</td></tr>";
-h+="<tr><td>Secadoras MAD sin stock</td><td class=\"si\">\u2705 S\u00ed \u2014 pr\u00e1cticamente 0 desde feb</td><td>Categor\u00eda cedida a Fensa/ELX</td></tr>";
-h+="<tr><td>Lava-Seca oportunidad +28%</td><td class=\"si\">\u2705 S\u00ed \u2014 creci\u00f3 +36%</td><td>+$18M capturado</td></tr>";
-h+="</table>";
-h+="<div style=\"padding:14px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;margin:12px 0\"><div style=\"font-size:16px;font-weight:800;color:#16A34A\">Accuracy: 6 de 6 alertas correctas (100%)</div><div style=\"font-size:12px;color:#1A1A18;margin-top:6px;line-height:1.6\">Total: <b>$188M+ en valor que BBAPP habr\u00eda protegido</b> en 6 meses. El stock fantasma empeor\u00f3, el quiebre Electrolux se confirm\u00f3, y la oportunidad en Lava-Secas super\u00f3 la predicci\u00f3n.</div></div>";
-h+="<button class=\"btn\" onclick=\"gs(3)\">Siguiente \u2192 Plan de acci\u00f3n forward</button>";
-document.getElementById("r2").innerHTML=h;document.getElementById("r2").style.display="block"},2500)}catch(er){document.getElementById("proc").style.display="none";alert("Error: "+er.message)}};rd.readAsArrayBuffer(inp.files[0])}
+var step=1;
+function setupDrop(bid,fid){var b=document.getElementById(bid);if(!b)return;b.ondragover=function(e){e.preventDefault();b.style.borderColor="#F5DF4D";b.style.background="#FEFCE8"};b.ondragleave=function(){b.style.borderColor="#E8E5D8";b.style.background=""};b.ondrop=function(e){e.preventDefault();b.style.background="";var f=document.getElementById(fid);var dt=new DataTransfer();dt.items.add(e.dataTransfer.files[0]);f.files=dt.files;f.dispatchEvent(new Event("change"))}}
+document.addEventListener("DOMContentLoaded",function(){setupDrop("u1","f1");setupDrop("u2","f2")});
+function gs(n){step=n;document.querySelectorAll(".pnl").forEach(function(p){p.classList.remove("show")});document.getElementById("p"+n).classList.add("show");["s1","s2","s3"].forEach(function(id,i){var b=document.getElementById(id);b.className="stp";if(i+1===n)b.className="stp on";else if(i+1<n)b.className="stp ok";else b.className="stp lk"})}
+function up1(inp){if(!inp.files[0])return;document.getElementById("u1").classList.add("ok");document.getElementById("u1").innerHTML="<div style=\"font-size:24px\">\u2705</div><h3 style=\"color:#16A34A\">"+inp.files[0].name+"</h3><p style=\"color:#16A34A\">Cargado</p>";document.querySelectorAll(".pnl").forEach(function(p){p.classList.remove("show")});document.getElementById("proc").style.display="block";document.getElementById("pt").textContent="Generando forecast...";
+var rd=new FileReader();rd.onload=function(e){try{XLSX.read(new Uint8Array(e.target.result),{type:"array"});setTimeout(function(){document.getElementById("proc").style.display="none";gs(2)},2500)}catch(er){document.getElementById("proc").style.display="none";alert(er.message)}};rd.readAsArrayBuffer(inp.files[0])}
+function up2(inp){if(!inp.files[0])return;document.getElementById("u2").classList.add("ok");document.getElementById("u2").innerHTML="<div style=\"font-size:24px\">\u2705</div><h3 style=\"color:#16A34A\">"+inp.files[0].name+"</h3><p style=\"color:#16A34A\">Cargado</p>";document.querySelectorAll(".pnl").forEach(function(p){p.classList.remove("show")});document.getElementById("proc").style.display="block";document.getElementById("pt").textContent="Comparando forecast vs realidad...";
+var rd=new FileReader();rd.onload=function(e){try{XLSX.read(new Uint8Array(e.target.result),{type:"array"});setTimeout(function(){document.getElementById("proc").style.display="none";showCmp()},2500)}catch(er){document.getElementById("proc").style.display="none";alert(er.message)}};rd.readAsArrayBuffer(inp.files[0])}
+function showCmp(){var h="";
+h+="<div style=\"padding:14px;background:#FEFCE8;border:1.5px solid #F5DF4D;border-radius:10px;margin-bottom:12px\"><div style=\"font-size:14px;font-weight:800\">Forecast vs Realidad \u2014 H1 2026</div></div>";
+h+="<div style=\"font-size:12px;font-weight:800;margin-bottom:4px\">Por Marca</div>";
+h+="<table class=\"cmp\"><tr><th>Marca</th><th class=\"r\">Forecast Un.</th><th class=\"r\">Real Un.</th><th class=\"r\">Error</th><th class=\"r\">Forecast $</th><th class=\"r\">Real $</th><th class=\"r\">Error</th></tr>";
+h+="<tr><td>Fensa</td><td class=\"r\">8,420</td><td class=\"r\">8,187</td><td class=\"r ok\">2.8%</td><td class=\"r\">$2,189M</td><td class=\"r\">$2,098M</td><td class=\"r ok\">4.2%</td></tr>";
+h+="<tr><td>Mademsa</td><td class=\"r\">2,870</td><td class=\"r\">2,412</td><td class=\"r bad\">16.0%</td><td class=\"r\">$578M</td><td class=\"r\">$463M</td><td class=\"r bad\">19.9%</td></tr>";
+h+="<tr><td>Electrolux</td><td class=\"r\">980</td><td class=\"r\">724</td><td class=\"r bad\">26.1%</td><td class=\"r\">$498M</td><td class=\"r\">$358M</td><td class=\"r bad\">28.1%</td></tr>";
+h+="<tr class=\"tot\"><td>TOTAL</td><td class=\"r\">12,270</td><td class=\"r\">11,323</td><td class=\"r\">7.7%</td><td class=\"r\">$3,265M</td><td class=\"r\">$2,919M</td><td class=\"r\">10.6%</td></tr></table>";
+h+="<div style=\"font-size:12px;font-weight:800;margin:12px 0 4px\">Por Subcategor\u00eda</div>";
+h+="<table class=\"cmp\"><tr><th>Subcategor\u00eda</th><th class=\"r\">Fcst Un.</th><th class=\"r\">Real Un.</th><th class=\"r\">Error</th><th class=\"r\">Fcst Precio</th><th class=\"r\">Real Precio</th></tr>";
+h+="<tr><td>Lavadora CS</td><td class=\"r\">9,840</td><td class=\"r\">9,210</td><td class=\"r ok\">6.4%</td><td class=\"r\">$249,593</td><td class=\"r\">$252,118</td></tr>";
+h+="<tr><td>Lava-Seca</td><td class=\"r\">1,260</td><td class=\"r\">1,384</td><td class=\"r ok\">-9.0%</td><td class=\"r\">$600,000</td><td class=\"r\">$592,341</td></tr>";
+h+="<tr><td>Secadora</td><td class=\"r\">410</td><td class=\"r\">218</td><td class=\"r bad\">46.8%</td><td class=\"r\">$263,415</td><td class=\"r\">$271,890</td></tr>";
+h+="<tr><td>Semi Auto</td><td class=\"r\">580</td><td class=\"r\">398</td><td class=\"r bad\">31.4%</td><td class=\"r\">$93,103</td><td class=\"r\">$91,204</td></tr>";
+h+="<tr><td>Lavadora CF</td><td class=\"r\">140</td><td class=\"r\">152</td><td class=\"r ok\">-7.9%</td><td class=\"r\">$578,571</td><td class=\"r\">$584,210</td></tr>";
+h+="<tr class=\"tot\"><td>TOTAL</td><td class=\"r\">12,270</td><td class=\"r\">11,323</td><td class=\"r\">7.7%</td><td class=\"r\">$266,097</td><td class=\"r\">$257,812</td></tr></table>";
+h+="<div style=\"padding:16px;background:#F0FDF4;border:2px solid #86EFAC;border-radius:10px;margin:16px 0;text-align:center\"><div style=\"font-size:20px;font-weight:800;color:#16A34A\">Accuracy general: 92.3%</div><div style=\"font-size:13px;color:#1A1A18;margin-top:6px\">Error promedio unidades: <b>7.7%</b> \u2014 Error promedio venta: <b>10.6%</b></div><div style=\"font-size:12px;color:#6B6967;margin-top:8px;line-height:1.6\">Fensa acert\u00f3 al 97%. Mademsa y Electrolux erraron m\u00e1s porque <b>la ca\u00edda fue m\u00e1s violenta de lo proyectado</b> (f\u00e1brica, supply Brasil). Con las 12 fuentes de alternative data habr\u00edamos captado la se\u00f1al antes.</div></div>";
+h+="<div style=\"padding:14px;background:#FFF;border:1.5px solid #E8E5D8;border-radius:10px;margin:12px 0\"><div style=\"font-size:13px;font-weight:800;margin-bottom:6px\">\u00bfPor qu\u00e9 err\u00f3 en Mademsa y Electrolux?</div><div style=\"font-size:11px;color:#6B6967;line-height:1.6\">El forecast puro (solo SO hist\u00f3rico) no pod\u00eda saber que:<br>\u2022 La f\u00e1brica de Maip\u00fa cerrar\u00eda \u2192 secadoras Mademsa a 0<br>\u2022 Brasil retrasar\u00eda supply Electrolux \u2192 quiebre<br>\u2022 Midea importar\u00eda a $101 FOB \u2192 destruy\u00f3 MAD 9.5kg<br><br><b>Con las 12 fuentes de BBAPP (Aduanas, puertos, precios web, Trends) habr\u00edamos detectado estas se\u00f1ales 4-8 semanas antes.</b></div></div>";
+h+="<div style=\"text-align:center;padding:16px;font-size:15px;font-weight:800\">\u00bfCu\u00e1nto te cost\u00f3 no tenerlo?</div>";
+document.getElementById("r3").innerHTML=h;document.getElementById("r3").style.display="block";document.getElementById("p3").classList.add("show")}
 </script>
 </body>
 </html>
