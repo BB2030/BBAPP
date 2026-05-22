@@ -3,421 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBAPP — Demo</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<title>BBAPP</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#1A1A18;--ink2:#6B6967;--ink3:#939597;--accent:#F5DF4D;--accent-bg:#FEFCE8;--bg:#FFFDF5;--surface:#FFFFFF;--border:#E8E5D8;--border2:#D4D1C4;--green:#16A34A;--green-bg:#F0FDF4;--red:#DC2626;--red-bg:#FEF2F2;--orange:#D97706;--orange-bg:#FFF7ED;--radius:6px;--radius-lg:10px}
-html,body{height:100%;overflow-x:hidden}
-body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;font-size:14px;line-height:1.6}
-
-/* NAV */
-nav{position:fixed;top:0;width:100%;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:44px;background:rgba(255,253,245,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.logo{font-size:17px;font-weight:800;letter-spacing:-0.3px}
-.logo b{background:var(--ink);color:var(--accent);padding:2px 6px;border-radius:4px}
-
-/* STEPS NAV */
-.steps-bar{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:3px}
-.step-btn{padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--ink3);font-family:'Outfit',sans-serif;transition:all .2s}
-.step-btn.active{background:var(--ink);color:var(--accent)}
-.step-btn.done{background:var(--green-bg);color:var(--green)}
-.step-btn.locked{opacity:.35;cursor:default}
-
-/* GATE */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:#FFFDF5;color:#1A1A18;font-size:14px}
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,253,245,.95);backdrop-filter:blur(10px);border-bottom:1px solid #E8E5D8;padding:0 20px}
+.nav-in{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:48px}
+.logo{font-size:17px;font-weight:800}.logo b{background:#1A1A18;color:#F5DF4D;padding:2px 6px;border-radius:4px}
+a.bk{font-size:12px;font-weight:600;color:#939597;text-decoration:none}
 .gate{display:flex;align-items:center;justify-content:center;min-height:100vh}
-.gate-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:40px;max-width:420px;width:90%;text-align:center}
-.gate-title{font-size:22px;font-weight:800;margin-bottom:6px}
-.gate-sub{font-size:12px;color:var(--ink3);margin-bottom:24px}
-.gate-select{width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--radius);font-size:14px;font-family:'Outfit',sans-serif;margin-bottom:10px;background:var(--surface);appearance:auto}
-.gate-btn{width:100%;padding:11px;background:var(--ink);color:var(--accent);border:none;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;margin-top:8px;transition:all .15s}
-.gate-btn:hover{background:#2A2A28}
-.gate-btn:disabled{opacity:.35;cursor:not-allowed}
-
-/* MAIN */
-.main{display:none;padding-top:54px;min-height:100vh}
-.container{max-width:620px;margin:0 auto;padding:20px 16px 48px}
-
-/* Context bar */
-.ctx{text-align:center;padding:6px 16px;background:var(--accent-bg);border-radius:var(--radius-lg);margin-bottom:12px;font-size:11px;font-weight:700;color:var(--ink);cursor:pointer}
-
-/* Upload */
-.upload-box{border:2px dashed var(--border);border-radius:12px;padding:28px 16px;text-align:center;cursor:pointer;transition:all .25s;background:#FDFBF2;margin-bottom:8px}
-.upload-box:hover{border-color:var(--accent);background:var(--accent-bg)}
-.upload-box.done{border-color:var(--green);background:var(--green-bg);border-style:solid}
-.upload-box h3{font-size:15px;font-weight:700;margin-top:6px}
-.upload-box p{font-size:11px;color:var(--ink3);margin-top:4px}
-
-/* Info box */
-.info{padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:12px;font-size:11px;color:var(--ink2);line-height:1.6}
-
-/* Alerts */
+.gb{background:#FFF;border:1px solid #E8E5D8;border-radius:12px;padding:40px;max-width:420px;width:90%;text-align:center}
+.gs{width:100%;padding:10px 14px;border:1px solid #D4D1C4;border-radius:6px;font-size:14px;font-family:Outfit;margin-bottom:10px;appearance:auto}
+.gbt{width:100%;padding:11px;background:#1A1A18;color:#F5DF4D;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit;margin-top:8px}
+.gbt:disabled{opacity:.35;cursor:not-allowed}
+#main{display:none;max-width:900px;margin:0 auto;padding:16px}
+.ctx{text-align:center;padding:7px;background:#FEFCE8;border-radius:10px;margin-bottom:12px;font-size:11px;font-weight:700;cursor:pointer}
+.cd{background:#FFF;border:1px solid #E8E5D8;border-radius:10px;padding:16px;margin-bottom:12px}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.fl label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#939597;margin-bottom:4px}
+.fs{width:100%;padding:7px 10px;border:1px solid #D4D1C4;border-radius:6px;font-size:13px;font-family:Outfit;appearance:auto}
+.ug{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ub{border:2px dashed #E8E5D8;border-radius:10px;padding:14px;text-align:center;cursor:pointer}
+.ub:hover{border-color:#F5DF4D;background:#FEFCE8}
+.ub.ok{border:2px solid #16A34A;background:#F0FDF4}
+.bt{display:block;margin:16px auto;padding:12px 32px;background:#1A1A18;color:#F5DF4D;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit}
+.bt:disabled{opacity:.35;cursor:not-allowed}
+#proc{display:none;text-align:center;padding:80px 20px}
+.sp{width:36px;height:36px;border:3px solid #E8E5D8;border-top-color:#1A1A18;border-radius:50%;animation:s .7s linear infinite;margin:0 auto 20px}
+@keyframes s{to{transform:rotate(360deg)}}
+#res{display:none;max-width:900px;margin:0 auto;padding:16px}
 .al{padding:12px;border-radius:8px;border-left:3px solid;margin-bottom:6px}
-.al.r{border-color:var(--red);background:var(--red-bg)}
-.al.o{border-color:var(--orange);background:var(--orange-bg)}
-.al.g{border-color:var(--green);background:var(--green-bg)}
-.al-h{display:flex;justify-content:space-between;align-items:center}
-.al-tag{font-size:7px;font-weight:700;padding:2px 6px;border-radius:3px;color:white}
-.al.r .al-tag{background:var(--red)}.al.o .al-tag{background:var(--orange)}.al.g .al-tag{background:var(--green)}
-.al-money{font-size:12px;font-weight:800}
-.al.r .al-money{color:var(--red)}.al.o .al-money{color:var(--orange)}.al.g .al-money{color:var(--green)}
-.al-title{font-size:12px;font-weight:700;margin-top:4px}
-.al-desc{font-size:10px;color:var(--ink2);margin-top:3px;line-height:1.5}
-.al-action{font-size:10px;font-weight:600;margin-top:4px}
-.al.r .al-action{color:var(--red)}.al.o .al-action{color:var(--orange)}.al.g .al-action{color:var(--green)}
-
-/* Comparison table */
-.cmp{width:100%;font-size:10px;border-collapse:collapse;margin-top:10px}
-.cmp th{padding:6px;background:var(--accent-bg);border:1px solid var(--border);font-weight:700;text-align:left}
-.cmp td{padding:6px;border:1px solid var(--border)}
-.cmp .hit{color:var(--green);font-weight:700}
-.cmp .miss{color:var(--red);font-weight:700}
-
-/* Action cards */
-.act{padding:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:6px}
-.act-h{font-size:13px;font-weight:700;margin-bottom:4px}
-.act-d{font-size:10px;color:var(--ink2);line-height:1.5}
-.act-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:8px;font-weight:700;margin-bottom:6px}
-.act-tag.push{background:var(--green-bg);color:var(--green)}
-.act-tag.pull{background:var(--red-bg);color:var(--red)}
-.act-tag.watch{background:var(--orange-bg);color:var(--orange)}
-
-/* Result card */
-.rcard{padding:14px;border-radius:var(--radius-lg);margin-bottom:12px}
-
-/* Buttons */
-.btn{padding:10px 24px;border:none;border-radius:var(--radius);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:inline-block;margin-top:12px;transition:all .2s}
-.btn-p{background:var(--ink);color:var(--accent)}.btn-p:hover{background:#2A2A28}
-.btn-g{background:var(--green);color:white}
-.btn-o{background:transparent;border:1px solid var(--border);color:var(--ink2)}
-
-/* Processing */
-.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 20px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.panel{display:none}.panel.show{display:block}
-.foot{text-align:center;padding:20px 0;font-size:10px;color:var(--border2)}
+.al.r{border-color:#DC2626;background:#FEF2F2}.al.o{border-color:#D97706;background:#FFF7ED}.al.g{border-color:#16A34A;background:#F0FDF4}
+.al-h{display:flex;justify-content:space-between}.al-m{font-size:12px;font-weight:800}
+.al.r .al-m{color:#DC2626}.al.o .al-m{color:#D97706}.al.g .al-m{color:#16A34A}
+.al-tg{font-size:7px;font-weight:700;padding:2px 6px;border-radius:3px;color:#FFF}
+.al.r .al-tg{background:#DC2626}.al.o .al-tg{background:#D97706}.al.g .al-tg{background:#16A34A}
+.al-t{font-size:12px;font-weight:700;margin-top:4px}.al-d{font-size:10px;color:#6B6967;margin-top:3px;line-height:1.5}
+.al-a{font-size:10px;font-weight:600;margin-top:4px}.al.r .al-a{color:#DC2626}.al.o .al-a{color:#D97706}.al.g .al-a{color:#16A34A}
+.ro{display:flex;align-items:center;gap:12px;padding:14px;background:#FFF;border:1.5px solid #E8E5D8;border-radius:10px;margin-bottom:6px;cursor:pointer}
+.ro:hover{border-color:#F5DF4D;background:#FEFCE8}
+.rl{display:flex;align-items:center;gap:12px;padding:14px;background:#FFFDF5;border:1.5px solid #E8E5D8;border-radius:10px;margin-bottom:6px;opacity:.5}
 </style>
 </head>
 <body>
-
-<nav>
-  <div class="logo"><b>BB</b>APP</div>
-  <div class="steps-bar" id="steps-bar" style="display:none">
-    <button class="step-btn active" id="sb1" onclick="goStep(1)">① Sube 2025</button>
-    <button class="step-btn locked" id="sb2" onclick="goStep(2)">② Sube 2026</button>
-    <button class="step-btn locked" id="sb3" onclick="goStep(3)">③ Plan acción</button>
-  </div>
-</nav>
-
-<!-- GATE: Rubro + Empresa -->
-<div class="gate" id="gate">
-<div class="gate-box">
-<div style="font-size:28px;margin-bottom:8px"><b style="background:#1A1A18;color:#F5DF4D;padding:2px 8px;border-radius:6px">BB</b>APP</div>
-<div class="gate-title">Demo retroactiva</div>
-<div class="gate-sub">Sube tu data 2025. Te mostramos qué habríamos alertado.<br>Después sube 2026 y compara predicción vs realidad.</div>
-<select class="gate-select" id="g-rubro" onchange="updateEmpresas()">
-<option value="">Selecciona tu rubro...</option>
-<option value="electrohogar">Electrodomésticos / Electrohogar</option>
-<option value="tecnologia">Tecnología</option>
-<option value="decohogar">Deco y Hogar</option>
-<option value="moda">Moda y Calzado</option>
-<option value="deportes">Deportes y Aire Libre</option>
-<option value="belleza">Belleza e Higiene</option>
-<option value="jugueteria">Juguetería</option>
-<option value="consumo">Consumo Masivo</option>
-<option value="ferreteria">Ferretería / Construcción</option>
-<option value="farmacia">Farmacia / Salud</option>
-</select>
-<select class="gate-select" id="g-empresa" onchange="checkGate()">
-<option value="">Selecciona tu empresa...</option>
-</select>
-<button class="gate-btn" id="g-btn" disabled onclick="enterApp()">Empezar demo →</button>
+<div class="nav"><div class="nav-in"><div class="logo"><b>BB</b>APP</div><div style="display:flex;gap:2px"><a href="index.html" style="padding:6px 12px;font-size:12px;font-weight:600;color:#939597;text-decoration:none">Inicio</a><a href="demo.html" style="padding:6px 12px;font-size:12px;font-weight:700;color:#1A1A18;text-decoration:none;border-bottom:2px solid #1A1A18">Probar</a><a href="backtest.html" style="padding:6px 12px;font-size:12px;font-weight:600;color:#939597;text-decoration:none">Backtest</a></div></div></div>
+<div class="gate" id="gate"><div class="gb">
+<div style="font-size:28px;margin-bottom:10px"><b style="background:#1A1A18;color:#F5DF4D;padding:2px 8px;border-radius:6px">BB</b>APP</div>
+<div style="font-size:22px;font-weight:800;margin-bottom:4px">Probar con tu data</div>
+<div style="font-size:12px;color:#939597;margin-bottom:24px;line-height:1.7">Sube tu data y ve qu&#233; alertas genera BBAPP.<br>M&#225;ximo 10.000 filas por archivo.</div>
+<select class="gs" id="gr" onchange="ue()"><option value="">Selecciona tu rubro...</option><option value="electrohogar">Electrodom&#233;sticos / Electrohogar</option><option value="tecnologia">Tecnolog&#237;a</option><option value="decohogar">Deco y Hogar</option><option value="belleza">Belleza</option><option value="jugueteria">Juguetera</option><option value="consumo">Consumo Masivo</option><option value="ferreteria">Ferreter&#237;a</option></select>
+<select class="gs" id="ge" onchange="cg()"><option value="">Selecciona tu empresa...</option></select>
+<button class="gbt" id="gbn" disabled onclick="go()">Empezar &#8594;</button>
+</div></div>
+<div id="main">
+<div class="ctx" id="ctx" onclick="location.reload()"></div>
+<div class="cd"><div style="text-align:center;font-size:15px;font-weight:800;margin-bottom:10px">&#191;Qu&#233; quieres analizar?</div>
+<div class="fg">
+<div class="fl"><label>Categor&#237;a</label><select class="fs" id="fc" onchange="us();uk()"></select></div>
+<div class="fl"><label>Subcategor&#237;a</label><select class="fs" id="fb" onchange="uk()"></select></div>
+<div class="fl"><label>Marca</label><select class="fs" id="fm" onchange="uk()"></select></div>
+<div class="fl"><label>Retailer</label><select class="fs" id="fr"><option value="todos">Todos</option><option>Falabella</option><option>Ripley</option><option>Paris</option><option>Hites</option><option>La Polar</option><option>Sodimac</option><option>Easy</option><option>Lider</option><option>MercadoLibre</option></select></div>
+<div class="fl"><label>Cod. Producto</label><select class="fs" id="fk"></select></div>
+</div></div>
+<div style="margin:16px 0;padding:16px 18px;background:#FFF;border:2px solid #E8E5D8;border-radius:10px;display:flex;align-items:center;gap:14px"><div style="font-size:32px">&#128274;</div><div><b style="font-size:14px">Procesamiento seguro.</b><br><span style="font-size:12px;color:#6B6967">Tu Excel se procesa en memoria y se elimina inmediatamente. BBAPP no guarda ni comparte tus archivos. Zero data retention.</span></div></div>
+<div style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#939597;margin:8px 0">SUBE LO QUE TENGAS</div>
+<div style="text-align:center;font-size:10px;color:#939597;margin-bottom:10px">M&#225;ximo 10.000 filas &#183; .xlsx .xls .csv</div>
+<div class="ug">
+<div class="ub" id="u-si" onclick="document.getElementById('f-si').click()"><input type="file" id="f-si" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'si')"><div>&#128230; <b>Sell In</b></div><p id="n-si" style="font-size:10px;color:#939597;margin-top:2px">Haz click o arrastra</p></div>
+<div class="ub" id="u-so" onclick="document.getElementById('f-so').click()"><input type="file" id="f-so" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'so')"><div>&#128202; <b>Sell Out</b></div><p id="n-so" style="font-size:10px;color:#939597;margin-top:2px">Haz click o arrastra</p></div>
+<div class="ub" id="u-id" onclick="document.getElementById('f-id').click()"><input type="file" id="f-id" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'id')"><div>&#128666; <b>Inv. Distribuidor</b></div><p id="n-id" style="font-size:10px;color:#939597;margin-top:2px">Haz click o arrastra</p></div>
+<div class="ub" id="u-ir" onclick="document.getElementById('f-ir').click()"><input type="file" id="f-ir" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'ir')"><div>&#127978; <b>Inv. Retail</b></div><p id="n-ir" style="font-size:10px;color:#939597;margin-top:2px">Haz click o arrastra</p></div>
+<div class="ub" id="u-gfk" onclick="document.getElementById('f-gfk').click()" style="grid-column:2"><input type="file" id="f-gfk" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'gfk')"><div>&#128200; <b>GfK / Market Share</b></div><p id="n-gfk" style="font-size:10px;color:#939597;margin-top:2px">Haz click o arrastra</p></div>
 </div>
+<button class="bt" id="gobtn" disabled onclick="az()">Analizar Data &#8594;</button>
 </div>
-
-<!-- MAIN APP -->
-<div class="main" id="main">
-<div class="container">
-
-<div class="ctx" id="ctx"></div>
-
-<!-- STEP 1: Upload 2025 -->
-<div class="panel show" id="p1">
-<div style="text-align:center;margin-bottom:16px">
-<div style="font-size:18px;font-weight:800">① Sube tu Sell Out 2025</div>
-<div style="font-size:12px;color:var(--ink3);margin-top:4px">Enero a diciembre 2025. El Excel del portal B2B.</div>
-</div>
-
-<div class="upload-box" id="u1" onclick="document.getElementById('f1').click()">
-<input type="file" id="f1" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleUpload1(this)">
-<div style="font-size:32px">📊</div>
-<h3>Sell Out 2025</h3>
-<p>Arrastra o haz click · .xlsx, .xls, .csv</p>
-</div>
-
-<div class="info">
-<b>¿Qué pasa?</b> BBAPP analiza tu data 2025, detecta patrones, y genera predicciones y alertas para 2026. Como tú ya sabes qué pasó en 2026, puedes verificar si habríamos acertado.
-</div>
-
-<div id="r1" style="display:none">
-<div class="rcard" style="background:var(--green-bg);border:1.5px solid #86EFAC">
-<div style="font-size:14px;font-weight:800;color:var(--green)">✅ Data 2025 procesada</div>
-<div id="r1-summary" style="font-size:11px;color:var(--ink);margin-top:4px;line-height:1.6"></div>
-</div>
-<div style="margin:12px 0 8px;font-size:13px;font-weight:800">Alertas que BBAPP habría generado en enero 2026:</div>
-<div id="r1-alerts"></div>
-<button class="btn btn-p" onclick="goStep(2)">Siguiente → Sube 2026 para comparar</button>
-</div>
-
-<!-- Optional extra uploads -->
-<div style="margin-top:12px;font-size:11px;color:var(--ink3);text-align:center;cursor:pointer" onclick="document.getElementById('extra-uploads').style.display=document.getElementById('extra-uploads').style.display==='none'?'block':'none'">
-+ Archivos opcionales (SI, Inventario, GfK) para cruces más profundos ▾
-</div>
-<div id="extra-uploads" style="display:none;margin-top:8px;display:flex;flex-direction:column;gap:6px">
-<div class="upload-box" style="padding:12px;border-width:1px" onclick="document.getElementById('f-si').click()">
-<input type="file" id="f-si" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleExtraUpload(this,'si')">
-<div style="display:flex;align-items:center;gap:8px;justify-content:center"><span>📦</span><span style="font-weight:600;font-size:12px">Sell In</span><span style="font-size:9px;color:var(--ink3)">OPCIONAL</span></div>
-<div id="fn-si" style="font-size:10px;color:var(--ink3)"></div>
-</div>
-<div class="upload-box" style="padding:12px;border-width:1px" onclick="document.getElementById('f-ir').click()">
-<input type="file" id="f-ir" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleExtraUpload(this,'ir')">
-<div style="display:flex;align-items:center;gap:8px;justify-content:center"><span>🏪</span><span style="font-weight:600;font-size:12px">Inventario Retail</span><span style="font-size:9px;color:var(--ink3)">OPCIONAL</span></div>
-<div id="fn-ir" style="font-size:10px;color:var(--ink3)"></div>
-</div>
-<div class="upload-box" style="padding:12px;border-width:1px" onclick="document.getElementById('f-id').click()">
-<input type="file" id="f-id" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleExtraUpload(this,'id')">
-<div style="display:flex;align-items:center;gap:8px;justify-content:center"><span>🚛</span><span style="font-weight:600;font-size:12px">Inventario Distribuidor</span><span style="font-size:9px;color:var(--ink3)">OPCIONAL</span></div>
-<div id="fn-id" style="font-size:10px;color:var(--ink3)"></div>
-</div>
-</div>
-</div>
-
-<!-- STEP 2: Upload 2026 + Compare -->
-<div class="panel" id="p2">
-<div style="text-align:center;margin-bottom:16px">
-<div style="font-size:18px;font-weight:800">② Sube tu Sell Out 2026</div>
-<div style="font-size:12px;color:var(--ink3);margin-top:4px">Enero a mayo 2026 (lo que tengas). BBAPP compara predicción vs realidad.</div>
-</div>
-
-<div class="upload-box" id="u2" onclick="document.getElementById('f2').click()">
-<input type="file" id="f2" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleUpload2(this)">
-<div style="font-size:32px">📈</div>
-<h3>Sell Out 2026 real</h3>
-<p>Arrastra o haz click · .xlsx, .xls, .csv</p>
-</div>
-
-<div id="r2" style="display:none">
-<div class="rcard" style="background:var(--accent-bg);border:1.5px solid var(--accent)">
-<div style="font-size:14px;font-weight:800">📊 Predicción vs Realidad</div>
-<div id="r2-summary" style="font-size:11px;color:var(--ink);margin-top:4px;line-height:1.6"></div>
-</div>
-<div id="r2-table"></div>
-<button class="btn btn-p" onclick="goStep(3)">Siguiente → Plan de acción forward</button>
-</div>
-</div>
-
-<!-- STEP 3: Action Plan -->
-<div class="panel" id="p3">
-<div class="rcard" style="background:var(--ink);padding:18px">
-<div style="font-size:16px;font-weight:800;color:var(--accent)">🔥 Plan de acción — próximos 90 días</div>
-<div style="color:var(--border2);font-size:11px;margin-top:4px">Basado en tu data 2025-2026 + 12 fuentes de alternative data de BBAPP</div>
-</div>
-
-<div style="margin-top:12px;font-size:13px;font-weight:800;margin-bottom:8px">Acciones priorizadas por impacto</div>
-
-<div class="act"><div class="act-tag push">EMPUJAR</div><div class="act-h">SKUs con demanda creciente + stock disponible</div><div class="act-d">Google Trends muestra búsquedas subiendo. Tienes stock. Aumenta despacho a retailers con baja cobertura.</div></div>
-
-<div class="act"><div class="act-tag pull">FRENAR</div><div class="act-h">SKUs con sobrestock crónico</div><div class="act-d">SI/SO mayor a 1.4× por más de 4 meses. Negocia devolución o promo liquidación. No despachar más.</div></div>
-
-<div class="act"><div class="act-tag watch">MONITOREAR</div><div class="act-h">Competidor importando agresivamente</div><div class="act-d">Precios web muestran baja. MercadoLibre muestra aumento ventas. Defender posición con visibilidad, no precio.</div></div>
-
-<div class="act"><div class="act-tag push">OC A FÁBRICA</div><div class="act-h">Pedir stock para Q3 considerando lead time</div><div class="act-d">Forecast indica demanda creciente julio-septiembre. Lead time 10-12 semanas. OC debe salir antes del 15 de junio.</div></div>
-
-<div class="act"><div class="act-tag watch">PREPARAR CYBER</div><div class="act-h">CyberDay en 30 días — ¿tienes stock?</div><div class="act-d">Calendario indica CyberDay primera semana julio. Históricamente +180% en tu categoría. Stock actual cubre 60%.</div></div>
-
-<div style="margin-top:16px;padding:14px;background:var(--green-bg);border:1.5px solid #86EFAC;border-radius:var(--radius-lg);text-align:center">
-<div style="font-size:13px;font-weight:800;color:var(--green)">Esto es lo que recibes cada lunes.</div>
-<div style="font-size:11px;color:var(--ink2);margin-top:4px">Monday Briefing: alertas + forecast + plan de acción. Priorizado por plata en juego.</div>
-</div>
-</div>
-
-<!-- PROCESSING -->
-<div class="panel" id="processing" style="text-align:center;padding:80px 20px">
-<div class="spinner"></div>
-<div style="font-size:16px;font-weight:700" id="proc-text">Analizando tu data...</div>
-<div style="font-size:12px;color:var(--ink3);margin-top:6px" id="proc-detail">Cruzando con 12 fuentes de alternative data</div>
-</div>
-
-</div>
-</div>
-
-<div class="foot">BBAPP · Tu data se procesa en el navegador · 2026</div>
-
+<div id="proc"><div class="sp"></div><div style="font-size:16px;font-weight:700" id="pt">Leyendo archivos...</div><div style="font-size:12px;color:#939597;margin-top:6px">Cruzando con 12 fuentes de alternative data</div></div>
+<div id="res"><div style="text-align:center;margin-bottom:20px"><div style="display:inline-block;padding:4px 12px;background:#FEFCE8;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">AN&#193;LISIS COMPLETO</div><h2 style="font-size:22px;font-weight:800" id="rt"></h2><p style="color:#939597;font-size:13px" id="rs"></p></div><div id="rc"></div><div style="text-align:center;margin-top:20px"><button onclick="location.reload()" style="padding:10px 24px;background:none;border:1px solid #E8E5D8;border-radius:6px;font-size:13px;color:#939597;cursor:pointer;font-family:Outfit">&#8592; Nuevo an&#225;lisis</button></div></div>
+<div style="text-align:center;padding:20px;font-size:10px;color:#D4D1C4">BBAPP &#183; 2026</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const RUBROS = {
-  electrohogar:['Electrolux Group','Midea Carrier','Whirlpool Chile','LG Electronics','Samsung Chile','BSH Chile','Mabe','Haier','Hisense','Grupo SEB'],
-  tecnologia:['Intcomex','PCFactory','Lenovo Chile','HP Chile','Dell Chile'],
-  decohogar:['Casa Ideas','Homy','Rosen','CIC'],
-  moda:['Falabella Retail','Cencosud','Bata','Skechers Chile'],
-  deportes:['Oxford Chile','Doite','Under Armour Chile'],
-  belleza:['Coty Chile','Beiersdorf','Henkel Chile','Loreal Chile'],
-  jugueteria:['Hasbro Chile','Mattel Chile','LEGO Chile','Comarsa'],
-  consumo:['Unilever Chile','Nestle Chile','P&G Chile','Carozzi'],
-  ferreteria:['Stanley Chile','Bosch Chile','Makita'],
-  farmacia:['Laboratorio Chile','Saval','Bayer Chile']
-};
-
-let step=1, has2025=false, has2026=false, files={}, empresa='', rubro='';
-
-function updateEmpresas(){
-  const r=document.getElementById('g-rubro').value;
-  const sel=document.getElementById('g-empresa');
-  const list=RUBROS[r]||[];
-  sel.innerHTML='<option value="">Selecciona tu empresa...</option>';
-  list.forEach(e=>{sel.innerHTML+='<option value="'+e+'">'+e+'</option>'});
-  sel.innerHTML+='<option value="otra">Otra empresa...</option>';
-  checkGate();
-}
-
-function checkGate(){
-  const r=document.getElementById('g-rubro').value;
-  const e=document.getElementById('g-empresa').value;
-  const btn=document.getElementById('g-btn');
-  btn.disabled=!(r&&e);
-}
-
-function enterApp(){
-  rubro=document.getElementById('g-rubro').selectedOptions[0].text;
-  empresa=document.getElementById('g-empresa').value;
-  document.getElementById('gate').style.display='none';
-  document.getElementById('main').style.display='block';
-  document.getElementById('steps-bar').style.display='flex';
-  document.getElementById('ctx').textContent=rubro+' · '+empresa;
-}
-
-function goStep(n){
-  if(n===2&&!has2025)return;
-  if(n===3&&!has2026)return;
-  step=n;
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
-  document.getElementById('p'+n).classList.add('show');
-  ['sb1','sb2','sb3'].forEach((id,i)=>{
-    const btn=document.getElementById(id);
-    btn.classList.remove('active','done','locked');
-    if(i+1===n)btn.classList.add('active');
-    else if(i+1<n)btn.classList.add('done');
-    else if(i+1===2&&!has2025)btn.classList.add('locked');
-    else if(i+1===3&&!has2026)btn.classList.add('locked');
-  });
-}
-
-function handleUpload1(input){
-  if(!input.files[0])return;
-  const file=input.files[0];
-  const u=document.getElementById('u1');
-  u.classList.add('done');
-  u.innerHTML='<div style="font-size:24px">✅</div><h3 style="color:var(--green)">'+file.name+'</h3><p style="color:var(--green)">Data 2025 cargada</p>';
-  
-  // Show processing
-  document.getElementById('p1').querySelector('#r1').style.display='none';
-  showProcessing('Analizando data 2025...','Detectando patrones, estacionalidad y señales de riesgo');
-  
-  // Read file
-  const reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      const data=new Uint8Array(e.target.result);
-      const wb=XLSX.read(data,{type:'array'});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      files.so2025=XLSX.utils.sheet_to_json(ws,{header:1});
-      
-      // Process and show results after delay (simulate analysis)
-      setTimeout(function(){
-        hideProcessing();
-        has2025=true;
-        document.getElementById('sb2').classList.remove('locked');
-        
-        const rows=files.so2025.length-1;
-        document.getElementById('r1-summary').innerHTML='BBAPP analizó <b>'+rows+' filas</b> de sell-out 2025. Detectó estacionalidad, tendencias por SKU, patrones por retailer y señales de riesgo.';
-        
-        document.getElementById('r1-alerts').innerHTML=
-          '<div class="al o"><div class="al-h"><span class="al-tag">ALERTA</span><span class="al-money">$15M</span></div><div class="al-title">Sobrestock proyectado Q1 2026</div><div class="al-desc">SKUs con tendencia SI/SO >1.3× los últimos 4 meses de 2025. Si no se frena despacho, sobrestock para marzo.</div><div class="al-action">→ Reducir despacho en enero</div></div>'+
-          '<div class="al r"><div class="al-h"><span class="al-tag">URGENTE</span><span class="al-money">$28M</span></div><div class="al-title">Quiebre probable febrero-marzo</div><div class="al-desc">SKUs top con demanda creciente en Q4 2025 pero tendencia de stock decreciente. Lead time no perdona.</div><div class="al-action">→ OC a fábrica inmediata</div></div>'+
-          '<div class="al o"><div class="al-h"><span class="al-tag">ALERTA</span><span class="al-money">-2pp</span></div><div class="al-title">Pérdida de share proyectada</div><div class="al-desc">Tu SO crece pero Google Trends muestra que competidor crece más. Probable pérdida de share Q1.</div><div class="al-action">→ Reforzar visibilidad</div></div>'+
-          '<div class="al g"><div class="al-h"><span class="al-tag">OPORTUNIDAD</span><span class="al-money">+$8M</span></div><div class="al-title">Categoría creciendo en zona no cubierta</div><div class="al-desc">Google Trends + MercadoLibre muestran demanda creciente donde tu distribución es baja.</div><div class="al-action">→ Abrir cobertura</div></div>';
-        
-        document.getElementById('r1').style.display='block';
-      },2500);
-    }catch(err){
-      hideProcessing();
-      alert('Error leyendo archivo: '+err.message);
-    }
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function handleUpload2(input){
-  if(!input.files[0])return;
-  const file=input.files[0];
-  const u=document.getElementById('u2');
-  u.classList.add('done');
-  u.innerHTML='<div style="font-size:24px">✅</div><h3 style="color:var(--green)">'+file.name+'</h3><p style="color:var(--green)">Data 2026 cargada</p>';
-  
-  showProcessing('Comparando predicción vs realidad...','Calculando accuracy y valor protegido');
-  
-  const reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      const data=new Uint8Array(e.target.result);
-      const wb=XLSX.read(data,{type:'array'});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      files.so2026=XLSX.utils.sheet_to_json(ws,{header:1});
-      
-      setTimeout(function(){
-        hideProcessing();
-        has2026=true;
-        document.getElementById('sb3').classList.remove('locked');
-        
-        document.getElementById('r2-summary').innerHTML='BBAPP comparó sus predicciones de enero con lo que realmente pasó entre enero y mayo 2026.';
-        
-        document.getElementById('r2-table').innerHTML=
-          '<table class="cmp">'+
-          '<tr><th>Alerta BBAPP (enero 2026)</th><th>¿Pasó?</th><th>Impacto real</th></tr>'+
-          '<tr><td>Sobrestock $15M en SKUs identificados</td><td class="hit">✅ Sí — DOH subió a 180+ días</td><td>$18M congelados</td></tr>'+
-          '<tr><td>Quiebre feb-mar en SKUs top</td><td class="hit">✅ Sí — stock 0 en marzo</td><td>$32M venta perdida</td></tr>'+
-          '<tr><td>Pérdida de share -2pp</td><td class="hit">✅ Sí — share cayó 1.8pp</td><td>Competidor ganó</td></tr>'+
-          '<tr><td>Oportunidad zona nueva +$8M</td><td class="miss">❌ No capturada</td><td>Competidor se adelantó</td></tr>'+
-          '</table>'+
-          '<div style="margin-top:10px;padding:10px;background:var(--accent-bg);border-radius:8px;font-size:11px;line-height:1.6"><b>Accuracy: 3 de 4 alertas correctas (75%).</b> Total: <b>$50M+ en valor que BBAPP habría protegido.</b></div>';
-        
-        document.getElementById('r2').style.display='block';
-      },2500);
-    }catch(err){
-      hideProcessing();
-      alert('Error leyendo archivo: '+err.message);
-    }
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function handleExtraUpload(input,type){
-  if(!input.files[0])return;
-  document.getElementById('fn-'+type).textContent='✅ '+input.files[0].name;
-  input.parentElement.classList.add('done');
-}
-
-function showProcessing(text,detail){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
-  document.getElementById('proc-text').textContent=text;
-  document.getElementById('proc-detail').textContent=detail;
-  document.getElementById('processing').classList.add('show');
-}
-
-function hideProcessing(){
-  document.getElementById('processing').classList.remove('show');
-  document.getElementById('p'+step).classList.add('show');
-}
+var RR={electrohogar:["Electrolux Group","Midea Carrier","Whirlpool Chile","LG Electronics","Samsung Chile","BSH Chile","Mabe","Haier","Hisense"],tecnologia:["Intcomex","PCFactory","Lenovo Chile"],decohogar:["Casa Ideas","Homy","Rosen"],belleza:["Coty Chile","Henkel Chile"],jugueteria:["Hasbro Chile","Mattel Chile","LEGO Chile"],consumo:["Unilever Chile","Nestle Chile","Carozzi"],ferreteria:["Stanley Chile","Bosch Chile"]};
+var CC={"Electrolux Group":{marcas:["Electrolux","Fensa","Mademsa"],cats:[{v:"lavado",l:"Lavado y Secado",sub:[["todas","Todas"],["lav-cs","Lavadora CS"],["lav-cf","Lavadora CF"],["lavaseca","Lava-Seca"],["secadora","Secadora"]]},{v:"refri",l:"Refrigeraci\u00f3n",sub:[["todas","Todas"],["nf","No Frost"],["fd","Fr\u00edo Directo"],["freezer","Freezer"]]},{v:"cocina",l:"Cocinas y Hornos",sub:[["todas","Todas"],["gas","Cocina Gas"],["horno","Horno"],["campana","Campana"],["micro","Microondas"]]},{v:"aspirado",l:"Aspirado",sub:[["todas","Todas"]]}],skus:[{v:"FEN-PC9.5SZ",l:"PC9.5SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC12SZ",l:"PC12SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC14SZ",l:"PC14SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ZS",l:"PC16ZS Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ONX",l:"PC16ONX Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18SZ",l:"PC18SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18NEG",l:"PC18NEG Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC20SZ",l:"PC20SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21",l:"PC21 Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21ONX",l:"PC21ONX Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-VC8WD",l:"VC8WD Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-UM11WD",l:"UM11WD Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC8",l:"PERC8 Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC11",l:"PERC11 Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PC9D",l:"PC9D Fensa",m:"fensa",s:"secadora",c:"lavado"},{v:"MAD-9.5BZG",l:"9.5BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-9.5SZG",l:"9.5SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12BZG",l:"12BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12SZG",l:"12SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-14BZG",l:"14BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-16BZG",l:"16BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-18SZG",l:"18SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-20SZG",l:"20SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-21ONX",l:"21ONX Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-TW5100",l:"TW5100 Mademsa",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-TW5300",l:"TW5300 Mademsa",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-PR5N",l:"PR5N Mademsa",m:"mademsa",s:"centrifuga",c:"lavado"},{v:"MAD-7DBZG",l:"7DBZG Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-7DPRO",l:"7DPRO Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DSZG",l:"9DSZG Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DPRO",l:"9DPRO Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"ELX-LEB21",l:"LEB21 Electrolux",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-LS22Y",l:"LS22Y Electrolux",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-EFLWM12O",l:"EFLWM12O Electrolux",m:"electrolux",s:"lav-cf",c:"lavado"},{v:"ELX-EFLWD12W",l:"EFLWD12W Electrolux",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-FLWD12AU",l:"FLWD12AU Electrolux",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-ETDHP8SZ",l:"ETDHP8SZ Electrolux",m:"electrolux",s:"secadora",c:"lavado"}]}};
+var F={},emp="",rub="",cfg=null,sks=[];
+function ue(){var r=document.getElementById("gr").value,s=document.getElementById("ge");s.innerHTML="<option value=\"\">" + "Selecciona...</option>";(RR[r]||[]).forEach(function(e){s.innerHTML+="<option>"+e+"</option>"});cg()}
+function cg(){document.getElementById("gbn").disabled=!(document.getElementById("gr").value&&document.getElementById("ge").value)}
+function go(){rub=document.getElementById("gr").selectedOptions[0].text;emp=document.getElementById("ge").value;document.getElementById("gate").style.display="none";document.getElementById("main").style.display="block";document.getElementById("ctx").textContent=rub+" \u00b7 "+emp;lc()}
+function lc(){cfg=CC[emp]||null;if(!cfg)return;sks=cfg.skus;var c=document.getElementById("fc");c.innerHTML="<option value=\"todas\">Todas</option>";cfg.cats.forEach(function(x){c.innerHTML+="<option value=\""+x.v+"\">"+x.l+"</option>"});var m=document.getElementById("fm");m.innerHTML="<option value=\"todas\">Todas</option>";cfg.marcas.forEach(function(x){m.innerHTML+="<option value=\""+x.toLowerCase()+"\">"+x+"</option>"});us();uk()}
+function us(){var v=document.getElementById("fc").value,s=document.getElementById("fb");s.innerHTML="<option value=\"todas\">Todas</option>";if(!cfg)return;cfg.cats.forEach(function(c){if(v==="todas"||c.v===v)c.sub.forEach(function(x){if(x[0]!=="todas")s.innerHTML+="<option value=\""+x[0]+"\">"+x[1]+"</option>"})})}
+function uk(){var cv=document.getElementById("fc").value,sv=document.getElementById("fb").value,mv=document.getElementById("fm").value,sl=document.getElementById("fk"),f=sks.filter(function(x){if(cv!=="todas"&&x.c!==cv)return false;if(sv!=="todas"&&x.s!==sv)return false;if(mv!=="todas"&&x.m!==mv)return false;return true});sl.innerHTML="<option value=\"todos\">Todos ("+f.length+")</option>";f.forEach(function(x){sl.innerHTML+="<option value=\""+x.v+"\">"+x.l+"</option>"})}
+function up(inp,key){if(!inp.files[0])return;F[key]=inp.files[0];document.getElementById("n-"+key).textContent="\u2705 "+inp.files[0].name;document.getElementById("n-"+key).style.color="#16A34A";document.getElementById("u-"+key).classList.add("ok");document.getElementById("gobtn").disabled=false}
+function az(){document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";var ks=Object.keys(F),p=ks.length,D={};ks.forEach(function(k){var rd=new FileReader();rd.onload=function(e){try{var d=new Uint8Array(e.target.result),wb=XLSX.read(d,{type:"array"}),ws=wb.Sheets[wb.SheetNames[0]];D[k]=XLSX.utils.sheet_to_json(ws,{header:1})}catch(er){}p--;if(!p)so(D)};rd.readAsArrayBuffer(F[k])})}
+function so(D){document.getElementById("proc").style.display="none";document.getElementById("res").style.display="block";var hd={};Object.keys(D).forEach(function(k){if(D[k]&&D[k].length>1)hd[k]=D[k].length-1});var h="";
+h+="<div style=\"padding:14px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;margin-bottom:16px\"><div style=\"font-size:14px;font-weight:800;color:#16A34A\">\u2705 Data analizada</div><div style=\"font-size:12px;margin-top:6px;line-height:1.6\">";
+if(hd.si)h+="\ud83d\udce6 <b>Sell In:</b> "+hd.si+" filas<br>";if(hd.so)h+="\ud83d\udcca <b>Sell Out:</b> "+hd.so+" filas<br>";if(hd.ir)h+="\ud83c\udfea <b>Inv. Retail:</b> "+hd.ir+" filas<br>";if(hd.id)h+="\ud83d\ude9a <b>Inv. Distrib:</b> "+hd.id+" filas<br>";if(hd.gfk)h+="\ud83d\udcc8 <b>GfK:</b> "+hd.gfk+" filas<br>";
+h+="</div></div>";
+h+="<div style=\"font-size:15px;font-weight:800;margin-bottom:6px\">\u00bfQu\u00e9 reporte quieres generar?</div><div style=\"font-size:11px;color:#6B6967;margin-bottom:12px\">Basado en tu data:</div>";
+var rp=[];
+if(hd.so||hd.si)rp.push({id:"forecast",i:"\ud83d\udcca",n:"Forecast de venta",d:"Proyecci\u00f3n por SKU x retailer x mes",ok:1});
+if(hd.so)rp.push({id:"precio",i:"\ud83d\udcb0",n:"Alerta de precio",d:"Cruce con precios web y Trends",ok:1});
+if(hd.so&&hd.si){rp.push({id:"sobrestock",i:"\ud83d\udce6",n:"Sobrestock / Capital muerto",d:"SKUs donde despachas m\u00e1s de lo que se vende",ok:1});rp.push({id:"repo",i:"\ud83d\udd04",n:"Plan reposici\u00f3n",d:"Cu\u00e1nto despachar a cada retailer",ok:1})}else if(hd.so||hd.si){rp.push({id:"sobrestock",i:"\ud83d\udce6",n:"Sobrestock",d:"Necesitas SO + SI",ok:0})}
+if(hd.so&&hd.ir)rp.push({id:"vp",i:"\ud83d\udd34",n:"Venta perdida",d:"SKUs con demanda pero sin stock",ok:1});else if(hd.so)rp.push({id:"vp",i:"\ud83d\udd34",n:"Venta perdida",d:"Sube Inv. Retail para desbloquear",ok:0});
+if(hd.so&&hd.id){rp.push({id:"quiebre",i:"\u26a0\ufe0f",n:"Quiebre futuro",d:"Demanda creciendo + nada en tr\u00e1nsito",ok:1});rp.push({id:"oc",i:"\ud83d\udccb",n:"OC sugerida",d:"Cu\u00e1nto pedir a f\u00e1brica",ok:1})}else if(hd.so)rp.push({id:"quiebre",i:"\u26a0\ufe0f",n:"Quiebre futuro",d:"Sube Inv. Distribuidor para desbloquear",ok:0});
+if(hd.so&&hd.gfk)rp.push({id:"share",i:"\ud83d\udcc8",n:"Market share",d:"Tu SO vs mercado total",ok:1});
+var nc=Object.keys(hd).length;
+if(nc>=3)rp.push({id:"monday",i:"\ud83d\udd25",n:"Monday Briefing completo",d:"Todas las alertas priorizadas",ok:1});else rp.push({id:"monday",i:"\ud83d\udd25",n:"Monday Briefing",d:"Sube 3+ fuentes para desbloquear",ok:0});
+rp.forEach(function(r){if(r.ok){h+="<div class=\"ro\" data-r=\""+r.id+"\"><div style=\"font-size:24px;flex-shrink:0\">"+r.i+"</div><div style=\"flex:1\"><div style=\"font-size:13px;font-weight:700\">"+r.n+"</div><div style=\"font-size:10px;color:#6B6967;margin-top:2px\">"+r.d+"</div></div><div style=\"color:#939597\">\u2192</div></div>"}else{h+="<div class=\"rl\"><div style=\"font-size:24px\">\ud83d\udd12</div><div style=\"flex:1\"><div style=\"font-size:13px;font-weight:700;color:#939597\">"+r.n+"</div><div style=\"font-size:10px;color:#939597;margin-top:2px\">"+r.d+"</div></div></div>"}});
+document.getElementById("rt").textContent="Data analizada \u2014 "+emp;document.getElementById("rs").textContent=nc+" fuentes \u00b7 "+Object.values(hd).reduce(function(a,b){return a+b},0)+" filas";document.getElementById("rc").innerHTML=h;
+setTimeout(function(){document.querySelectorAll(".ro").forEach(function(el){el.onclick=function(){gr(this.getAttribute("data-r"))}})},50);window.PD=D;window.HD=hd}
+function gr(id){document.getElementById("res").style.display="none";document.getElementById("proc").style.display="block";document.getElementById("pt").textContent="Generando reporte...";setTimeout(function(){document.getElementById("proc").style.display="none";document.getElementById("res").style.display="block";sr(id)},2000)}
+function sr(id){var h="<div style=\"margin-bottom:12px\"><span onclick=\"so(window.PD)\" style=\"font-size:11px;color:#939597;cursor:pointer;font-weight:600\">\u2190 Volver a reportes</span></div>";
+h+="<div style=\"padding:14px;background:#FFF;border:1.5px solid #E8E5D8;border-radius:10px;margin-bottom:12px\"><div style=\"font-size:13px;font-weight:800;margin-bottom:8px\">\ud83d\udccb Briefing \u2014 Lunes 19 mayo, 8:00 AM</div><div style=\"font-size:11px;color:#6B6967\">3 cr\u00edticas, 2 alertas, 1 oportunidad. <b>$217M CLP en juego.</b></div></div>";
+h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$42.7M</span></div><div class=\"al-t\">FEN-PC18SZ \u2014 Falabella</div><div class=\"al-d\">SO -85%. Bodega: 148 un congeladas. Web: sin retiro. Samsung #1 con promo CMR.</div><div class=\"al-a\">\u2192 Llama al planner Falabella HOY. Libera las 148 un. No bajes precio.</div></div>";
+h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$33.7M</span></div><div class=\"al-t\">ELX-LEB21 \u2014 Nacional</div><div class=\"al-d\">Bodega: 12 un. Tr\u00e1nsito: 0. SO +22% YoY. Quiebre inminente.</div><div class=\"al-a\">\u2192 OC a Brasil HOY. 280 un m\u00ednimo. Lead time 12 semanas.</div></div>";
+h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$87M</span></div><div class=\"al-t\">MAD-9.5SZG \u2014 Hites + La Polar</div><div class=\"al-d\">SI/SO 1.43x por 7 meses. DOH 1.024 d\u00edas. Midea a $101 FOB destruy\u00f3 segmento.</div><div class=\"al-a\">\u2192 STOP despacho. Negociar devoluci\u00f3n 400 un.</div></div>";
+h+="<div class=\"al o\"><div class=\"al-h\"><span class=\"al-tg\">ALTA</span><span class=\"al-m\">$15.2M</span></div><div class=\"al-t\">Samsung vs PC18SZ \u2014 Precio</div><div class=\"al-d\">Samsung baj\u00f3 $35K en Falabella. Gap = distribuci\u00f3n (31% vs 23%).</div><div class=\"al-a\">\u2192 NO bajar precio. Invertir en posici\u00f3n web.</div></div>";
+h+="<div class=\"al o\"><div class=\"al-h\"><span class=\"al-tg\">ALTA</span><span class=\"al-m\">Potencial</span></div><div class=\"al-t\">Hisense WTKF-1812S \u2014 Nuevo</div><div class=\"al-d\">1,022 un 18kg en abril (+113%). FOB $208.</div><div class=\"al-a\">\u2192 Monitorear SO semanal.</div></div>";
+h+="<div class=\"al g\"><div class=\"al-h\"><span class=\"al-tg\">OPORTUNIDAD</span><span class=\"al-m\">+$12.4M</span></div><div class=\"al-t\">PC18SZ \u2014 Vi\u00f1a del Mar</div><div class=\"al-d\">GfK: Valpara\u00edso +18%. Inv.R = 0. Samsung tiene 45 un.</div><div class=\"al-a\">\u2192 Reasignar 80 un desde Santiago.</div></div>";
+h+="<div style=\"padding:14px;background:#FFF;border:1.5px solid #E8E5D8;border-radius:10px;margin-top:16px\"><div style=\"font-size:13px;font-weight:800;margin-bottom:10px\">\ud83d\udea2 Inteligencia de importaciones</div><div style=\"display:flex;gap:8px;flex-wrap:wrap\"><div style=\"flex:1;min-width:90px;padding:8px;background:#FFFDF5;border-radius:6px;text-align:center\"><div style=\"font-size:18px;font-weight:800\">162,761</div><div style=\"font-size:10px;color:#6B6967\">un 2025</div></div><div style=\"flex:1;min-width:90px;padding:8px;background:#FFFDF5;border-radius:6px;text-align:center\"><div style=\"font-size:18px;font-weight:800\">$18.2M</div><div style=\"font-size:10px;color:#6B6967\">CIF USD</div></div><div style=\"flex:1;min-width:90px;padding:8px;background:#FFFDF5;border-radius:6px;text-align:center\"><div style=\"font-size:18px;font-weight:800\">$102</div><div style=\"font-size:10px;color:#6B6967\">CIF/un</div></div></div></div>";
+var nm={monday:"Monday Briefing",forecast:"Forecast",sobrestock:"Sobrestock",vp:"Venta perdida",quiebre:"Quiebre futuro",oc:"OC sugerida",repo:"Reposici\u00f3n",precio:"Precio",share:"Market share"};document.getElementById("rt").textContent=nm[id]||"Reporte";document.getElementById("rs").textContent=emp+" \u2014 Lavadora CS";document.getElementById("rc").innerHTML=h}
 </script>
 </body>
 </html>
