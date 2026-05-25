@@ -95,7 +95,7 @@ nav {
 
 .hero h1 {
   font-family: 'Libre Baskerville', serif;
-  font-size: clamp(28px, 4.5vw, 46px);
+  font-size: clamp(22px, 3vw, 32px);
   font-weight: 700;
   line-height: 1.2;
   color: var(--dk);
@@ -446,12 +446,34 @@ nav {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width:680px) {
-  nav, .section, .hero, .cta-section, .foot { padding-left: 20px; padding-right: 20px; }
-  .hero h1 { font-size: 26px; }
-  .pm-block { grid-template-columns: 1fr; }
-  .monday { grid-template-columns: 1fr; }
-  .alert-sources { display: none; }
+  nav { padding: 16px 20px; }
   .nav-links { gap: 20px; }
+  .nav-links a { font-size: 13px; }
+
+  .hero { padding: 40px 20px 32px; }
+  .hero h1 { font-size: 26px; letter-spacing: -0.5px; }
+
+  .section { padding: 32px 20px; }
+
+  .matrix-wrap {
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    border: 1px solid var(--border);
+  }
+  .matrix { min-width: 560px; }
+  .matrix th, .matrix td { padding: 10px 10px; font-size: 11px; }
+  .matrix td.cell small { font-size: 9px; }
+
+  .glossary { grid-template-columns: 1fr 1fr; }
+  .gloss-item:nth-child(5) { border-right: none; }
+
+  .alt-card { padding: 20px; }
+  .chips { gap: 6px; }
+  .chip { font-size: 11px; padding: 5px 10px; }
+
+  .cta-section { padding: 40px 20px; }
+  .foot { padding: 16px 20px; }
 }
 </style>
 </head>
@@ -534,28 +556,7 @@ nav {
     </table>
   </div>
 
-  <div class="glossary">
-    <div class="gloss-item">
-      <div class="gloss-term">🛍️ Sell Out</div>
-      <div class="gloss-def">Lo que el consumidor compra en la tienda. Lo que mueve la góndola.</div>
-    </div>
-    <div class="gloss-item">
-      <div class="gloss-term">📦 Sell In</div>
-      <div class="gloss-def">Lo que tú le mandas al retailer o distribuidor. Tu factura.</div>
-    </div>
-    <div class="gloss-item">
-      <div class="gloss-term">🏪 Inv. Retail</div>
-      <div class="gloss-def">El stock en góndola y bodega del retail.</div>
-    </div>
-    <div class="gloss-item">
-      <div class="gloss-term">🚛 Inv. Distrib.</div>
-      <div class="gloss-def">El stock en bodega del distribuidor.</div>
-    </div>
-    <div class="gloss-item">
-      <div class="gloss-term">📊 GfK</div>
-      <div class="gloss-def">Medición del mercado total. Toda la categoría, todas las marcas.</div>
-    </div>
-  </div>
+</div>
 </div>
 
 <!-- ALT DATA -->
