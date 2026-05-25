@@ -137,8 +137,7 @@ nav {
 /* ─── MATRIX ─── */
 .matrix-wrap {
   overflow-x: auto;
-  max-width: 660px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .matrix {
@@ -456,14 +455,18 @@ nav {
   .section { padding: 32px 20px; }
 
   .matrix-wrap {
-    overflow-x: scroll;
-    -webkit-overflow-scrolling: touch;
-    max-width: 100%;
-    border: 1px solid var(--border);
+    overflow-x: visible;
+    width: 100%;
   }
-  .matrix { min-width: 560px; }
-  .matrix th, .matrix td { padding: 10px 10px; font-size: 11px; }
-  .matrix td.cell small { font-size: 9px; }
+  .matrix { min-width: unset; width: 100%; table-layout: fixed; }
+  .matrix th, .matrix td { padding: 6px 3px; font-size: 9px; }
+  .matrix td.row-head { font-size: 9px; padding: 6px 3px; }
+  .matrix thead th { font-size: 12px; padding: 6px 2px; letter-spacing: 0; }
+  .matrix td.cell small { display: none; }
+  .matrix td.cell { font-size: 9px; line-height: 1.3; }
+  /* Show only emoji in headers on mobile */
+  .matrix thead th .label { display: none; }
+  .matrix td.row-head .label { display: none; }
 
   .glossary { grid-template-columns: 1fr 1fr; }
   .gloss-item:nth-child(5) { border-right: none; }
@@ -504,16 +507,16 @@ nav {
       <thead>
         <tr>
           <th></th>
-          <th>🛍️ Sell Out</th>
-          <th>📦 Sell In</th>
-          <th>🏪 Inv. Retail</th>
-          <th>🚛 Inv. Distrib.</th>
-          <th>📊 GfK</th>
+          <th>🛍️<span class="label"> Sell Out</span></th>
+          <th>📦<span class="label"> Sell In</span></th>
+          <th>🏪<span class="label"> Inv. Retail</span></th>
+          <th>🚛<span class="label"> Inv. Distrib.</span></th>
+          <th>📊<span class="label"> GfK</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="row-head">🛍️ Sell Out</td>
+          <td class="row-head">🛍️<span class="label"> Sell Out</span></td>
           <td class="empty">—</td>
           <td class="cell amber">Plata atrapada<br><small>Stock que no rota es plata que no vuelve</small></td>
           <td class="cell red">Venta perdida<br><small>Plata que se fue a la competencia. Hoy.</small></td>
@@ -521,7 +524,7 @@ nav {
           <td class="cell red">Pierdes mercado<br><small>Subes en ventas pero pierdes participación</small></td>
         </tr>
         <tr>
-          <td class="row-head">📦 Sell In</td>
+          <td class="row-head">📦<span class="label"> Sell In</span></td>
           <td class="cell amber">Mandaste de más<br><small>Evita devoluciones o capital congelado</small></td>
           <td class="empty">—</td>
           <td class="cell amber">No reciben todo<br><small>Tu despacho llega incompleto y el retailer te cobra el faltante</small></td>
@@ -529,7 +532,7 @@ nav {
           <td class="cell">Mucho o poco</td>
         </tr>
         <tr>
-          <td class="row-head">🏪 Inv. Retail</td>
+          <td class="row-head">🏪<span class="label"> Inv. Retail</span></td>
           <td class="cell amber">Stock parado<br><small>Cuántos días lleva sin moverse. Cuánto te cuesta.</small></td>
           <td class="cell">¿Alcanza?</td>
           <td class="empty">—</td>
@@ -537,7 +540,7 @@ nav {
           <td class="cell">Vendes sin stock</td>
         </tr>
         <tr>
-          <td class="row-head">🚛 Inv. Distrib.</td>
+          <td class="row-head">🚛<span class="label"> Inv. Distrib.</span></td>
           <td class="cell amber">Nada en camino<br><small>En 30 días no tienes con qué despachar</small></td>
           <td class="cell">¿Cuándo?</td>
           <td class="cell">¿Dónde falta?</td>
@@ -545,7 +548,7 @@ nav {
           <td class="cell">Stock vs mercado</td>
         </tr>
         <tr>
-          <td class="row-head">📊 GfK</td>
+          <td class="row-head">📊<span class="label"> GfK</span></td>
           <td class="cell amber">Perdiendo<br><small>Tu mercado crece. Tu share no.</small></td>
           <td class="cell">Cuota óptima</td>
           <td class="cell">¿Dónde no estás?</td>
