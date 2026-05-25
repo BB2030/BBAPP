@@ -3,140 +3,589 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBAPP</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>BBAPP — Inteligencia comercial sin consultor</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',system-ui,sans-serif;background:#FFFDF5;color:#1A1A18;min-height:100vh}
-.app{max-width:580px;margin:0 auto;padding:16px}
-.hdr{display:flex;justify-content:space-between;align-items:center;padding:10px 0 20px}
-.logo{font-size:18px;font-weight:800;letter-spacing:-.5px}
-.logo b{background:#1A1A18;color:#F5DF4D;padding:2px 6px;border-radius:4px}
-.tag{font-size:9px;color:#939597;border:1px solid #E8E5D8;padding:2px 8px;border-radius:4px;background:#F7F5EA}
-.hero{text-align:center;padding:16px 0 28px}
-.hero h1{font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-1px}
-.hero h1 em{font-style:normal;background:#F5DF4D;padding:0 6px;border-radius:4px}
-.hero p{font-size:13px;color:#6B6967;margin-top:10px;line-height:1.6;max-width:460px;margin-left:auto;margin-right:auto}
-.sec{margin-bottom:28px}
-.sec-l{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#939597;margin-bottom:10px}
+:root {
+  --bg:      #F2F0EC;
+  --white:   #FFFFFF;
+  --orange:  #0496ff;
+  --red:     #8acdea;
+  --violet:  #0f7173;
+  --dk:      #1a0d47;
+  --gold:    #F5DF4D;
+  --border:  #E0DDD7;
+  --text:    #1a0d47;
+  --text2:   #5a5370;
+  --text3:   #9a94b0;
+}
 
-/* Matrix */
-.mx-w{overflow-x:auto}
-table.mx{width:100%;font-size:9px;border-collapse:collapse;text-align:center}
-.mx td{padding:7px 5px;border:1px solid #E8E5D8;transition:all .2s}
-.mx .mh{background:#1A1A18;color:#F5DF4D;font-weight:700;font-size:9px}
-.mx .md{background:#F7F5EA;color:#D4D1C4}
-.mx .mr{background:#FEF2F2;color:#DC2626;font-weight:700;cursor:pointer}
-.mx .mr:hover{background:#FEE2E2}
-.mx .mo{background:#FFF7ED;color:#D97706;font-weight:700;cursor:pointer}
-.mx .mo:hover{background:#FFEDD5}
-.mx .mn{background:#FAFAF5;color:#6B6967;cursor:pointer}
-.mx .mn:hover{background:#F7F5EA}
+* { margin:0; padding:0; box-sizing:border-box; }
 
-/* Cross detail */
-.xp{display:none;margin-top:10px;padding:14px;background:#FEFCE8;border:1.5px solid #F5DF4D;border-radius:10px}
-.xp.show{display:block}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
 
-/* Green box */
-.gbox{padding:14px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px}
-.gbox-t{font-size:13px;font-weight:700;color:#16A34A;margin-bottom:8px}
-.chips{display:flex;flex-wrap:wrap;gap:5px}
-.chip{padding:5px 10px;background:white;border:1px solid #86EFAC;border-radius:6px;font-size:9px;font-weight:600;color:#16A34A}
-.gbox-d{font-size:11px;color:#6B6967;margin-top:10px;line-height:1.6}
+/* ─── NAV ─── */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 56px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
 
-/* Outputs */
-.out{display:flex;gap:10px;padding:12px;background:white;border:1.5px solid #E8E5D8;border-radius:10px;margin-bottom:6px;align-items:flex-start}
-.out-i{font-size:18px;flex-shrink:0;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.out-i.red{background:#FEF2F2}.out-i.org{background:#FFF7ED}.out-i.grn{background:#F0FDF4}.out-i.blk{background:#1A1A18}
-.out-n{font-size:13px;font-weight:700}
-.out-d{font-size:10px;color:#6B6967;margin-top:2px;line-height:1.5}
-.out-src{font-size:8px;color:#939597;margin-top:3px}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--dk);
+  text-decoration: none;
+}
 
-.cta{padding:20px;background:white;border:1.5px solid #E8E5D8;border-radius:12px;text-align:center}
-.cta h3{font-size:16px;font-weight:800;margin-bottom:4px}
-.cta p{font-size:11px;color:#939597;margin-bottom:10px}
-.cta .email{font-size:14px;font-weight:700}
+.logo-box {
+  background: var(--dk);
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 16px;
+  padding: 4px 7px;
+  letter-spacing: 0.5px;
+  margin-right: 1px;
+}
 
-.foot{text-align:center;padding:20px 0;font-size:10px;color:#D4D1C4}
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text2);
+  text-decoration: none;
+  padding-bottom: 4px;
+  transition: color 0.15s;
+}
+
+.nav-links a.active {
+  color: var(--dk);
+  border-bottom: 2px solid var(--dk);
+}
+
+.nav-links a:hover { color: var(--dk); }
+
+/* ─── HERO ─── */
+.hero {
+  text-align: center;
+  padding: 72px 56px 56px;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(28px, 4.5vw, 46px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--dk);
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+.highlight {
+  background: var(--red);
+  padding: 0 6px 2px;
+  display: inline-block;
+  color: var(--dk);
+}
+
+.hero p {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ─── SECTION ─── */
+.section { padding: 48px 56px; }
+
+.section-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+/* ─── MATRIX ─── */
+.matrix-wrap {
+  overflow-x: auto;
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.matrix {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.matrix th, .matrix td {
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.matrix thead th {
+  background: var(--dk);
+  color: rgba(255,255,255,0.75);
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.matrix thead th:first-child {
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.matrix td.row-head {
+  background: var(--dk);
+  color: rgba(255,255,255,0.75);
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.matrix td.empty {
+  background: #E8E5DF;
+  color: #C0BCB5;
+  font-size: 14px;
+}
+
+.matrix td.cell {
+  background: var(--white);
+  font-size: 12px;
+  color: var(--text2);
+  transition: background 0.12s;
+}
+.matrix td.cell:hover { background: #F5F3EF; }
+
+.matrix td.red   { color: var(--red);    font-weight: 700; background: #f0f8fd; }
+.matrix td.cell small { display:block; font-size:10px; font-weight:300; color:var(--text3); margin-top:3px; line-height:1.4; }
+.matrix td.red small  { color: rgba(138,205,234,0.7); }
+.matrix td.amber small { color: rgba(4,150,255,0.6); }
+.matrix td.amber { color: var(--orange); font-weight: 700; background: #f0f7ff; }
+
+/* ─── GLOSSARY ─── */
+.glossary {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--border);
+  margin-top: 16px;
+  max-width: 660px;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--white);
+}
+@media (max-width:680px){ .glossary { grid-template-columns: 1fr 1fr; } }
+
+.gloss-item {
+  padding: 14px 16px;
+  border-right: 1px solid var(--border);
+}
+.gloss-item:last-child { border-right: none; }
+
+.gloss-term {
+  font-family: 'Lato', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--violet);
+  margin-bottom: 4px;
+  letter-spacing: 0.3px;
+}
+.gloss-def { font-size: 11px; color: var(--text2); line-height: 1.45; font-weight: 300; }
+
+/* ─── ALT DATA CARD ─── */
+.alt-card {
+  border: 1.5px solid var(--violet);
+  border-radius: 8px;
+  padding: 28px 32px;
+  background: rgba(15,113,115,0.03);
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.alt-card-title {
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dk);
+  margin-bottom: 16px;
+}
+.alt-card-title span { color: var(--violet); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+.chip {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--text2);
+  background: var(--white);
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.chip:hover { border-color: var(--violet); color: var(--violet); }
+
+.alt-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ─── ALERTAS ─── */
+.alerts-grid {
+  border: 1px solid var(--border);
+  background: var(--white);
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.alert-row {
+  display: grid;
+  grid-template-columns: 4px 1fr auto;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+.alert-row:last-child { border-bottom: none; }
+.alert-row:hover { background: #F8F6F2; }
+
+.alert-bar.red   { background: var(--red); }
+.alert-bar.amber { background: var(--orange); }
+.alert-bar.violet { background: var(--violet); }
+
+.alert-body { padding: 16px 20px; }
+
+.alert-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.alert-label.red    { color: var(--red); }
+.alert-label.amber  { color: var(--orange); }
+.alert-label.violet { color: var(--violet); }
+
+.alert-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--dk);
+  margin-bottom: 3px;
+}
+.alert-desc { font-size: 12px; color: var(--text2); font-weight: 300; line-height: 1.5; }
+
+.alert-sources {
+  padding: 16px 20px 16px 0;
+  font-size: 10px;
+  color: var(--text3);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+/* ─── MONDAY ─── */
+.monday {
+  background: var(--dk);
+  padding: 24px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.monday-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.monday-desc { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 300; line-height: 1.5; }
+
+.monday-badge {
+  background: rgba(245,223,77,0.15);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: 'Lato', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 8px 14px;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+}
+
+/* ─── PM ─── */
+.pm-block {
+  border: 1px solid var(--border);
+  background: var(--white);
+  padding: 32px 36px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: start;
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.pm-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.pm-eyebrow {
+  font-family: 'Lato', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 6px;
+}
+
+.pm-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--dk);
+  margin-bottom: 6px;
+}
+.pm-desc { font-size: 13px; color: var(--text2); font-weight: 300; line-height: 1.65; }
+
+/* ─── CTA ─── */
+.cta-section {
+  text-align: center;
+  padding: 64px 56px;
+  border-top: 1px solid var(--border);
+}
+
+.cta-section h2 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--dk);
+  margin-bottom: 8px;
+}
+.cta-section p { font-size: 14px; color: var(--text2); font-weight: 300; margin-bottom: 28px; }
+
+.cta-btn {
+  background: var(--dk);
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px 36px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: opacity 0.2s;
+  letter-spacing: 0.5px;
+}
+.cta-btn:hover { opacity: 0.8; }
+
+/* ─── FOOTER ─── */
+.foot {
+  padding: 20px 56px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text3);
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width:680px) {
+  nav, .section, .hero, .cta-section, .foot { padding-left: 20px; padding-right: 20px; }
+  .hero h1 { font-size: 26px; }
+  .pm-block { grid-template-columns: 1fr; }
+  .monday { grid-template-columns: 1fr; }
+  .alert-sources { display: none; }
+  .nav-links { gap: 20px; }
+}
 </style>
 </head>
 <body>
-<div class="app">
 
-<div style="position:sticky;top:0;z-index:100;background:rgba(255,253,245,0.95);backdrop-filter:blur(10px);border-bottom:1px solid #E8E5D8;padding:0 20px">
-<div style="max-width:580px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:48px">
-<div class="logo"><b>BB</b>APP</div>
-<div style="display:flex;gap:4px">
-<a href="index.html" style="padding:6px 14px;font-size:12px;font-weight:700;color:#1A1A18;text-decoration:none;border-bottom:2px solid #1A1A18">Inicio</a>
-<a href="demo.html" style="padding:6px 14px;font-size:12px;font-weight:600;color:#939597;text-decoration:none">Probar</a>
-<a href="backtest.html" style="padding:6px 14px;font-size:12px;font-weight:600;color:#939597;text-decoration:none">Backtest</a>
-</div>
-</div>
-</div>
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <span class="logo-box">BB</span>APP
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Inicio</a></li>
+    <li><a href="demo.html">Probar</a></li>
+    <li><a href="#">Backtest</a></li>
+  </ul>
+</nav>
 
+<!-- HERO -->
 <div class="hero">
-<h1>Tu equipo ya tiene la data.<br>BBAPP la hace <em>hablar</em>.</h1>
-<p>Sube el Excel que tu KAM ya descarga del portal B2B. Sin instalar nada, sin ERP, sin consultor. BBAPP cruza con 12 fuentes de mercado y cada lunes recibes un briefing con las alertas que importan — priorizadas por plata en juego.</p>
+  <h1>Tu equipo ya tiene la data.<br>BBAPP la convierte en <span class="highlight">decisiones</span>.</h1>
 </div>
 
 <!-- MATRIX -->
-<div class="sec">
-<div class="sec-l">Qué pasa cuando cruzas tu data</div>
-<div class="mx-w">
-<table class="mx">
-<tr><td class="md" style="min-width:60px"></td><td class="mh">📊 Sell Out</td><td class="mh">📦 Sell In</td><td class="mh">🏪 Inv. Retail</td><td class="mh">🚛 Inv. Distrib.</td><td class="mh">📈 GfK</td></tr>
-<tr><td class="mh">📊 Sell Out</td><td class="md">—</td><td class="mo" onclick="sx(this,'Plata atrapada','Mandaste más de lo que el retailer vende. Hay plata congelada en su bodega que cada mes vale menos.','SO + SI')">Plata atrapada</td><td class="mr" onclick="sx(this,'Venta que estás perdiendo','Hay gente que quiere comprar tu producto pero no lo encuentra en góndola. Está en la bodega del retailer. Cada día sin stock es plata que se va a la competencia.','SO + Inv. Retail')">Venta perdida</td><td class="mr" onclick="sx(this,'Te vas a quedar sin stock','La demanda está creciendo pero no tienes nada en camino. Si no haces una orden de compra hoy, te quedas sin producto.','SO + Inv. Distrib.')">Sin stock</td><td class="mo" onclick="sx(this,'Pierdes mercado sin saberlo','Tu sell-out subió 5% y te felicitaste. Pero el mercado total subió 12%. Estás perdiendo participación sin darte cuenta.','SO + GfK')">Pierdes mercado</td></tr>
-<tr><td class="mh">📦 Sell In</td><td class="mo" onclick="sx(this,'Mandaste de más','Llevas meses mandando más de lo que se vende. La bodega del retailer está llena de tu producto. Es plata parada.','SI + SO')">Mandaste de más</td><td class="md">—</td><td class="mo" onclick="sx(this,'No reciben todo','El retailer pide 100 y le llegan 60. O le mandas 100 y rechaza porque ya tiene de más.','SI + Inv. Retail')">No reciben todo</td><td class="mn" onclick="sx(this,'Qué viene en camino','Pipeline de despacho vs lo que hay en tránsito. ¿Alcanza o sobra?','SI + Inv. Distrib.')">Qué viene</td><td class="mn" onclick="sx(this,'Mandas mucho o poco','Tu despacho vs lo que el mercado total pide. ¿Estás poniendo suficiente?','SI + GfK')">Mucho o poco</td></tr>
-<tr><td class="mh">🏪 Inv. Retail</td><td class="mr" onclick="sx(this,'Stock parado hace meses','Producto en la bodega del retailer que lleva meses sin venderse. Plata muerta.','Inv. Retail + SO')">Stock parado</td><td class="mn" onclick="sx(this,'¿Alcanza el stock?','Cobertura actual vs lo que necesitas para no quebrar.','Inv. Retail + SI')">¿Alcanza?</td><td class="md">—</td><td class="mn" onclick="sx(this,'Mover entre bodegas','Sobra en un retailer, falta en otro. Se puede redistribuir.','Inv. Retail + Inv. Distrib.')">Mover stock</td><td class="mn" onclick="sx(this,'Donde vendes no tienes','Tienes buen share en Falabella pero 0 stock en Sodimac. Pierdes por distribución.','Inv. Retail + GfK')">Vendes sin stock</td></tr>
-<tr><td class="mh">🚛 Inv. Distrib.</td><td class="mr" onclick="sx(this,'Nada viene en camino','Demanda creciendo + 0 contenedores en tránsito. Lead time no perdona.','Inv. Distrib. + SO')">Nada en camino</td><td class="mn" onclick="sx(this,'¿Cuándo repones?','Timing óptimo de reposición según demanda y lead time.','Inv. Distrib. + SI')">¿Cuándo?</td><td class="mn" onclick="sx(this,'¿Dónde falta producto?','Distribución entre retailers y zonas. ¿Dónde estás ausente?','Inv. Distrib. + Inv. Retail')">¿Dónde falta?</td><td class="md">—</td><td class="mn" onclick="sx(this,'Tu stock vs el mercado','Lo que tienes en bodega vs lo que el mercado total demanda.','Inv. Distrib. + GfK')">Stock vs mercado</td></tr>
-<tr><td class="mh">📈 GfK</td><td class="mo" onclick="sx(this,'Estás perdiendo mercado','Tu sell-out sube pero la competencia crece más rápido. Pierdes share relativo.','GfK + SO')">Perdiendo</td><td class="mn" onclick="sx(this,'¿Cuánto deberías vender?','Cuota óptima según tu share y el tamaño del mercado.','GfK + SI')">Cuota óptima</td><td class="mn" onclick="sx(this,'¿Dónde no estás?','Tienes share alto pero no estás en todos los retailers. Oportunidad.','GfK + Inv. Retail')">¿Dónde no estás?</td><td class="mn" onclick="sx(this,'Inventario del mercado','Stock total del mercado vs tu parte. ¿Estás subdimensionado?','GfK + Inv. Distrib.')">Inv. mercado</td><td class="md">—</td></tr>
-</table>
+<div class="section" style="padding-top:0;">
+  <div class="section-label" style="text-align:center;">Qué pasa cuando cruzas tu data</div>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th></th>
+          <th>🛍️ Sell Out</th>
+          <th>📦 Sell In</th>
+          <th>🏪 Inv. Retail</th>
+          <th>🚛 Inv. Distrib.</th>
+          <th>📊 GfK</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-head">🛍️ Sell Out</td>
+          <td class="empty">—</td>
+          <td class="cell amber">Plata atrapada<br><small>Stock que no rota es plata que no vuelve</small></td>
+          <td class="cell red">Venta perdida<br><small>Plata que se fue a la competencia. Hoy.</small></td>
+          <td class="cell red">Sin stock<br><small>Cada día sin stock es una venta que no recuperas</small></td>
+          <td class="cell red">Pierdes mercado<br><small>Subes en ventas pero pierdes participación</small></td>
+        </tr>
+        <tr>
+          <td class="row-head">📦 Sell In</td>
+          <td class="cell amber">Mandaste de más<br><small>Evita devoluciones o capital congelado</small></td>
+          <td class="empty">—</td>
+          <td class="cell amber">No reciben todo<br><small>Tu despacho llega incompleto y el retailer te cobra el faltante</small></td>
+          <td class="cell">Qué viene</td>
+          <td class="cell">Mucho o poco</td>
+        </tr>
+        <tr>
+          <td class="row-head">🏪 Inv. Retail</td>
+          <td class="cell amber">Stock parado<br><small>Cuántos días lleva sin moverse. Cuánto te cuesta.</small></td>
+          <td class="cell">¿Alcanza?</td>
+          <td class="empty">—</td>
+          <td class="cell">Mover stock</td>
+          <td class="cell">Vendes sin stock</td>
+        </tr>
+        <tr>
+          <td class="row-head">🚛 Inv. Distrib.</td>
+          <td class="cell amber">Nada en camino<br><small>En 30 días no tienes con qué despachar</small></td>
+          <td class="cell">¿Cuándo?</td>
+          <td class="cell">¿Dónde falta?</td>
+          <td class="empty">—</td>
+          <td class="cell">Stock vs mercado</td>
+        </tr>
+        <tr>
+          <td class="row-head">📊 GfK</td>
+          <td class="cell amber">Perdiendo<br><small>Tu mercado crece. Tu share no.</small></td>
+          <td class="cell">Cuota óptima</td>
+          <td class="cell">¿Dónde no estás?</td>
+          <td class="cell">Inv. mercado</td>
+          <td class="empty">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="glossary">
+    <div class="gloss-item">
+      <div class="gloss-term">🛍️ Sell Out</div>
+      <div class="gloss-def">Lo que el consumidor compra en la tienda. Lo que mueve la góndola.</div>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">📦 Sell In</div>
+      <div class="gloss-def">Lo que tú le mandas al retailer o distribuidor. Tu factura.</div>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">🏪 Inv. Retail</div>
+      <div class="gloss-def">El stock en góndola y bodega del retail.</div>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">🚛 Inv. Distrib.</div>
+      <div class="gloss-def">El stock en bodega del distribuidor.</div>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">📊 GfK</div>
+      <div class="gloss-def">Medición del mercado total. Toda la categoría, todas las marcas.</div>
+    </div>
+  </div>
 </div>
 
-<div class="xp" id="xp">
-<div style="display:flex;justify-content:space-between;align-items:flex-start">
-<div><div id="xt" style="font-size:14px;font-weight:800"></div><div id="xs" style="font-size:9px;color:#939597;margin-top:2px"></div></div>
-<span onclick="document.getElementById('xp').classList.remove('show')" style="cursor:pointer;color:#939597;font-size:16px">✕</span>
-</div>
-<div id="xd" style="font-size:12px;color:#4A4845;margin-top:8px;line-height:1.6"></div>
-</div>
-</div>
-
-<!-- GREEN SOURCES -->
-<div class="sec">
-<div class="gbox">
-<div class="gbox-t">+ 12 fuentes de Alternative Data que BBAPP procesa</div>
-<div class="chips">
-<span class="chip">💰 Precios web</span>
-<span class="chip">🌐 Disponibilidad</span>
-<span class="chip">🔍 Google Trends</span>
-<span class="chip">🛒 MercadoLibre</span>
-<span class="chip">🏛️ ChileCompra</span>
-<span class="chip">💵 Banco Central</span>
-<span class="chip">🌤️ Clima</span>
-<span class="chip">🚢 Puertos</span>
-<span class="chip">⭐ Reviews + SERNAC</span>
-<span class="chip">📢 Retail Ads</span>
-<span class="chip">📅 Calendario</span>
-<span class="chip">📱 Redes + Web</span>
-</div>
-<div class="gbox-d">Datos alternativos de mercado que BBAPP procesa y correlaciona diariamente. Predicen demanda, detectan guerras de precio, alertan quiebres y monitorean a tu competencia. Automático, sin que tu equipo haga nada.</div>
-</div>
+<!-- ALT DATA -->
+<div class="section" style="padding-top:0;">
+  <div class="alt-card">
+    <div class="alt-card-title">+ 12 fuentes de <span>Alternative Data</span> que BBAPP procesa</div>
+    <div class="chips">
+      <div class="chip">🔥 Precios web</div>
+      <div class="chip">🌐 Disponibilidad</div>
+      <div class="chip">🔍 Google Trends</div>
+      <div class="chip">🛒 MercadoLibre</div>
+      <div class="chip">🏛️ ChileCompra</div>
+      <div class="chip">🏦 Banco Central</div>
+      <div class="chip">🌤️ Clima</div>
+      <div class="chip">⚓ Puertos</div>
+      <div class="chip">⭐ Reviews + SERNAC</div>
+      <div class="chip">📣 Retail Ads</div>
+      <div class="chip">📅 Calendario</div>
+      <div class="chip">📱 Redes + Web</div>
+    </div>
+    <div class="alt-desc">Datos alternativos de mercado que BBAPP procesa y correlaciona diariamente.</div>
+  </div>
 </div>
 
-
+<!-- CTA -->
+<div class="cta-section">
+  <a href="demo.html" class="cta-btn">Probar con mi data →</a>
+</div>
 
 <div class="foot">BBAPP · 2026</div>
 
-<script>
-function sx(el, title, desc, sources) {
-  var p = document.getElementById('xp');
-  p.classList.add('show');
-  document.getElementById('xt').textContent = title;
-  document.getElementById('xd').textContent = desc;
-  document.getElementById('xs').textContent = 'Cruce: ' + sources;
-  p.scrollIntoView({behavior:'smooth', block:'nearest'});
-}
-</script>
 </body>
 </html>
