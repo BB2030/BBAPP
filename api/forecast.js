@@ -277,16 +277,29 @@ Genera un análisis en JSON con EXACTAMENTE esta estructura. Usa los números RE
 
 {
   "forecast": [{"mes":"Jul 26","uds":NUMERO,"venta":NUMERO}, ... 12 meses],
+  "forecast_base": NUMERO,
+  "forecast_ajustado": NUMERO,
+  "forecast_factores": [{"factor":"TEXTO corto","impacto":"TEXTO 1 línea","efecto":"+X%" o "-X%"}, ... 3-5 factores],
   "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO corto","detalle":"TEXTO 2-3 líneas max con números reales","accion":"TEXTO 1 línea acción específica"}, ... mínimo 3, máximo 6]
 }
 
-REGLAS:
-- forecast: 12 meses desde el mes siguiente al último dato. Respetar estacionalidad real del historial. Venta en CLP.
-- alertas: MÍNIMO 3, MÁXIMO 6. Cada una cita números del dataset. Cruzar fuentes disponibles. Acción específica. Montos en CLP.
-- Detalle de alerta: MÁXIMO 3 líneas. Conciso. Números concretos.
-- Si hay datos de SI: incluir alertas de gap SI/SO
-- Si hay datos de inventario: incluir alertas de cobertura/quiebre
-- Si hay datos de GfK: incluir alertas de share
+REGLAS FORECAST CRUZADO (NO es SO + 10%, es un forecast inteligente):
+- forecast_base: promedio mensual SO últimos 6 meses × 12. Ese es el punto de partida SIN ajustar.
+- forecast_ajustado: el total REAL que proyectas después de cruzar las 5 fuentes. Puede ser MENOR que el base.
+- forecast_factores: cada factor que ajustó el forecast. Ejemplos:
+  * SI/SO gap: si SI > SO por 3+ meses → canal cargado → demanda real es MENOR que SO (el retailer compra de más, no el consumidor)
+  * Inventario: si DOH distribuidor > 90 días → no necesitas producir/importar → el SO futuro depende del sell-through, no del sell-in
+  * GfK mercado: si mercado crece 10% pero tu SO crece 3% → estás perdiendo share → ajustar a la baja por presión competitiva
+  * GfK competencia: si Midea/Samsung crecen en tu segmento → presión de precio → ajustar volumen o precio a la baja
+  * Estacionalidad: multiplicadores reales del historial (peak BF/Navidad, dip verano)
+  * Post-fábrica Maipú: lead time 10-12 semanas puede causar quiebres que deprimen SO
+- forecast mensual: distribuir el forecast_ajustado mes a mes respetando estacionalidad real del historial
+- Venta en CLP por mes
+- El forecast debe EXPLICAR por qué el número es diferente al SO base. Si todas las fuentes dicen que va a bajar, el forecast BAJA. No maquilles.
+
+REGLAS ALERTAS:
+- MÍNIMO 3, MÁXIMO 6. Cada una cita números del dataset. Cruzar fuentes. Acción específica. Montos en CLP.
+- Detalle: MÁXIMO 3 líneas. Conciso. Números concretos.
 - NO generar JSON gigante. Mantenerlo compacto.`;
 
     // Claude
@@ -319,6 +332,33 @@ REGLAS:
     result.sku = filtroSKU;
     result.retailer = filtroRetailer;
     result.marca = filtroMarca;
+
+    // Benchmark from GfK (no Claude needed)
+    if (gfkAgg && gfkAgg.topSKUs.length) {
+      const totalMkt = gfkAgg.totalUds;
+      const byBrand = {};
+      gfkAgg.topSKUs.forEach(s => {
+        const b = s.marca || s.cod.split('-')[0] || 'Otro';
+        if (!byBrand[b]) byBrand[b] = 0;
+        byBrand[b] += s.uds;
+      });
+      const topMarcas = Object.entries(byBrand)
+        .sort((a,b) => b[1] - a[1])
+        .slice(0, 10)
+        .map(([marca, uds]) => ({ marca, uds, share: totalMkt > 0 ? Math.round(uds / totalMkt * 1000) / 10 : 0 }));
+      const topSkus = gfkAgg.topSKUs.slice(0, 15).map(s => ({
+        cod: s.cod,
+        marca: s.marca || s.cod.split('-')[0],
+        uds: s.uds,
+        share: totalMkt > 0 ? Math.round(s.uds / totalMkt * 1000) / 10 : 0
+      }));
+      result.benchmark = {
+        descripcion: 'Mercado GfK — ' + (cat || 'Lavado y Secado') + (subcat && subcat !== 'Todas' ? ' / ' + subcat : ''),
+        total_mercado: totalMkt,
+        top_marcas: topMarcas,
+        top_skus: topSkus
+      };
+    }
 
     return res.status(200).json(result);
 
