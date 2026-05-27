@@ -233,24 +233,21 @@ TOP MARCAS GfK: ${gfkAgg.topSKUs.slice(0,10).map(s => `${s.cod}: ${s.uds.toLocal
 ${MOTOR_LAVADO}
 
 ═══ TAREA ═══
-Genera un análisis completo en JSON con EXACTAMENTE esta estructura. Usa los números REALES del dataset. NO inventes datos. Responde SOLO el JSON, sin markdown, sin backticks.
+Genera un análisis en JSON con EXACTAMENTE esta estructura. Usa los números REALES del dataset. NO inventes datos. Responde SOLO el JSON, sin markdown, sin backticks.
 
 {
   "forecast": [{"mes":"Jul 26","uds":NUMERO,"venta":NUMERO}, ... 12 meses],
-  ${siAgg ? '"gap": [{"retailer":"NOMBRE","si":NUMERO,"so":NUMERO,"gap_pct":NUMERO,"diagnostico":"TEXTO"}, ...],' : ''}
-  ${idAgg || irAgg ? '"inventario": [{"sku":"COD","inv_dist":NUMERO,"inv_retail":NUMERO,"so_mes":NUMERO,"doh_dist":NUMERO,"doh_retail":NUMERO,"status":"🔴|🟡|🟢"}, ...],' : ''}
-  ${gfkAgg ? '"share": [{"mes":"TEXTO","tu_so":NUMERO,"mercado":NUMERO,"share":NUMERO}, ...],' : ''}
-  "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO","detalle":"TEXTO","accion":"TEXTO"}, ...]
+  "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO corto","detalle":"TEXTO 2-3 líneas max con números reales","accion":"TEXTO 1 línea acción específica"}, ... mínimo 3, máximo 6]
 }
 
 REGLAS:
-- forecast: 12 meses desde el mes siguiente al último dato. Respetar estacionalidad real del historial.
-- gap: SI total vs SO total últimos 6 meses por retailer. gap_pct = (SI-SO)/SO*100. Diagnostico: >40% = "Sobrestock severo", >20% = "Exceso acumulado", >10% = "Vigilar", <0 = "Canal se vacía", resto = "Equilibrado"
-- inventario: cruzar inv actual vs SO promedio últimos 3 meses. DOH = inv / (so_mes/30). Status: <15 días = 🔴, 15-45 = 🟡, >45 = 🟢, >120 = 🔴 (sobrestock)
-- share: tu SO / mercado GfK por mes. Calcular tendencia.
-- alertas: MÍNIMO 4 alertas. Cada una debe citar números reales del dataset. Cruzar fuentes. La acción debe ser específica ("llamar a X", "OC de Y un", "reasignar Z un desde A a B").
-- TODOS los montos en CLP
-- Si una sección no tiene datos suficientes, omítela del JSON`;
+- forecast: 12 meses desde el mes siguiente al último dato. Respetar estacionalidad real del historial. Venta en CLP.
+- alertas: MÍNIMO 3, MÁXIMO 6. Cada una cita números del dataset. Cruzar fuentes disponibles. Acción específica. Montos en CLP.
+- Detalle de alerta: MÁXIMO 3 líneas. Conciso. Números concretos.
+- Si hay datos de SI: incluir alertas de gap SI/SO
+- Si hay datos de inventario: incluir alertas de cobertura/quiebre
+- Si hay datos de GfK: incluir alertas de share
+- NO generar JSON gigante. Mantenerlo compacto.`;
 
     // Claude
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -258,7 +255,7 @@ REGLAS:
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 8000,
+      max_tokens: 4000,
       messages: [{ role: 'user', content: prompt }]
     });
 
