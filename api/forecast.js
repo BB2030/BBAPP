@@ -163,12 +163,15 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { so, si, id, ir, gfk, empresa, rubro, categoria, subcategoria } = req.body;
+    const { so, si, id, ir, gfk, empresa, rubro, categoria, subcategoria, marca, retailer, sku } = req.body;
 
     if (!so) return res.status(200).json({ error: 'Necesitas al menos Sell Out.' });
 
     const cat = categoria || 'Lavado y Secado';
     const subcat = subcategoria || 'Todas';
+    const filtroMarca = marca && marca !== 'Todas' ? marca : null;
+    const filtroRetailer = retailer && retailer !== 'Todos' ? retailer : null;
+    const filtroSKU = sku && sku !== 'Todos' ? sku : null;
 
     // Parsear
     const soRows = parseCSV(so);
@@ -197,6 +200,11 @@ EMPRESA: ${empresa || 'No especificada'}
 RUBRO: ${rubro || 'Electrohogar'}
 CATEGORÍA: ${cat}
 SUBCATEGORÍA: ${subcat}
+${filtroMarca ? `MARCA SELECCIONADA: ${filtroMarca}` : ''}
+${filtroRetailer ? `RETAILER SELECCIONADO: ${filtroRetailer}` : ''}
+${filtroSKU ? `SKU SELECCIONADO: ${filtroSKU}` : ''}
+${filtroSKU || filtroRetailer ? `\nANÁLISIS ESPECÍFICO: Analiza EXCLUSIVAMENTE ${filtroSKU || 'todos los SKUs'}${filtroRetailer ? ' en ' + filtroRetailer : ''}${filtroMarca ? ' marca ' + filtroMarca : ''}. El forecast, las alertas y todas las conclusiones deben ser sobre este producto/retailer específico. NO menciones otros SKUs ni otros retailers en las alertas salvo para comparar contra este. Piensa como el KAM responsable de este SKU en este retailer — qué necesita saber el lunes a las 8AM.` : ''}
+REGLA CRÍTICA DE SUBCATEGORÍA: Analiza SOLO datos relevantes a "${subcat}". Si la subcategoría es "Lavadora Carga Superior", IGNORA secadoras, lava-secas, semi-automáticas, centrífugas, carga frontal. Las alertas deben ser SOLO sobre la subcategoría seleccionada. Si un SKU es de otra subcategoría (ej: secadora, lava-seca), NO lo menciones en las alertas.
 FUENTES DISPONIBLES: ${fuentes.join(', ')} (${fuentes.length} fuentes)
 
 ═══ SELL OUT (${soAgg.serie.length} meses, ${soAgg.totalUds.toLocaleString()} un, $${soAgg.totalVenta.toLocaleString()} CLP) ═══
@@ -271,6 +279,9 @@ REGLAS:
     result.fuentes = fuentes;
     result.total_filas = soRows.length + siRows.length + idRows.length + irRows.length + gfkRows.length;
     result.serie_historica = soAgg.serie;
+    result.sku = filtroSKU;
+    result.retailer = filtroRetailer;
+    result.marca = filtroMarca;
 
     return res.status(200).json(result);
 
