@@ -182,11 +182,40 @@ module.exports = async (req, res) => {
 
     if (soRows.length < 5) return res.status(200).json({ error: 'Sell Out tiene muy pocas filas.' });
 
+    // Filtrar filas según selección del usuario
+    function filtrar(rows) {
+      return rows.filter(r => {
+        if (filtroSKU) {
+          const cod = getField(r, 'Cod. Producto', 'Cod. Interno', 'Codigo', 'SKU', 'Item');
+          if (cod && !cod.includes(filtroSKU) && filtroSKU !== cod) return false;
+        }
+        if (filtroRetailer) {
+          const ret = getField(r, 'Retailer', 'Retail', 'Cliente', 'Canal', 'Bodega');
+          if (ret && ret.toLowerCase() !== filtroRetailer.toLowerCase()) return false;
+        }
+        if (filtroMarca) {
+          const mar = getField(r, 'Marca', 'BRAND', 'Brand');
+          if (mar && mar.toLowerCase() !== filtroMarca.toLowerCase()) return false;
+        }
+        return true;
+      });
+    }
+
+    const soFiltered = filtrar(soRows);
+    const siFiltered = filtrar(siRows);
+    const idFiltered = filtroSKU ? idRows.filter(r => {
+      const cod = getField(r, 'Cod. Producto', 'Cod. Interno', 'Codigo', 'SKU');
+      return cod && cod.includes(filtroSKU);
+    }) : idRows;
+    const irFiltered = filtrar(irRows);
+
+    if (soFiltered.length < 3) return res.status(200).json({ error: 'Muy pocas filas para ' + (filtroSKU || '') + ' ' + (filtroRetailer || '') + '. Revisa los filtros.' });
+
     // Agregar
-    const soAgg = agregar(soRows, 'so');
-    const siAgg = siRows.length ? agregar(siRows, 'si') : null;
-    const idAgg = idRows.length ? agregar(idRows, 'id') : null;
-    const irAgg = irRows.length ? agregar(irRows, 'ir') : null;
+    const soAgg = agregar(soFiltered, 'so');
+    const siAgg = siFiltered.length ? agregar(siFiltered, 'si') : null;
+    const idAgg = idFiltered.length ? agregar(idFiltered, 'id') : null;
+    const irAgg = irFiltered.length ? agregar(irFiltered, 'ir') : null;
     const gfkAgg = gfkRows.length ? agregar(gfkRows, 'gfk') : null;
 
     const fuentes = ['SO', siAgg ? 'SI' : null, idAgg ? 'Inv.Dist' : null, irAgg ? 'Inv.Retail' : null, gfkAgg ? 'GfK' : null].filter(Boolean);
@@ -274,7 +303,7 @@ REGLAS:
     // Add metadata
     result.empresa = empresa;
     result.fuentes = fuentes;
-    result.total_filas = soRows.length + siRows.length + idRows.length + irRows.length + gfkRows.length;
+    result.total_filas = soFiltered.length + siFiltered.length + idFiltered.length + irFiltered.length + gfkRows.length;
     result.serie_historica = soAgg.serie;
     result.sku = filtroSKU;
     result.retailer = filtroRetailer;
