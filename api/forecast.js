@@ -195,7 +195,7 @@ module.exports = async (req, res) => {
         }
         if (filtroMarca) {
           const mar = getField(r, 'Marca', 'BRAND', 'Brand');
-          if (mar && mar.toLowerCase() !== filtroMarca.toLowerCase()) return false;
+          if (mar && mar.toLowerCase() !== filtroMarca.toLowerCase() && !filtroMarca.toLowerCase().startsWith(mar.toLowerCase()) && !mar.toLowerCase().startsWith(filtroMarca.toLowerCase())) return false;
         }
         return true;
       });
