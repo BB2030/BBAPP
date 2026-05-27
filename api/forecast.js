@@ -209,7 +209,18 @@ module.exports = async (req, res) => {
     }) : idRows;
     const irFiltered = filtrar(irRows);
 
-    if (soFiltered.length < 3) return res.status(200).json({ error: 'Muy pocas filas para ' + (filtroSKU || '') + ' ' + (filtroRetailer || '') + '. Revisa los filtros.' });
+    if (soFiltered.length < 3) {
+      // Debug: show first 3 SO rows and what we're filtering for
+      const sample = soRows.slice(0, 3).map(r => ({
+        cod: getField(r, 'Cod. Producto', 'Cod. Interno', 'Codigo', 'SKU', 'Item'),
+        ret: getField(r, 'Retailer', 'Retail', 'Cliente', 'Canal', 'Bodega'),
+        mar: getField(r, 'Marca', 'BRAND', 'Brand'),
+        keys: Object.keys(r).join('|')
+      }));
+      return res.status(200).json({ 
+        error: 'Muy pocas filas (' + soFiltered.length + '/' + soRows.length + ' SO). Filtros: SKU=' + (filtroSKU||'null') + ' RET=' + (filtroRetailer||'null') + ' MAR=' + (filtroMarca||'null') + '. Sample: ' + JSON.stringify(sample)
+      });
+    }
 
     // Agregar
     const soAgg = agregar(soFiltered, 'so');
