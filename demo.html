@@ -3,127 +3,264 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBAPP</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>APP</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
+:root{--bg:#F2F0EC;--white:#FFF;--dk:#1a0d47;--gold:#F5DF4D;--blue:#0496ff;--sky:#8acdea;--aqua:#0f7173;--border:#E0DDD7;--text:#1a0d47;--text2:#5a5370;--text3:#9a94b0}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:#FFFDF5;color:#1A1A18;font-size:14px}
-.nav{position:sticky;top:0;z-index:100;background:rgba(255,253,245,.95);backdrop-filter:blur(10px);border-bottom:1px solid #E8E5D8;padding:0 20px}
+body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased}
+.nav{position:sticky;top:0;z-index:100;background:rgba(242,240,236,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 20px}
 .nav-in{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:48px}
-.logo{font-size:17px;font-weight:800}.logo b{background:#1A1A18;color:#F5DF4D;padding:2px 6px;border-radius:4px}
-a.bk{font-size:12px;font-weight:600;color:#939597;text-decoration:none}
+.logo{font-size:17px;font-weight:700;font-family:'Lato',sans-serif}
+.logo b{background:var(--dk);color:var(--gold);padding:2px 6px}
 .gate{display:flex;align-items:center;justify-content:center;min-height:100vh}
-.gb{background:#FFF;border:1px solid #E8E5D8;border-radius:12px;padding:40px;max-width:420px;width:90%;text-align:center}
-.gs{width:100%;padding:10px 14px;border:1px solid #D4D1C4;border-radius:6px;font-size:14px;font-family:Outfit;margin-bottom:10px;appearance:auto}
-.gbt{width:100%;padding:11px;background:#1A1A18;color:#F5DF4D;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit;margin-top:8px}
+.gb{background:var(--white);border:1px solid var(--border);padding:40px;max-width:420px;width:90%;text-align:center}
+.gs{width:100%;padding:10px 14px;border:1px solid var(--border);background:var(--bg);font-size:14px;font-family:'Lato',sans-serif;color:var(--dk);margin-bottom:10px;appearance:auto;outline:none}
+.gs:focus{border-color:var(--dk)}
+.gbt{width:100%;padding:12px;background:var(--dk);color:var(--gold);border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;margin-top:8px;letter-spacing:.3px;transition:opacity .2s}
 .gbt:disabled{opacity:.35;cursor:not-allowed}
+.gbt:hover:not(:disabled){opacity:.85}
 #main{display:none;max-width:900px;margin:0 auto;padding:16px}
-.ctx{text-align:center;padding:7px;background:#FEFCE8;border-radius:10px;margin-bottom:12px;font-size:11px;font-weight:700;cursor:pointer}
-.cd{background:#FFF;border:1px solid #E8E5D8;border-radius:10px;padding:16px;margin-bottom:12px}
+.ctx{text-align:center;padding:7px;background:#FEFCE8;border:1px solid var(--border);margin-bottom:12px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px}
+.cd{background:var(--white);border:1px solid var(--border);padding:16px;margin-bottom:12px}
 .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
-.fl label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#939597;margin-bottom:4px}
-.fs{width:100%;padding:7px 10px;border:1px solid #D4D1C4;border-radius:6px;font-size:13px;font-family:Outfit;appearance:auto}
+.fl label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:4px}
+.fs{width:100%;padding:7px 10px;border:1px solid var(--border);background:var(--bg);font-size:13px;font-family:'Lato',sans-serif;color:var(--dk);outline:none}
+.fs:focus{border-color:var(--dk)}
 .ug{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.ub{border:2px dashed #E8E5D8;border-radius:10px;padding:14px;text-align:center;cursor:pointer}
-.ub:hover{border-color:#F5DF4D;background:#FEFCE8}
-.ub.ok{border:2px solid #16A34A;background:#F0FDF4}
-.bt{display:block;margin:16px auto;padding:12px 32px;background:#1A1A18;color:#F5DF4D;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit}
+.ub{border:2px dashed var(--border);padding:14px;text-align:center;cursor:pointer;background:var(--bg);transition:all .15s}
+.ub:hover{border-color:var(--dk);background:rgba(26,13,71,.03)}
+.ub.ok{border:2px solid var(--aqua);background:rgba(15,113,115,.05)}
+.uf{border:2px solid var(--border);background:var(--white);cursor:pointer;transition:border-color .15s}
+.uf:hover{border-color:var(--dk)}.bt{display:block;margin:16px auto;padding:12px 32px;background:var(--dk);color:var(--gold);border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;letter-spacing:.3px;transition:opacity .2s}
 .bt:disabled{opacity:.35;cursor:not-allowed}
+.bt:hover:not(:disabled){opacity:.85}
 #proc{display:none;text-align:center;padding:80px 20px}
-.sp{width:36px;height:36px;border:3px solid #E8E5D8;border-top-color:#1A1A18;border-radius:50%;animation:s .7s linear infinite;margin:0 auto 20px}
+.sp{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--dk);border-radius:50%;animation:s .7s linear infinite;margin:0 auto 20px}
 @keyframes s{to{transform:rotate(360deg)}}
 #res{display:none;max-width:900px;margin:0 auto;padding:16px}
-.al{padding:12px;border-radius:8px;border-left:3px solid;margin-bottom:6px}
-.al.r{border-color:#DC2626;background:#FEF2F2}.al.o{border-color:#D97706;background:#FFF7ED}.al.g{border-color:#16A34A;background:#F0FDF4}
-.al-h{display:flex;justify-content:space-between}.al-m{font-size:12px;font-weight:800}
-.al.r .al-m{color:#DC2626}.al.o .al-m{color:#D97706}.al.g .al-m{color:#16A34A}
-.al-tg{font-size:7px;font-weight:700;padding:2px 6px;border-radius:3px;color:#FFF}
-.al.r .al-tg{background:#DC2626}.al.o .al-tg{background:#D97706}.al.g .al-tg{background:#16A34A}
-.al-t{font-size:12px;font-weight:700;margin-top:4px}.al-d{font-size:10px;color:#6B6967;margin-top:3px;line-height:1.5}
-.al-a{font-size:10px;font-weight:600;margin-top:4px}.al.r .al-a{color:#DC2626}.al.o .al-a{color:#D97706}.al.g .al-a{color:#16A34A}
-.ro{display:flex;align-items:center;gap:12px;padding:14px;background:#FFF;border:1.5px solid #E8E5D8;border-radius:10px;margin-bottom:6px;cursor:pointer}
-.ro:hover{border-color:#F5DF4D;background:#FEFCE8}
-.rl{display:flex;align-items:center;gap:12px;padding:14px;background:#FFFDF5;border:1.5px solid #E8E5D8;border-radius:10px;margin-bottom:6px;opacity:.5}
+.al{padding:12px 14px;border-left:4px solid;margin-bottom:6px;background:var(--white)}
+.al.r{border-color:var(--sky);background:rgba(138,205,234,.06)}
+.al.o{border-color:var(--blue);background:rgba(4,150,255,.05)}
+.al.g{border-color:var(--aqua);background:rgba(15,113,115,.05)}
+.al-h{display:flex;justify-content:space-between;align-items:center}
+.al-m{font-size:12px;font-weight:700}
+.al.r .al-m{color:#2a7fa8}.al.o .al-m{color:var(--blue)}.al.g .al-m{color:var(--aqua)}
+.al-tg{font-size:7px;font-weight:700;padding:2px 7px;letter-spacing:1px}
+.al.r .al-tg{background:var(--sky);color:var(--dk)}
+.al.o .al-tg{background:var(--blue);color:#fff}
+.al.g .al-tg{background:var(--aqua);color:#fff}
+.al-t{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;margin-top:4px;color:var(--dk)}
+.al-d{font-size:10px;color:var(--text2);margin-top:3px;line-height:1.5;font-weight:300}
+.al-a{font-size:10px;font-weight:700;margin-top:4px}
+.al.r .al-a{color:#2a7fa8}.al.o .al-a{color:var(--blue)}.al.g .al-a{color:var(--aqua)}
+.ro{display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);margin-bottom:6px;cursor:pointer;transition:all .12s}
+.ro:hover{border-color:var(--dk);background:rgba(26,13,71,.02)}
+.rl{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg);border:1px solid var(--border);margin-bottom:6px;opacity:.45}
 </style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><div class="logo"><b>BB</b>APP</div><div style="display:flex;gap:2px"><a href="index.html" style="padding:6px 12px;font-size:12px;font-weight:600;color:#939597;text-decoration:none">Inicio</a><a href="demo.html" style="padding:6px 12px;font-size:12px;font-weight:700;color:#1A1A18;text-decoration:none;border-bottom:2px solid #1A1A18">Probar</a><a href="backtest.html" style="padding:6px 12px;font-size:12px;font-weight:600;color:#939597;text-decoration:none">Backtest</a></div></div></div>
-<div class="gate" id="gate"><div class="gb">
-<div style="font-size:28px;margin-bottom:10px"><b style="background:#1A1A18;color:#F5DF4D;padding:2px 8px;border-radius:6px">BB</b>APP</div>
-<div style="font-size:22px;font-weight:800;margin-bottom:4px">Probar con tu data</div>
-<div style="font-size:12px;color:#939597;margin-bottom:24px;line-height:1.7">Sube tu data y ve qu&#233; alertas genera BBAPP.<br>M&#225;ximo 10.000 filas por archivo.</div>
-<select class="gs" id="gr" onchange="ue()"><option value="">Selecciona tu rubro...</option><option value="electrohogar">Electrodom&#233;sticos / Electrohogar</option><option value="tecnologia">Tecnolog&#237;a</option><option value="decohogar">Deco y Hogar</option><option value="belleza">Belleza</option><option value="jugueteria">Juguetera</option><option value="consumo">Consumo Masivo</option><option value="ferreteria">Ferreter&#237;a</option></select>
-<select class="gs" id="ge" onchange="cg()"><option value="">Selecciona tu empresa...</option></select>
-<button class="gbt" id="gbn" disabled onclick="go()">Empezar &#8594;</button>
+<div class="nav"><div class="nav-in">
+  <div class="logo">APP</div>
+  <div style="display:flex;gap:2px">
+    <a href="index.html" style="padding:6px 12px;font-size:12px;font-weight:700;color:var(--text3);text-decoration:none;font-family:'Lato',sans-serif">Inicio</a>
+    <a href="demo.html" style="padding:6px 12px;font-size:12px;font-weight:700;color:var(--dk);text-decoration:none;border-bottom:2px solid var(--dk);font-family:'Lato',sans-serif">Probar</a>
+    <a href="backtest.html" style="padding:6px 12px;font-size:12px;font-weight:700;color:var(--text3);text-decoration:none;font-family:'Lato',sans-serif">Backtest</a>
+  </div>
 </div></div>
+
+<div class="gate" id="gate"><div class="gb">
+<div style="font-size:28px;margin-bottom:10px"><span style="font-family:'Lato',sans-serif;font-weight:700;font-size:28px;color:var(--dk)">APP</span></div>
+<div style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;margin-bottom:4px;color:var(--dk)">Probar con tu data</div>
+<div style="font-size:12px;color:var(--text3);margin-bottom:24px;line-height:1.7;font-weight:300">Sube tu data y ve qué alertas genera APP.<br>Máximo 10.000 filas por archivo.</div>
+<select class="gs" id="gr" onchange="ue()"><option value="">Selecciona tu rubro...</option><option value="electrohogar">Electrodomésticos / Electrohogar</option><option value="tecnologia">Tecnología</option><option value="decohogar">Deco y Hogar</option><option value="belleza">Belleza</option><option value="jugueteria">Juguetería</option><option value="consumo">Consumo Masivo</option><option value="ferreteria">Ferretería</option></select>
+<select class="gs" id="ge" onchange="cg()"><option value="">Selecciona tu empresa...</option></select>
+<button class="gbt" id="gbn" disabled onclick="go()">Empezar →</button>
+</div></div>
+
 <div id="main">
 <div class="ctx" id="ctx" onclick="location.reload()"></div>
-<div class="cd"><div style="text-align:center;font-size:15px;font-weight:800;margin-bottom:10px">&#191;Qu&#233; quieres analizar?</div>
-<div class="fg">
-<div class="fl"><label>Categor&#237;a</label><select class="fs" id="fc" onchange="us();uk()"></select></div>
-<div class="fl"><label>Subcategor&#237;a</label><select class="fs" id="fb" onchange="uk()"></select></div>
-<div class="fl"><label>Marca</label><select class="fs" id="fm" onchange="uk()"></select></div>
-<div class="fl"><label>Retailer</label><select class="fs" id="fr"><option value="todos">Todos</option><option>Falabella</option><option>Ripley</option><option>Paris</option><option>Hites</option><option>La Polar</option><option>Sodimac</option><option>Easy</option><option>Lider</option><option>MercadoLibre</option></select></div>
-<div class="fl"><label>Cod. Producto</label><select class="fs" id="fk"></select></div>
-</div></div>
-<div style="margin:16px 0;padding:16px 18px;background:#FFF;border:2px solid #E8E5D8;border-radius:10px;display:flex;align-items:center;gap:14px"><div style="font-size:32px">&#128274;</div><div><b style="font-size:14px">Procesamiento seguro.</b><br><span style="font-size:12px;color:#6B6967">Tu Excel se procesa en memoria y se elimina inmediatamente. BBAPP no guarda ni comparte tus archivos. Zero data retention.</span></div></div>
-<div style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#939597;margin:8px 0">SUBE LO QUE TENGAS</div>
-<div style="text-align:center;font-size:10px;color:#939597;margin-bottom:10px">M&#225;ximo 10.000 filas &#183; .xlsx .xls .csv</div>
+<div class="cd">
+  <div style="text-align:center;font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;margin-bottom:10px;color:var(--dk)">¿Qué quieres analizar?</div>
+  <div class="fg">
+    <div class="fl"><label>Categoría</label><select class="fs" id="fc" onchange="us();uk()"></select></div>
+    <div class="fl"><label>Subcategoría</label><select class="fs" id="fb" onchange="uk()"></select></div>
+    <div class="fl"><label>Marca</label><select class="fs" id="fm" onchange="uk()"></select></div>
+    <div class="fl"><label>Retailer</label><select class="fs" id="fr"><option value="todos">Todos</option><option>Falabella</option><option>Ripley</option><option>Paris</option><option>Hites</option><option>La Polar</option><option>Sodimac</option><option>Easy</option><option>Lider</option><option>MercadoLibre</option></select></div>
+    <div class="fl"><label>Cod. Producto</label><select class="fs" id="fk"></select></div>
+  </div>
+</div>
+<div style="margin:16px 0;padding:16px 18px;background:var(--white);border:1px solid var(--border);display:flex;align-items:center;gap:14px"><div style="font-size:32px">🔒</div><div><b style="font-size:14px;color:var(--dk)">Procesamiento seguro.</b><br><span style="font-size:12px;color:var(--text2);font-weight:300">Tu Excel se procesa en memoria y se elimina inmediatamente. APP no guarda ni comparte tus archivos. Zero data retention.</span></div></div>
+<div style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin:8px 0">SUBE LO QUE TENGAS</div>
+<div style="text-align:center;font-size:10px;color:var(--text3);margin-bottom:10px">Máximo 10.000 filas · .xlsx .xls .csv</div>
+
 <div class="ug">
-<div class="ub" id="u-si" onclick="document.getElementById('f-si').click()"><input type="file" id="f-si" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'si')"><div>&#128230; <b>Sell In</b></div><p id="n-si" style="font-size:10px;color:#939597;margin-top:2px">Arrastra tu archivo o haz click</p></div>
-<div class="ub" id="u-so" onclick="document.getElementById('f-so').click()"><input type="file" id="f-so" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'so')"><div>&#128202; <b>Sell Out</b></div><p id="n-so" style="font-size:10px;color:#939597;margin-top:2px">Arrastra tu archivo o haz click</p></div>
-<div class="ub" id="u-id" onclick="document.getElementById('f-id').click()"><input type="file" id="f-id" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'id')"><div>&#128666; <b>Inv. Distribuidor</b></div><p id="n-id" style="font-size:10px;color:#939597;margin-top:2px">Arrastra tu archivo o haz click</p></div>
-<div class="ub" id="u-ir" onclick="document.getElementById('f-ir').click()"><input type="file" id="f-ir" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'ir')"><div>&#127978; <b>Inv. Retail</b></div><p id="n-ir" style="font-size:10px;color:#939597;margin-top:2px">Arrastra tu archivo o haz click</p></div>
-<div class="ub" id="u-gfk" onclick="document.getElementById('f-gfk').click()" style="grid-column:2"><input type="file" id="f-gfk" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'gfk')"><div>&#128200; <b>GfK / Market Share</b></div><p id="n-gfk" style="font-size:10px;color:#939597;margin-top:2px">Arrastra tu archivo o haz click</p></div>
+
+<div id="u-so" class="uf" onclick="document.getElementById('f-so').click()">
+  <input type="file" id="f-so" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'so')">
+  <div style="padding:20px 20px;text-align:center">
+    <div style="font-size:17px;font-weight:700;color:var(--dk);display:flex;align-items:center;justify-content:center;gap:8px">📊 Sell Out <span style="font-size:9px;font-weight:700;padding:2px 8px;background:var(--dk);color:var(--gold);letter-spacing:1px">OBLIGATORIO</span></div>
+    <div style="font-size:13px;color:var(--text2);margin-top:6px">Haz click o arrastra tu Excel</div>
+    <p id="n-so" style="font-size:11px;color:var(--aqua);font-weight:700;margin-top:4px"></p>
+  </div>
+  <div style="text-align:center;padding-bottom:10px" onclick="event.stopPropagation()">
+    <span onclick="tf('fmt-so')" style="font-size:11px;color:var(--aqua);font-weight:700;cursor:pointer;text-decoration:underline">👁 ver formato</span>
+  </div>
+  <div id="fmt-so" style="display:none;border-top:1px solid var(--border);padding:12px 14px" onclick="event.stopPropagation()">
+    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">COLUMNAS OBLIGATORIAS</div>
+    <table style="width:100%;border-collapse:collapse;font-size:10px">
+      <tr><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Fecha</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Retailer</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Marca</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Cod. Producto</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Unidades</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Venta Total sin IVA</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Venta Total con IVA</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">PVP Promedio</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Costo Internado Unit.</th></tr>
+      <tr><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">2024-01</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">Falabella</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">Fensa</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">FEN-PC18SZ</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">89</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">27.589.110</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">32.810.941</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">368.663</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">188.000</td></tr>
+      <tr><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td></tr>
+    </table>
+  </div>
 </div>
-<button class="bt" id="gobtn" disabled onclick="az()">Analizar Data &#8594;</button>
+
+<div id="u-si" class="uf" onclick="document.getElementById('f-si').click()">
+  <input type="file" id="f-si" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'si')">
+  <div style="padding:20px 20px;text-align:center">
+    <div style="font-size:17px;font-weight:700;color:var(--dk);display:flex;align-items:center;justify-content:center;gap:8px">📦 Sell In <span style="font-size:9px;font-weight:700;padding:2px 8px;background:var(--border);color:var(--text2);letter-spacing:1px">OPCIONAL</span></div>
+    <div style="font-size:13px;color:var(--text2);margin-top:6px">Haz click o arrastra tu Excel</div>
+    <p id="n-si" style="font-size:11px;color:var(--aqua);font-weight:700;margin-top:4px"></p>
+  </div>
+  <div style="text-align:center;padding-bottom:10px" onclick="event.stopPropagation()">
+    <span onclick="tf('fmt-si')" style="font-size:11px;color:var(--aqua);font-weight:700;cursor:pointer;text-decoration:underline">👁 ver formato</span>
+  </div>
+  <div id="fmt-si" style="display:none;border-top:1px solid var(--border);padding:12px 14px" onclick="event.stopPropagation()">
+    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">COLUMNAS OBLIGATORIAS</div>
+    <table style="width:100%;border-collapse:collapse;font-size:10px">
+      <tr><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Fecha</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Retailer</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Marca</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Cod.</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Un.</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Venta s/IVA</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Costo unit.</th></tr>
+      <tr><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">2024-01</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">Falabella</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">Fensa</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">FEN-PC18SZ</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">89</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">27.589.110</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">188.000</td></tr>
+      <tr><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td></tr>
+    </table>
+  </div>
 </div>
-<div id="proc"><div class="sp"></div><div style="font-size:16px;font-weight:700" id="pt">Leyendo archivos...</div><div style="font-size:12px;color:#939597;margin-top:6px">Cruzando con 12 fuentes de alternative data</div></div>
-<div id="res"><div style="text-align:center;margin-bottom:20px"><div style="display:inline-block;padding:4px 12px;background:#FEFCE8;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">AN&#193;LISIS COMPLETO</div><h2 style="font-size:22px;font-weight:800" id="rt"></h2><p style="color:#939597;font-size:13px" id="rs"></p></div><div id="rc"></div><div style="text-align:center;margin-top:20px"><button onclick="location.reload()" style="padding:10px 24px;background:none;border:1px solid #E8E5D8;border-radius:6px;font-size:13px;color:#939597;cursor:pointer;font-family:Outfit">&#8592; Nuevo an&#225;lisis</button></div></div>
-<div style="text-align:center;padding:20px;font-size:10px;color:#D4D1C4">BBAPP &#183; 2026</div>
+
+<div id="u-id" class="uf" onclick="document.getElementById('f-id').click()">
+  <input type="file" id="f-id" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'id')">
+  <div style="padding:20px 20px;text-align:center">
+    <div style="font-size:17px;font-weight:700;color:var(--dk);display:flex;align-items:center;justify-content:center;gap:8px">🚛 Inv. Distribuidor <span style="font-size:9px;font-weight:700;padding:2px 8px;background:var(--border);color:var(--text2);letter-spacing:1px">OPCIONAL</span></div>
+    <div style="font-size:13px;color:var(--text2);margin-top:6px">Haz click o arrastra tu Excel</div>
+    <p id="n-id" style="font-size:11px;color:var(--aqua);font-weight:700;margin-top:4px"></p>
+  </div>
+  <div style="text-align:center;padding-bottom:10px" onclick="event.stopPropagation()">
+    <span onclick="tf('fmt-id')" style="font-size:11px;color:var(--aqua);font-weight:700;cursor:pointer;text-decoration:underline">👁 ver formato</span>
+  </div>
+  <div id="fmt-id" style="display:none;border-top:1px solid var(--border);padding:12px 14px" onclick="event.stopPropagation()">
+    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">COLUMNAS OBLIGATORIAS</div>
+    <table style="width:100%;border-collapse:collapse;font-size:10px">
+      <tr><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Fecha Corte</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Bodega</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Cod. Producto</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Disponible</th></tr>
+      <tr><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">2025-12-15</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">Stgo Centro</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">FEN-PC18SZ</td><td style="padding:4px 6px;color:var(--blue);font-weight:700;border-bottom:1px solid var(--border)">45</td></tr>
+      <tr><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td colspan="3" style="padding:4px 6px;color:var(--text3);font-style:italic">...</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="u-ir" class="uf" onclick="document.getElementById('f-ir').click()">
+  <input type="file" id="f-ir" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'ir')">
+  <div style="padding:20px 20px;text-align:center">
+    <div style="font-size:17px;font-weight:700;color:var(--dk);display:flex;align-items:center;justify-content:center;gap:8px">🏪 Inv. Retail <span style="font-size:9px;font-weight:700;padding:2px 8px;background:var(--border);color:var(--text2);letter-spacing:1px">OPCIONAL</span></div>
+    <div style="font-size:13px;color:var(--text2);margin-top:6px">Haz click o arrastra tu Excel</div>
+    <p id="n-ir" style="font-size:11px;color:var(--aqua);font-weight:700;margin-top:4px"></p>
+  </div>
+  <div style="text-align:center;padding-bottom:10px" onclick="event.stopPropagation()">
+    <span onclick="tf('fmt-ir')" style="font-size:11px;color:var(--aqua);font-weight:700;cursor:pointer;text-decoration:underline">👁 ver formato</span>
+  </div>
+  <div id="fmt-ir" style="display:none;border-top:1px solid var(--border);padding:12px 14px" onclick="event.stopPropagation()">
+    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">COLUMNAS OBLIGATORIAS</div>
+    <table style="width:100%;border-collapse:collapse;font-size:10px">
+      <tr><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Fecha Corte</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Retail</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Cod. Producto</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Stock Total</th></tr>
+      <tr><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">2025-12-15</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">Falabella</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">FEN-PC18SZ</td><td style="padding:4px 6px;color:var(--aqua);font-weight:700;border-bottom:1px solid var(--border)">5</td></tr>
+      <tr><td style="padding:4px 6px;color:var(--text3);font-style:italic">...</td><td colspan="3" style="padding:4px 6px;color:var(--text3);font-style:italic">...</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="u-gfk" class="uf" style="grid-column:1/-1" onclick="document.getElementById('f-gfk').click()">
+  <input type="file" id="f-gfk" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'gfk')">
+  <div style="padding:20px 20px;text-align:center">
+    <div style="font-size:17px;font-weight:700;color:var(--dk);display:flex;align-items:center;justify-content:center;gap:8px">📈 Data de Mercado (GfK) <span style="font-size:9px;font-weight:700;padding:2px 8px;background:var(--border);color:var(--text2);letter-spacing:1px">OPCIONAL</span></div>
+    <div style="font-size:13px;color:var(--text2);margin-top:6px">Haz click o arrastra tu Excel</div>
+    <p id="n-gfk" style="font-size:11px;color:var(--aqua);font-weight:700;margin-top:4px"></p>
+  </div>
+  <div style="text-align:center;padding-bottom:10px" onclick="event.stopPropagation()">
+    <span onclick="tf('fmt-gfk')" style="font-size:11px;color:var(--aqua);font-weight:700;cursor:pointer;text-decoration:underline">👁 ver formato</span>
+  </div>
+  <div id="fmt-gfk" style="display:none;border-top:1px solid var(--border);padding:12px 14px" onclick="event.stopPropagation()">
+    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">FORMATO REAL GfK — pega el Excel tal como te llega</div>
+    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:8px">
+      <tr><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Period</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">BRAND</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Item</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">AUTOMATIC</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">LOADING</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">DRYING FUNCTION</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">LOADING KG</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Sales Units</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Sales Value &lt;LC&gt;</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Price CLP</th></tr>
+      <tr><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">Jul 19</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">BOSCH</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">WAN24260ES</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">FULLAUTOM.</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">FRONTLOADING</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">NO</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">7</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">52</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">16.452.495</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">316.394</td></tr>
+    </table>
+    <div style="font-size:10px;color:var(--aqua);font-weight:600">📌 Pega el Excel GfK tal como te llega — sin renombrar columnas.</div>
+  </div>
+</div>
+
+</div>
+<button class="bt" id="gobtn" disabled onclick="az()">Analizar Data →</button>
+</div>
+
+<div id="proc"><div class="sp"></div><div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:400;color:var(--dk)" id="pt">Leyendo archivos...</div><div style="font-size:12px;color:var(--text3);margin-top:6px;font-weight:300">Cruzando con 12 fuentes de alternative data</div></div>
+
+<div id="res">
+  <div style="text-align:center;margin-bottom:20px">
+    <div style="display:inline-block;padding:4px 12px;background:var(--bg);border:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;color:var(--text3)">ANÁLISIS COMPLETO</div>
+    <h2 style="font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--dk)" id="rt"></h2>
+    <p style="color:var(--text3);font-size:13px;font-weight:300" id="rs"></p>
+  </div>
+  <div id="rc"></div>
+  <div style="text-align:center;margin-top:20px"><button onclick="location.reload()" style="padding:10px 24px;background:none;border:1px solid var(--border);font-size:13px;color:var(--text3);cursor:pointer;font-family:'Lato',sans-serif">← Nuevo análisis</button></div>
+</div>
+
+<div style="text-align:center;padding:20px;font-size:10px;color:var(--text3);border-top:1px solid var(--border);margin-top:20px">APP · 2026</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 var RR={electrohogar:["Electrolux Group","Midea Carrier","Whirlpool Chile","LG Electronics","Samsung Chile","BSH Chile","Mabe","Haier","Hisense"],tecnologia:["Intcomex","PCFactory","Lenovo Chile"],decohogar:["Casa Ideas","Homy","Rosen"],belleza:["Coty Chile","Henkel Chile"],jugueteria:["Hasbro Chile","Mattel Chile","LEGO Chile"],consumo:["Unilever Chile","Nestle Chile","Carozzi"],ferreteria:["Stanley Chile","Bosch Chile"]};
-var CC={"Electrolux Group":{marcas:["Electrolux","Fensa","Mademsa"],cats:[{v:"lavado",l:"Lavado y Secado",sub:[["todas","Todas"],["lav-cs","Lavadora CS"],["lav-cf","Lavadora CF"],["lavaseca","Lava-Seca"],["secadora","Secadora"]]},{v:"refri",l:"Refrigeraci\u00f3n",sub:[["todas","Todas"],["nf","No Frost"],["fd","Fr\u00edo Directo"],["freezer","Freezer"]]},{v:"cocina",l:"Cocinas y Hornos",sub:[["todas","Todas"],["gas","Cocina Gas"],["horno","Horno"],["campana","Campana"],["micro","Microondas"]]},{v:"aspirado",l:"Aspirado",sub:[["todas","Todas"]]}],skus:[{v:"FEN-PC9.5SZ",l:"PC9.5SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC12SZ",l:"PC12SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC14SZ",l:"PC14SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ZS",l:"PC16ZS Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ONX",l:"PC16ONX Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18SZ",l:"PC18SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18NEG",l:"PC18NEG Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC20SZ",l:"PC20SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21",l:"PC21 Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21ONX",l:"PC21ONX Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-VC8WD",l:"VC8WD Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-UM11WD",l:"UM11WD Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC8",l:"PERC8 Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC11",l:"PERC11 Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PC9D",l:"PC9D Fensa",m:"fensa",s:"secadora",c:"lavado"},{v:"MAD-9.5BZG",l:"9.5BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-9.5SZG",l:"9.5SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12BZG",l:"12BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12SZG",l:"12SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-14BZG",l:"14BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-16BZG",l:"16BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-18SZG",l:"18SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-20SZG",l:"20SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-21ONX",l:"21ONX Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-TW5100",l:"TW5100 Mademsa",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-TW5300",l:"TW5300 Mademsa",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-PR5N",l:"PR5N Mademsa",m:"mademsa",s:"centrifuga",c:"lavado"},{v:"MAD-7DBZG",l:"7DBZG Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-7DPRO",l:"7DPRO Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DSZG",l:"9DSZG Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DPRO",l:"9DPRO Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"ELX-LEB21",l:"LEB21 Electrolux",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-LS22Y",l:"LS22Y Electrolux",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-EFLWM12O",l:"EFLWM12O Electrolux",m:"electrolux",s:"lav-cf",c:"lavado"},{v:"ELX-EFLWD12W",l:"EFLWD12W Electrolux",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-FLWD12AU",l:"FLWD12AU Electrolux",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-ETDHP8SZ",l:"ETDHP8SZ Electrolux",m:"electrolux",s:"secadora",c:"lavado"}]}};
+var CC={"Electrolux Group":{marcas:["Electrolux","Fensa","Mademsa"],cats:[{v:"lavado",l:"Lavado y Secado",sub:[["todas","Todas"],["lav-cs","Lavadora Carga Superior"],["lav-cf","Lavadora Carga Frontal"],["lavaseca","Lava-Seca"],["secadora","Secadora"],["lav-semi","Semiautomática"],["centrifuga","Centrífuga"]]},{v:"refri",l:"Refrigeración",sub:[["todas","Todas"],["nf","No Frost"],["fd","Frío Directo"],["nf-2p","No Frost 2 Puertas"],["nf-3p","No Frost 3 Puertas"],["freezer","Freezer"],["minifridge","Frigobar"]]},{v:"coccion",l:"Cocinas y Hornos",sub:[["todas","Todas"],["cocina-gas","Cocina a Gas"],["cocina-elec","Cocina Eléctrica"],["horno-emp","Horno Empotrable"],["micro","Microondas"],["campana","Campana Extractora"],["encimera","Encimera"]]},{v:"lavaplatos",l:"Lavavajillas",sub:[["todas","Todas"],["60cm","60cm"],["45cm","45cm Slim"]]},{v:"aspirado",l:"Aspirado y Cuidado",sub:[["todas","Todas"],["aspira","Aspiradora"],["robot","Robot Aspirador"],["stick","Aspiradora Stick"]]},{v:"climatizacion",l:"Climatización",sub:[["todas","Todas"],["split","Split Muro"],["portatil","Portátil"],["ventilador","Ventilador"]]},{v:"calefaccion",l:"Calefacción",sub:[["todas","Todas"],["convector","Convector"],["estufa","Estufa"]]},{v:"otros",l:"Otros Electrodomésticos",sub:[["todas","Todas"],["plancha","Plancha"],["licuadora","Licuadora"],["tostador","Tostador"]]}],skus:[{v:"FEN-PC9.5SZ",l:"PC9.5SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC12SZ",l:"PC12SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC14SZ",l:"PC14SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ZS",l:"PC16ZS Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ONX",l:"PC16ONX Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18SZ",l:"PC18SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18NEG",l:"PC18NEG Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC20SZ",l:"PC20SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21",l:"PC21 Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21ONX",l:"PC21ONX Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-VC8WD",l:"VC8WD Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-UM11WD",l:"UM11WD Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC8",l:"PERC8 Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC11",l:"PERC11 Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PC9D",l:"PC9D Fensa",m:"fensa",s:"secadora",c:"lavado"},{v:"MAD-9.5BZG",l:"9.5BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-9.5SZG",l:"9.5SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12BZG",l:"12BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12SZG",l:"12SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-14BZG",l:"14BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-16BZG",l:"16BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-18SZG",l:"18SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-20SZG",l:"20SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-21ONX",l:"21ONX Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-TW5100",l:"TW5100 Mademsa",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-TW5300",l:"TW5300 Mademsa",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-PR5N",l:"PR5N Mademsa",m:"mademsa",s:"centrifuga",c:"lavado"},{v:"MAD-7DBZG",l:"7DBZG Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-7DPRO",l:"7DPRO Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DSZG",l:"9DSZG Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DPRO",l:"9DPRO Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"ELX-LEB21",l:"LEB21 Electrolux",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-LS22Y",l:"LS22Y Electrolux",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-EFLWM12O",l:"EFLWM12O Electrolux",m:"electrolux",s:"lav-cf",c:"lavado"},{v:"ELX-EFLWD12W",l:"EFLWD12W Electrolux",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-FLWD12AU",l:"FLWD12AU Electrolux",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-ETDHP8SZ",l:"ETDHP8SZ Electrolux",m:"electrolux",s:"secadora",c:"lavado"},
+{v:"FEN-NFM250",l:"NFM250 Fensa",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM320",l:"NFM320 Fensa",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM380",l:"NFM380 Fensa",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM430",l:"NFM430 Fensa",m:"fensa",s:"nf-3p",c:"refri"},{v:"FEN-NFM500",l:"NFM500 Fensa",m:"fensa",s:"nf-3p",c:"refri"},{v:"MAD-R250",l:"R250 Mademsa",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-R300",l:"R300 Mademsa",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-FZ180",l:"FZ180 Mademsa",m:"mademsa",s:"freezer",c:"refri"},{v:"ELX-ERFP38K2HUS",l:"ERFP38K2HUS Electrolux",m:"electrolux",s:"nf-3p",c:"refri"},
+{v:"FEN-CG64",l:"CG64 Fensa",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG76",l:"CG76 Fensa",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG86",l:"CG86 Fensa",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG55",l:"CG55 Mademsa",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG76",l:"CG76 Mademsa",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"ELX-EOED60",l:"EOED60 Electrolux",m:"electrolux",s:"horno-emp",c:"coccion"},{v:"ELX-EMS30400OX",l:"EMS30400OX Electrolux",m:"electrolux",s:"micro",c:"coccion"}
+]}};
 var F={},emp="",rub="",cfg=null,sks=[];
-function setupDrop(boxId,fileId){var b=document.getElementById(boxId);if(!b)return;b.ondragover=function(e){e.preventDefault();b.style.borderColor="#F5DF4D";b.style.background="#FEFCE8"};b.ondragleave=function(){b.style.borderColor="#E8E5D8";b.style.background=""};b.ondrop=function(e){e.preventDefault();b.style.borderColor="#E8E5D8";b.style.background="";var f=document.getElementById(fileId);var dt=new DataTransfer();dt.items.add(e.dataTransfer.files[0]);f.files=dt.files;f.dispatchEvent(new Event("change"))}}
+function tf(id){var el=document.getElementById(id);el.style.display=el.style.display==='none'?'block':'none'}
+function setupDrop(boxId,fileId){var b=document.getElementById(boxId);if(!b)return;b.ondragover=function(e){e.preventDefault();b.style.borderColor="var(--dk)"};b.ondragleave=function(){b.style.borderColor="var(--border)"};b.ondrop=function(e){e.preventDefault();b.style.borderColor="var(--border)";var f=document.getElementById(fileId);var dt=new DataTransfer();dt.items.add(e.dataTransfer.files[0]);f.files=dt.files;f.dispatchEvent(new Event("change"))}}
 document.addEventListener("DOMContentLoaded",function(){["si","so","id","ir","gfk"].forEach(function(k){setupDrop("u-"+k,"f-"+k)})});
-function ue(){var r=document.getElementById("gr").value,s=document.getElementById("ge");s.innerHTML="<option value=\"\">" + "Selecciona...</option>";(RR[r]||[]).forEach(function(e){s.innerHTML+="<option>"+e+"</option>"});cg()}
+function ue(){var r=document.getElementById("gr").value,s=document.getElementById("ge");s.innerHTML="<option value=''>Selecciona...</option>";(RR[r]||[]).forEach(function(e){s.innerHTML+="<option>"+e+"</option>"});cg()}
 function cg(){document.getElementById("gbn").disabled=!(document.getElementById("gr").value&&document.getElementById("ge").value)}
-function go(){rub=document.getElementById("gr").selectedOptions[0].text;emp=document.getElementById("ge").value;document.getElementById("gate").style.display="none";document.getElementById("main").style.display="block";document.getElementById("ctx").textContent=rub+" \u00b7 "+emp;lc()}
-function lc(){cfg=CC[emp]||null;if(!cfg)return;sks=cfg.skus;var c=document.getElementById("fc");c.innerHTML="<option value=\"todas\">Todas</option>";cfg.cats.forEach(function(x){c.innerHTML+="<option value=\""+x.v+"\">"+x.l+"</option>"});var m=document.getElementById("fm");m.innerHTML="<option value=\"todas\">Todas</option>";cfg.marcas.forEach(function(x){m.innerHTML+="<option value=\""+x.toLowerCase()+"\">"+x+"</option>"});us();uk()}
-function us(){var v=document.getElementById("fc").value,s=document.getElementById("fb");s.innerHTML="<option value=\"todas\">Todas</option>";if(!cfg)return;cfg.cats.forEach(function(c){if(v==="todas"||c.v===v)c.sub.forEach(function(x){if(x[0]!=="todas")s.innerHTML+="<option value=\""+x[0]+"\">"+x[1]+"</option>"})})}
-function uk(){var cv=document.getElementById("fc").value,sv=document.getElementById("fb").value,mv=document.getElementById("fm").value,sl=document.getElementById("fk"),f=sks.filter(function(x){if(cv!=="todas"&&x.c!==cv)return false;if(sv!=="todas"&&x.s!==sv)return false;if(mv!=="todas"&&x.m!==mv)return false;return true});sl.innerHTML="<option value=\"todos\">Todos ("+f.length+")</option>";f.forEach(function(x){sl.innerHTML+="<option value=\""+x.v+"\">"+x.l+"</option>"})}
-function up(inp,key){if(!inp.files[0])return;F[key]=inp.files[0];document.getElementById("n-"+key).textContent="\u2705 "+inp.files[0].name;document.getElementById("n-"+key).style.color="#16A34A";document.getElementById("u-"+key).classList.add("ok");document.getElementById("gobtn").disabled=false}
+function go(){rub=document.getElementById("gr").selectedOptions[0].text;emp=document.getElementById("ge").value;document.getElementById("gate").style.display="none";document.getElementById("main").style.display="block";document.getElementById("ctx").textContent=rub+" · "+emp;lc()}
+function lc(){cfg=CC[emp]||null;if(!cfg)return;sks=cfg.skus;var c=document.getElementById("fc");c.innerHTML="<option value='todas'>Todas</option>";cfg.cats.forEach(function(x){c.innerHTML+="<option value='"+x.v+"'>"+x.l+"</option>"});var m=document.getElementById("fm");m.innerHTML="<option value='todas'>Todas</option>";cfg.marcas.forEach(function(x){m.innerHTML+="<option value='"+x.toLowerCase()+"'>"+x+"</option>"});us();uk()}
+function us(){var v=document.getElementById("fc").value,s=document.getElementById("fb");s.innerHTML="<option value='todas'>Todas</option>";if(!cfg)return;cfg.cats.forEach(function(c){if(v==="todas"||c.v===v)c.sub.forEach(function(x){if(x[0]!=="todas")s.innerHTML+="<option value='"+x[0]+"'>"+x[1]+"</option>"})})}
+function uk(){var cv=document.getElementById("fc").value,sv=document.getElementById("fb").value,mv=document.getElementById("fm").value,sl=document.getElementById("fk"),f=sks.filter(function(x){if(cv!=="todas"&&x.c!==cv)return false;if(sv!=="todas"&&x.s!==sv)return false;if(mv!=="todas"&&x.m!==mv)return false;return true});sl.innerHTML="<option value='todos'>Todos ("+f.length+")</option>";f.forEach(function(x){sl.innerHTML+="<option value='"+x.v+"'>"+x.l+"</option>"})}
+function up(inp,key){if(!inp.files[0])return;F[key]=inp.files[0];document.getElementById("n-"+key).textContent="✓ "+inp.files[0].name;var card=document.getElementById("u-"+key);card.style.borderColor="var(--aqua)";card.style.background="rgba(15,113,115,.04)";document.getElementById("gobtn").disabled=false}
 function az(){document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";var ks=Object.keys(F),p=ks.length,D={};ks.forEach(function(k){var rd=new FileReader();rd.onload=function(e){try{var d=new Uint8Array(e.target.result),wb=XLSX.read(d,{type:"array"}),ws=wb.Sheets[wb.SheetNames[0]];D[k]=XLSX.utils.sheet_to_json(ws,{header:1})}catch(er){}p--;if(!p)so(D)};rd.readAsArrayBuffer(F[k])})}
 function so(D){document.getElementById("proc").style.display="none";document.getElementById("res").style.display="block";var hd={};Object.keys(D).forEach(function(k){if(D[k]&&D[k].length>1)hd[k]=D[k].length-1});var h="";
-h+="<div style=\"padding:14px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;margin-bottom:16px\"><div style=\"font-size:14px;font-weight:800;color:#16A34A\">\u2705 Data analizada</div><div style=\"font-size:12px;margin-top:6px;line-height:1.6\">";
-if(hd.si)h+="\ud83d\udce6 <b>Sell In:</b> "+hd.si+" filas<br>";if(hd.so)h+="\ud83d\udcca <b>Sell Out:</b> "+hd.so+" filas<br>";if(hd.ir)h+="\ud83c\udfea <b>Inv. Retail:</b> "+hd.ir+" filas<br>";if(hd.id)h+="\ud83d\ude9a <b>Inv. Distrib:</b> "+hd.id+" filas<br>";if(hd.gfk)h+="\ud83d\udcc8 <b>GfK:</b> "+hd.gfk+" filas<br>";
+h+="<div style='padding:14px;background:rgba(15,113,115,.06);border:1.5px solid var(--aqua);margin-bottom:16px'><div style='font-size:14px;font-weight:700;color:var(--aqua);font-family:Libre Baskerville,serif'>✅ Data analizada</div><div style='font-size:12px;margin-top:6px;line-height:1.6;font-weight:300;color:var(--text2)'>";
+if(hd.si)h+="📦 <b>Sell In:</b> "+hd.si+" filas<br>";if(hd.so)h+="📊 <b>Sell Out:</b> "+hd.so+" filas<br>";if(hd.ir)h+="🏪 <b>Inv. Retail:</b> "+hd.ir+" filas<br>";if(hd.id)h+="🚛 <b>Inv. Distrib:</b> "+hd.id+" filas<br>";if(hd.gfk)h+="📈 <b>GfK:</b> "+hd.gfk+" filas<br>";
 h+="</div></div>";
-h+="<div style=\"font-size:15px;font-weight:800;margin-bottom:6px\">\u00bfQu\u00e9 reporte quieres generar?</div><div style=\"font-size:11px;color:#6B6967;margin-bottom:12px\">Basado en tu data:</div>";
+h+="<div style='font-family:Libre Baskerville,serif;font-size:15px;font-weight:700;margin-bottom:6px;color:var(--dk)'>¿Qué reporte quieres generar?</div><div style='font-size:11px;color:var(--text3);margin-bottom:12px;font-weight:300'>Basado en tu data:</div>";
 var rp=[];
-if(hd.so||hd.si)rp.push({id:"forecast",i:"\ud83d\udcca",n:"Forecast de venta",d:"Proyecci\u00f3n por SKU x retailer x mes",ok:1});
-if(hd.so)rp.push({id:"precio",i:"\ud83d\udcb0",n:"Alerta de precio",d:"Cruce con precios web y Trends",ok:1});
-if(hd.so&&hd.si){rp.push({id:"sobrestock",i:"\ud83d\udce6",n:"Sobrestock / Capital muerto",d:"SKUs donde despachas m\u00e1s de lo que se vende",ok:1});rp.push({id:"repo",i:"\ud83d\udd04",n:"Plan reposici\u00f3n",d:"Cu\u00e1nto despachar a cada retailer",ok:1})}else if(hd.so||hd.si){rp.push({id:"sobrestock",i:"\ud83d\udce6",n:"Sobrestock",d:"Necesitas SO + SI",ok:0})}
-if(hd.so&&hd.ir)rp.push({id:"vp",i:"\ud83d\udd34",n:"Venta perdida",d:"SKUs con demanda pero sin stock",ok:1});else if(hd.so)rp.push({id:"vp",i:"\ud83d\udd34",n:"Venta perdida",d:"Sube Inv. Retail para desbloquear",ok:0});
-if(hd.so&&hd.id){rp.push({id:"quiebre",i:"\u26a0\ufe0f",n:"Quiebre futuro",d:"Demanda creciendo + nada en tr\u00e1nsito",ok:1});rp.push({id:"oc",i:"\ud83d\udccb",n:"OC sugerida",d:"Cu\u00e1nto pedir a f\u00e1brica",ok:1})}else if(hd.so)rp.push({id:"quiebre",i:"\u26a0\ufe0f",n:"Quiebre futuro",d:"Sube Inv. Distribuidor para desbloquear",ok:0});
-if(hd.so&&hd.gfk)rp.push({id:"share",i:"\ud83d\udcc8",n:"Market share",d:"Tu SO vs mercado total",ok:1});
+if(hd.so||hd.si)rp.push({id:"forecast",i:"📊",n:"Forecast de venta",d:"Proyección por SKU x retailer x mes",ok:1});
+if(hd.so)rp.push({id:"precio",i:"💰",n:"Alerta de precio",d:"Cruce con precios web y Trends",ok:1});
+if(hd.so&&hd.si){rp.push({id:"sobrestock",i:"📦",n:"Sobrestock / Capital muerto",d:"SKUs donde despachas más de lo que se vende",ok:1});rp.push({id:"repo",i:"🔄",n:"Plan reposición",d:"Cuánto despachar a cada retailer",ok:1})}else if(hd.so||hd.si){rp.push({id:"sobrestock",i:"📦",n:"Sobrestock",d:"Necesitas SO + SI",ok:0})}
+if(hd.so&&hd.ir)rp.push({id:"vp",i:"🔴",n:"Venta perdida",d:"SKUs con demanda pero sin stock",ok:1});else if(hd.so)rp.push({id:"vp",i:"🔴",n:"Venta perdida",d:"Sube Inv. Retail para desbloquear",ok:0});
+if(hd.so&&hd.id){rp.push({id:"quiebre",i:"⚠️",n:"Quiebre futuro",d:"Demanda creciendo + nada en tránsito",ok:1});rp.push({id:"oc",i:"📋",n:"OC sugerida",d:"Cuánto pedir a fábrica",ok:1})}else if(hd.so)rp.push({id:"quiebre",i:"⚠️",n:"Quiebre futuro",d:"Sube Inv. Distribuidor para desbloquear",ok:0});
+if(hd.so&&hd.gfk)rp.push({id:"share",i:"📈",n:"Market share",d:"Tu SO vs mercado total",ok:1});
 var nc=Object.keys(hd).length;
-if(nc>=3)rp.push({id:"monday",i:"\ud83d\udd25",n:"Monday Briefing completo",d:"Todas las alertas priorizadas",ok:1});else rp.push({id:"monday",i:"\ud83d\udd25",n:"Monday Briefing",d:"Sube 3+ fuentes para desbloquear",ok:0});
-rp.forEach(function(r){if(r.ok){h+="<div class=\"ro\" data-r=\""+r.id+"\"><div style=\"font-size:24px;flex-shrink:0\">"+r.i+"</div><div style=\"flex:1\"><div style=\"font-size:13px;font-weight:700\">"+r.n+"</div><div style=\"font-size:10px;color:#6B6967;margin-top:2px\">"+r.d+"</div></div><div style=\"color:#939597\">\u2192</div></div>"}else{h+="<div class=\"rl\"><div style=\"font-size:24px\">\ud83d\udd12</div><div style=\"flex:1\"><div style=\"font-size:13px;font-weight:700;color:#939597\">"+r.n+"</div><div style=\"font-size:10px;color:#939597;margin-top:2px\">"+r.d+"</div></div></div>"}});
-document.getElementById("rt").textContent="Data analizada \u2014 "+emp;document.getElementById("rs").textContent=nc+" fuentes \u00b7 "+Object.values(hd).reduce(function(a,b){return a+b},0)+" filas";document.getElementById("rc").innerHTML=h;
+if(nc>=3)rp.push({id:"monday",i:"🔥",n:"Monday Briefing completo",d:"Todas las alertas priorizadas",ok:1});else rp.push({id:"monday",i:"🔥",n:"Monday Briefing",d:"Sube 3+ fuentes para desbloquear",ok:0});
+rp.forEach(function(r){if(r.ok){h+="<div class='ro' data-r='"+r.id+"'><div style='font-size:22px;flex-shrink:0'>"+r.i+"</div><div style='flex:1'><div style='font-size:13px;font-weight:700;color:var(--dk)'>"+r.n+"</div><div style='font-size:10px;color:var(--text3);margin-top:2px;font-weight:300'>"+r.d+"</div></div><div style='color:var(--text3);font-weight:700'>→</div></div>"}else{h+="<div class='rl'><div style='font-size:22px'>🔒</div><div style='flex:1'><div style='font-size:13px;font-weight:700;color:var(--text3)'>"+r.n+"</div><div style='font-size:10px;color:var(--text3);margin-top:2px;font-weight:300'>"+r.d+"</div></div></div>"}});
+document.getElementById("rt").textContent="Data analizada — "+emp;document.getElementById("rs").textContent=nc+" fuentes · "+Object.values(hd).reduce(function(a,b){return a+b},0)+" filas";document.getElementById("rc").innerHTML=h;
 setTimeout(function(){document.querySelectorAll(".ro").forEach(function(el){el.onclick=function(){gr(this.getAttribute("data-r"))}})},50);window.PD=D;window.HD=hd}
 function gr(id){document.getElementById("res").style.display="none";document.getElementById("proc").style.display="block";document.getElementById("pt").textContent="Generando reporte...";setTimeout(function(){document.getElementById("proc").style.display="none";document.getElementById("res").style.display="block";sr(id)},2000)}
-function sr(id){var h="<div style=\"margin-bottom:12px\"><span onclick=\"so(window.PD)\" style=\"font-size:11px;color:#939597;cursor:pointer;font-weight:600\">\u2190 Volver a reportes</span></div>";
-h+="<div style=\"padding:14px;background:#FFF;border:1.5px solid #E8E5D8;border-radius:10px;margin-bottom:12px\"><div style=\"font-size:13px;font-weight:800;margin-bottom:8px\">\ud83d\udccb Briefing \u2014 Lunes 19 mayo, 8:00 AM</div><div style=\"font-size:11px;color:#6B6967\">3 cr\u00edticas, 2 alertas, 1 oportunidad. <b>$217M CLP en juego.</b></div></div>";
-h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$42.7M</span></div><div class=\"al-t\">FEN-PC18SZ \u2014 Falabella</div><div class=\"al-d\">SO -85%. Bodega: 148 un congeladas. Web: sin retiro. Samsung #1 con promo CMR.</div><div class=\"al-a\">\u2192 Llama al planner Falabella HOY. Libera las 148 un. No bajes precio.</div></div>";
-h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$33.7M</span></div><div class=\"al-t\">ELX-LEB21 \u2014 Nacional</div><div class=\"al-d\">Bodega: 12 un. Tr\u00e1nsito: 0. SO +22% YoY. Quiebre inminente.</div><div class=\"al-a\">\u2192 OC a Brasil HOY. 280 un m\u00ednimo. Lead time 12 semanas.</div></div>";
-h+="<div class=\"al r\"><div class=\"al-h\"><span class=\"al-tg\">CR\u00cdTICA</span><span class=\"al-m\">$87M</span></div><div class=\"al-t\">MAD-9.5SZG \u2014 Hites + La Polar</div><div class=\"al-d\">SI/SO 1.43x por 7 meses. DOH 1.024 d\u00edas. Midea a $101 FOB destruy\u00f3 segmento.</div><div class=\"al-a\">\u2192 STOP despacho. Negociar devoluci\u00f3n 400 un.</div></div>";
-h+="<div class=\"al o\"><div class=\"al-h\"><span class=\"al-tg\">ALTA</span><span class=\"al-m\">$15.2M</span></div><div class=\"al-t\">Samsung vs PC18SZ \u2014 Precio</div><div class=\"al-d\">Samsung baj\u00f3 $35K en Falabella. Gap = distribuci\u00f3n (31% vs 23%).</div><div class=\"al-a\">\u2192 NO bajar precio. Invertir en posici\u00f3n web.</div></div>";
-h+="<div class=\"al o\"><div class=\"al-h\"><span class=\"al-tg\">ALTA</span><span class=\"al-m\">Potencial</span></div><div class=\"al-t\">Hisense WTKF-1812S \u2014 Nuevo</div><div class=\"al-d\">1,022 un 18kg en abril (+113%). FOB $208.</div><div class=\"al-a\">\u2192 Monitorear SO semanal.</div></div>";
-h+="<div class=\"al g\"><div class=\"al-h\"><span class=\"al-tg\">OPORTUNIDAD</span><span class=\"al-m\">+$12.4M</span></div><div class=\"al-t\">PC18SZ \u2014 Vi\u00f1a del Mar</div><div class=\"al-d\">GfK: Valpara\u00edso +18%. Inv.R = 0. Samsung tiene 45 un.</div><div class=\"al-a\">\u2192 Reasignar 80 un desde Santiago.</div></div>";
-h+="<div style=\"padding:14px;background:#FFF;border:1.5px solid #E8E5D8;border-radius:10px;margin-top:16px\"><div style=\"font-size:13px;font-weight:800;margin-bottom:10px\">\ud83d\udea2 Inteligencia de importaciones</div><div style=\"display:flex;gap:8px;flex-wrap:wrap\"><div style=\"flex:1;min-width:90px;padding:8px;background:#FFFDF5;border-radius:6px;text-align:center\"><div style=\"font-size:18px;font-weight:800\">162,761</div><div style=\"font-size:10px;color:#6B6967\">un 2025</div></div><div style=\"flex:1;min-width:90px;padding:8px;background:#FFFDF5;border-radius:6px;text-align:center\"><div style=\"font-size:18px;font-weight:800\">$18.2M</div><div style=\"font-size:10px;color:#6B6967\">CIF USD</div></div><div style=\"flex:1;min-width:90px;padding:8px;background:#FFFDF5;border-radius:6px;text-align:center\"><div style=\"font-size:18px;font-weight:800\">$102</div><div style=\"font-size:10px;color:#6B6967\">CIF/un</div></div></div></div>";
-var nm={monday:"Monday Briefing",forecast:"Forecast",sobrestock:"Sobrestock",vp:"Venta perdida",quiebre:"Quiebre futuro",oc:"OC sugerida",repo:"Reposici\u00f3n",precio:"Precio",share:"Market share"};document.getElementById("rt").textContent=nm[id]||"Reporte";document.getElementById("rs").textContent=emp+" \u2014 Lavadora CS";document.getElementById("rc").innerHTML=h}
+function sr(id){var h="<div style='margin-bottom:12px'><span onclick='so(window.PD)' style='font-size:11px;color:var(--text3);cursor:pointer;font-weight:700'>← Volver a reportes</span></div>";
+h+="<div style='padding:14px;background:var(--white);border:1px solid var(--border);margin-bottom:12px'><div style='font-family:Libre Baskerville,serif;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--dk)'>📋 Briefing — Lunes "+new Date().toLocaleDateString("es-CL",{day:"numeric",month:"long"})+", 8:00 AM</div><div style='font-size:11px;color:var(--text2);font-weight:300'>3 críticas, 2 alertas, 1 oportunidad. <b style=\"color:var(--dk)\">$217M CLP en juego.</b></div></div>";
+h+="<div class='al r'><div class='al-h'><span class='al-tg'>CRÍTICA</span><span class='al-m'>$42.7M</span></div><div class='al-t'>FEN-PC18SZ — Falabella</div><div class='al-d'>SO -85%. Bodega: 148 un congeladas. Web: sin retiro. Samsung #1 con promo CMR.</div><div class='al-a'>→ Llama al planner Falabella HOY. Libera las 148 un. No bajes precio.</div></div>";
+h+="<div class='al r'><div class='al-h'><span class='al-tg'>CRÍTICA</span><span class='al-m'>$33.7M</span></div><div class='al-t'>ELX-LEB21 — Nacional</div><div class='al-d'>Bodega: 12 un. Tránsito: 0. SO +22% YoY. Quiebre inminente.</div><div class='al-a'>→ OC a Brasil HOY. 280 un mínimo. Lead time 12 semanas.</div></div>";
+h+="<div class='al r'><div class='al-h'><span class='al-tg'>CRÍTICA</span><span class='al-m'>$87M</span></div><div class='al-t'>MAD-9.5SZG — Hites + La Polar</div><div class='al-d'>SI/SO 1.43× por 7 meses. DOH 1.024 días. Midea a $101 FOB destruyó segmento.</div><div class='al-a'>→ STOP despacho. Negociar devolución 400 un.</div></div>";
+h+="<div class='al o'><div class='al-h'><span class='al-tg'>ALTA</span><span class='al-m'>$15.2M</span></div><div class='al-t'>Samsung vs PC18SZ — Precio</div><div class='al-d'>Samsung bajó $35K en Falabella. Gap = distribución (31% vs 23%).</div><div class='al-a'>→ NO bajar precio. Invertir en posición web.</div></div>";
+h+="<div class='al o'><div class='al-h'><span class='al-tg'>ALTA</span><span class='al-m'>Potencial</span></div><div class='al-t'>Hisense WTKF-1812S — Nuevo</div><div class='al-d'>1.022 un 18kg en abril (+113%). FOB $208.</div><div class='al-a'>→ Monitorear SO semanal.</div></div>";
+h+="<div class='al g'><div class='al-h'><span class='al-tg'>OPORTUNIDAD</span><span class='al-m'>+$12.4M</span></div><div class='al-t'>PC18SZ — Viña del Mar</div><div class='al-d'>GfK: Valparaíso +18%. Inv.R = 0. Samsung tiene 45 un.</div><div class='al-a'>→ Reasignar 80 un desde Santiago.</div></div>";
+h+="<div style='padding:14px;background:var(--white);border:1px solid var(--border);margin-top:14px'><div style='font-family:Libre Baskerville,serif;font-size:13px;font-weight:700;margin-bottom:10px;color:var(--dk)'>🚢 Inteligencia de importaciones</div><div style='display:flex;gap:8px;flex-wrap:wrap'><div style='flex:1;min-width:90px;padding:8px;background:var(--bg);text-align:center'><div style='font-size:18px;font-weight:700;color:var(--dk)'>162.761</div><div style='font-size:10px;color:var(--text3);font-weight:300'>un 2025</div></div><div style='flex:1;min-width:90px;padding:8px;background:var(--bg);text-align:center'><div style='font-size:18px;font-weight:700;color:var(--dk)'>$18.2M</div><div style='font-size:10px;color:var(--text3);font-weight:300'>CIF USD</div></div><div style='flex:1;min-width:90px;padding:8px;background:var(--bg);text-align:center'><div style='font-size:18px;font-weight:700;color:var(--dk)'>$102</div><div style='font-size:10px;color:var(--text3);font-weight:300'>CIF/un</div></div></div></div>";
+var nm={monday:"Monday Briefing",forecast:"Forecast",sobrestock:"Sobrestock",vp:"Venta perdida",quiebre:"Quiebre futuro",oc:"OC sugerida",repo:"Reposición",precio:"Precio",share:"Market share"};document.getElementById("rt").textContent=nm[id]||"Reporte";document.getElementById("rs").textContent=emp+" — Lavadora CS";document.getElementById("rc").innerHTML=h}
 </script>
 </body>
 </html>
