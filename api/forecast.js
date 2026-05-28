@@ -422,6 +422,42 @@ REGLAS ALERTAS:
       };
     }
 
+    // GfK per brand per month (for frontend charts)
+    if (gfkRows.length) {
+      const gfkByBrandMonth = {};
+      gfkRows.forEach(r => {
+        const period = getField(r, 'Period', 'Periodo', 'Fecha');
+        const brand = getField(r, 'BRAND', 'Brand', 'Marca');
+        const uds = toNum(getField(r, 'Sales Units', 'Unidades', 'Units'));
+        const val = toNum(getField(r, 'Sales Value', 'Venta', 'Value'));
+        const pvp = toNum(getField(r, 'Price CLP', 'Price', 'PVP', 'Precio'));
+        if (!period || !brand || uds <= 0) return;
+        const fecha = period.replace(/\s+/g, '-').replace(/(\d{4})-(\d{2})/, '$1-$2').substring(0,7);
+        const k = brand + '||' + fecha;
+        if (!gfkByBrandMonth[k]) gfkByBrandMonth[k] = { brand, fecha, uds: 0, venta: 0, pvp_sum: 0, pvp_n: 0 };
+        gfkByBrandMonth[k].uds += uds;
+        gfkByBrandMonth[k].venta += val || uds * pvp;
+        if (pvp > 0) { gfkByBrandMonth[k].pvp_sum += pvp; gfkByBrandMonth[k].pvp_n++; }
+      });
+      // Group by brand
+      const serieGfk = {};
+      Object.values(gfkByBrandMonth).forEach(d => {
+        if (!serieGfk[d.brand]) serieGfk[d.brand] = [];
+        serieGfk[d.brand].push({
+          fecha: d.fecha,
+          uds: Math.round(d.uds),
+          venta: Math.round(d.venta),
+          pvp: d.pvp_n > 0 ? Math.round(d.pvp_sum / d.pvp_n) : 0
+        });
+      });
+      // Sort each brand's series and keep top 6 brands by total units
+      const brandTotals = Object.entries(serieGfk).map(([b, s]) => [b, s.reduce((t, d) => t + d.uds, 0)]).sort((a, b) => b[1] - a[1]);
+      const topBrands = brandTotals.slice(0, 6).map(x => x[0]);
+      const serieGfkTop = {};
+      topBrands.forEach(b => { serieGfkTop[b] = serieGfk[b].sort((a, c) => a.fecha.localeCompare(c.fecha)); });
+      result.serie_gfk_marcas = serieGfkTop;
+    }
+
     return res.status(200).json(result);
 
   } catch(err) {
