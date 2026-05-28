@@ -391,53 +391,14 @@ h+="<div style='background:"+clr+";opacity:"+op+";border-radius:2px;height:14px'
 h+="</div>";
 h+="<div style='display:flex;gap:8px;margin-top:3px;font-size:7px;color:var(--text3)'><span style='display:inline-block;width:10px;height:10px;background:#0f7173;opacity:0.5;border-radius:2px;vertical-align:middle'></span> stock ok <span style='display:inline-block;width:10px;height:10px;background:#b85c00;opacity:0.4;border-radius:2px;vertical-align:middle;margin-left:8px'></span> bajo <span style='display:inline-block;width:10px;height:10px;background:#c0392b;opacity:0.7;border-radius:2px;vertical-align:middle;margin-left:8px'></span> quiebre</div>";
 }
-// ─── CARDS DE IMPACTO (cruzando GfK) ───
+// ─── SOLO 3 CARDS + EXCEL ───
 if(hi&&hi.costo_gestion){
 var cg=hi.costo_gestion;
 h+="<div style='display:flex;gap:6px;margin:12px 0'>";
-h+="<div style='flex:1;padding:8px;background:rgba(192,57,43,.05);border-left:3px solid #c0392b'><div style='font-size:8px;color:#c0392b;font-weight:700;letter-spacing:.5px'>VARIACIÓN SHARE</div><div style='font-size:20px;font-weight:700;color:#c0392b;margin:2px 0'>-"+(cg.share_variacion_pp||0)+"pp</div><div style='font-size:9px;color:var(--text3)'>"+(cg.competencia_que_capturo||"")+"</div><div style='font-size:8px;color:var(--text3);margin-top:2px;font-style:italic'>capturado por competencia</div></div>";
-h+="<div style='flex:1;padding:8px;background:rgba(184,92,0,.05);border-left:3px solid #b85c00'><div style='font-size:8px;color:#b85c00;font-weight:700;letter-spacing:.5px'>IMPACTO LOADING</div><div style='font-size:20px;font-weight:700;color:#b85c00;margin:2px 0'>"+(cg.loading_impacto_pct||0)+"%</div><div style='font-size:9px;color:var(--text3)'>"+(cg.loading_impacto_monto||"")+" no rotó en 60d</div></div>";
-h+="<div style='flex:1;padding:8px;background:rgba(0,0,0,.03);border-left:3px solid #666'><div style='font-size:8px;color:#666;font-weight:700;letter-spacing:.5px'>SOBRESTOCK</div><div style='font-size:20px;font-weight:700;color:var(--dk);margin:2px 0'>"+(cg.sobrestock_monto||"$0")+"</div><div style='font-size:9px;color:var(--text3)'>"+(cg.sobrestock_un||0).toLocaleString("es-CL")+" un · "+(cg.doh_actual||0)+"m DOH</div></div>";
+h+="<div style='flex:1;padding:10px;background:rgba(192,57,43,.03);border-left:3px solid #c0392b'><div style='font-size:8px;color:#c0392b;font-weight:700;letter-spacing:.5px'>VARIACIÓN SHARE</div><div style='font-size:22px;font-weight:700;color:#c0392b;margin:4px 0'>-"+(cg.share_variacion_pp||0)+"pp</div></div>";
+h+="<div style='flex:1;padding:10px;background:rgba(184,92,0,.03);border-left:3px solid #b85c00'><div style='font-size:8px;color:#b85c00;font-weight:700;letter-spacing:.5px'>IMPACTO LOADING</div><div style='font-size:22px;font-weight:700;color:#b85c00;margin:4px 0'>"+(cg.loading_impacto_pct||0)+"%</div></div>";
+h+="<div style='flex:1;padding:10px;background:rgba(0,0,0,.02);border-left:3px solid #666'><div style='font-size:8px;color:#666;font-weight:700;letter-spacing:.5px'>SOBRESTOCK</div><div style='font-size:22px;font-weight:700;color:var(--dk);margin:4px 0'>"+(cg.sobrestock_monto||"$0")+"</div></div>";
 h+="</div>";
-if(cg.moraleja||cg.precio_regalo||cg.contrafactual){
-h+="<div style='padding:10px 12px;background:rgba(192,57,43,.03);border-left:3px solid #c0392b;margin-bottom:12px'>";
-if(cg.precio_regalo)h+="<div style='font-size:11px;color:#b85c00;margin-bottom:4px'>"+cg.precio_regalo+"</div>";
-if(cg.si_cero_mes)h+="<div style='font-size:11px;color:#c0392b;margin-bottom:4px'>"+cg.si_cero_mes+"</div>";
-if(cg.contrafactual)h+="<div style='font-size:11px;color:var(--dk);font-weight:400;margin-bottom:4px'>"+cg.contrafactual+"</div>";
-if(cg.moraleja)h+="<div style='font-size:12px;color:#c0392b;font-style:italic;font-weight:400'>"+cg.moraleja+"</div>";
-h+="</div>"}
-}
-// ─── RETAILERS ABANDONADOS ───
-if(hi&&hi.retailers_abandonados&&hi.retailers_abandonados.length){
-h+="<div style='padding:10px;background:rgba(192,57,43,.04);margin-bottom:12px'>";
-h+="<div style='font-size:9px;font-weight:700;color:#c0392b;letter-spacing:.5px;margin-bottom:6px'>CLIENTES QUE DEJASTE SIN STOCK — "+hi.retailers_abandonados.length+" de 7 retailers</div>";
-hi.retailers_abandonados.forEach(function(ra){
-h+="<div style='display:flex;align-items:baseline;gap:6px;margin-bottom:3px'>";
-h+="<div style='font-size:11px;font-weight:700;color:#c0392b;width:80px'>"+ra.retailer+"</div>";
-h+="<div style='font-size:10px;color:var(--dk)'>"+(ra.meses_sin_stock||0)+"m sin stock</div>";
-h+="<div style='font-size:10px;color:var(--text2);font-style:italic;flex:1'>"+ra.descripcion+"</div>";
-h+="</div>"});
-h+="</div>";
-}
-// ─── RETAILERS CASTIGADOS ───
-if(hi&&hi.retailers_castigados&&hi.retailers_castigados.length){
-h+="<div style='padding:10px;background:rgba(184,92,0,.04);margin-bottom:12px'>";
-h+="<div style='font-size:9px;font-weight:700;color:#b85c00;letter-spacing:.5px;margin-bottom:6px'>CASTIGO COMERCIAL — retailers que redujeron espacio</div>";
-hi.retailers_castigados.forEach(function(rc){
-h+="<div style='display:flex;align-items:baseline;gap:6px;margin-bottom:3px'>";
-h+="<div style='font-size:11px;font-weight:700;color:#b85c00;width:80px'>"+rc.retailer+"</div>";
-h+="<div style='font-size:10px;color:var(--dk)'>"+(rc.so_antes||0)+"→"+(rc.so_despues||0)+" un/mes (-"+(rc.caida_pct||0)+"%)</div>";
-h+="<div style='font-size:10px;color:var(--text2);font-style:italic;flex:1'>"+rc.descripcion+"</div>";
-h+="</div>"});
-h+="</div>";
-}
-// ─── MINI PROFIT TABLE ───
-if(hi&&hi.canal_detalle&&hi.canal_detalle.length){
-var cd=hi.canal_detalle.slice().sort(function(a,b){return(b.profit_estimado||b.so_total||0)-(a.profit_estimado||a.so_total||0)});
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:10px 0 6px'>PROFIT POR RETAILER</div>";
-h+="<table style='width:100%;border-collapse:collapse;font-size:10px;margin-bottom:6px'><tr style='border-bottom:0.5px solid var(--border)'><td style='padding:3px 4px;font-size:9px;color:var(--text3)'>Retailer</td><td style='padding:3px 4px;text-align:right;font-size:9px;color:var(--text3)'>Venta</td><td style='padding:3px 4px;text-align:right;font-size:9px;color:var(--text3)'>Margen</td><td style='padding:3px 4px;text-align:right;font-size:9px;color:var(--text3)'>Profit est.</td></tr>";
-cd.forEach(function(c,ci){h+="<tr><td style='padding:2px 4px;font-weight:"+(ci===0?"700":"400")+";color:var(--dk)'>"+c.retailer+"</td><td style='padding:2px 4px;text-align:right;color:var(--text2)'>$"+((c.venta_total||0)>1e6?((c.venta_total||0)/1e6).toFixed(0)+"M":(c.venta_total||0).toLocaleString("es-CL"))+"</td><td style='padding:2px 4px;text-align:right;color:var(--text2)'>"+(c.margen_pct||0)+"%</td><td style='padding:2px 4px;text-align:right;font-weight:700;color:"+(ci===0?"var(--aqua)":"var(--text2)")+"'>$"+((c.profit_estimado||0)>1e6?((c.profit_estimado||0)/1e6).toFixed(0)+"M":(c.profit_estimado||0).toLocaleString("es-CL"))+"</td></tr>"});
-h+="</table>";
 }
 h+="</div>";return h;
 }
