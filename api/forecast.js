@@ -243,7 +243,7 @@ SUBCATEGORÍA: ${subcat}
 ${filtroMarca ? `MARCA SELECCIONADA: ${filtroMarca}` : ''}
 ${filtroRetailer ? `RETAILER SELECCIONADO: ${filtroRetailer}` : ''}
 ${filtroSKU ? `SKU SELECCIONADO: ${filtroSKU}` : ''}
-${filtroSKU || filtroRetailer ? `\nANÁLISIS ESPECÍFICO: Analiza EXCLUSIVAMENTE ${filtroSKU || 'todos los SKUs'}${filtroRetailer ? ' en ' + filtroRetailer : ''}${filtroMarca ? ' marca ' + filtroMarca : ''}. El forecast, las alertas y todas las conclusiones deben ser sobre este producto/retailer específico. NO menciones otros SKUs ni otros retailers en las alertas salvo para comparar contra este. Piensa como el KAM responsable de este SKU en este retailer — qué necesita saber el lunes a las 8AM.` : ''}
+${filtroSKU || filtroRetailer ? `\nANÁLISIS ESPECÍFICO: Analiza EXCLUSIVAMENTE ${filtroSKU || 'todos los SKUs'}${filtroRetailer ? ' en ' + filtroRetailer : ' en TODOS los retailers'}${filtroMarca ? ' marca ' + filtroMarca : ''}. ${filtroSKU && !filtroRetailer ? 'Compara el rendimiento de este SKU ENTRE retailers: quién vende más, quién menos, dónde hay sobrestock, dónde hay oportunidad. Las alertas deben incluir diferencias cross-retailer.' : ''} Piensa como el KAM responsable de este SKU — qué necesita saber el lunes a las 8AM.` : ''}
 REGLA CRÍTICA DE SUBCATEGORÍA: Analiza SOLO datos relevantes a "${subcat}". Si la subcategoría es "Lavadora Carga Superior", IGNORA secadoras, lava-secas, semi-automáticas, centrífugas, carga frontal. Las alertas deben ser SOLO sobre la subcategoría seleccionada. Si un SKU es de otra subcategoría (ej: secadora, lava-seca), NO lo menciones en las alertas.
 FUENTES DISPONIBLES: ${fuentes.join(', ')} (${fuentes.length} fuentes)
 
