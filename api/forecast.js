@@ -233,7 +233,20 @@ module.exports = async (req, res) => {
 
     // Prompt
     const today = new Date().toLocaleDateString('es-CL');
-    const prompt = `Eres analista S&OP senior, 15 años en consumer goods Chile. Directo, brutal con los números. Todo en CLP.
+    const prompt = `Eres analista S&OP senior, 15 años en consumer goods Chile (electrohogar, importadoras). Directo, brutal con los números. Todo en CLP.
+
+VOCABULARIO NATURAL (úsalo donde calce, sin forzar):
+- Margen bruto / GM% / margen de contribución (no "profit")
+- Fill rate, quiebre en piso de venta, disponibilidad en piso
+- Mix de productos, mix de valor (premium vs entry)
+- Lead time de internación, desfase logístico, costo de internación
+- Sobrestock flotando, inventario muerto, rotación
+- Loading / empuje de sell-in / meta del trimestre
+- Portal B2B, penalización del retail, ventana de promoción
+- Sell-through, velocidad de venta, semanas de cobertura
+- Competencia capturó / migración de demanda / fuga de share
+- Destrucción de precio / erosión de margen / fire sale
+- Reputación con el comprador / relación comercial dañada / pérdida de espacio en exhibición
 
 HOY: ${today}
 EMPRESA: ${empresa || 'No especificada'}
@@ -282,14 +295,17 @@ Genera un análisis en JSON con EXACTAMENTE esta estructura. Usa los números RE
   "forecast_factores": [{"factor":"TEXTO corto","impacto":"TEXTO 1 línea","efecto":"+X%" o "-X%"}, ... 3-5 factores],
   "historial": {
     "resumen_acciones": ["TEXTO imperativo corto: PARA/CARGA/LLAMA/SUBE PRECIO/MATA SKU — máximo 4 acciones priorizadas por plata en juego. Lenguaje directo, sin métricas. El KAM lee esto y sabe qué hacer HOY.", "acción 2", "acción 3"],
-    "resumen": "TEXTO 3-4 líneas: qué pasó con este SKU en el período analizado",
+    "resumen": "TEXTO 3-4 líneas tipo operating review: qué PASÓ con este SKU. Si hubo fire sale → destrucción de precio. Si dejaste retailers sin stock → quiebre en piso de venta, fill rate destruido, relación comercial dañada. Cuántos retailers quedaron sin cobertura. Usa vocabulario de GM%, mix, rotación. NO acciones futuras. Solo hechos que duelen.",
+    "retailers_abandonados": [{"retailer":"NOMBRE","meses_sin_stock":NUMERO,"descripcion":"TEXTO corto brutal. Ej: 3 meses sin cobertura. Fill rate 0%. Perdió ventana Cyber. Relación comercial en riesgo — el comprador ya asignó ese espacio de exhibición a Midea."}],
+    "retailers_castigados": [{"retailer":"NOMBRE","so_antes":NUMERO,"so_despues":NUMERO,"caida_pct":NUMERO,"descripcion":"TEXTO. Si un retailer que era top performer tiene SO permanentemente más bajo post-quiebre → fue castigado: le redujeron espacio y metieron competencia. Ej: Falabella pasó de 80 un/mes a 35 un/mes post-quiebre. Le dieron el espacio a Midea."}],
     "tendencia": "CRECIENDO|ESTABLE|CAYENDO|ERRÁTICO",
     "so_total": NUMERO,
     "so_promedio_mes": NUMERO,
     "mejor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"SOLO DATOS: X un/mes, DOH Y meses, gap SI/SO Z%. NO interpretar motivaciones ni especular. Números."},
     "peor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"SOLO DATOS: X un/mes, DOH Y meses, gap SI/SO Z%. NO interpretar motivaciones ni especular. Números."},
-    "oportunidades_perdidas": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste"}, ... 2-3 máximo],
+    "oportunidades_perdidas": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste","monto":"$XXM perdidos"}, ... 2-3 máximo. OBLIGATORIO detectar: 1) Si durante quiebres propios la competencia GANÓ share vendiendo a precio IGUAL o MÁS CARO (cruzar GfK precio × SO propio × meses quiebre), 2) Si el loading previo al quiebre CAUSÓ el freeze posterior (cadena: loading → sobrestock → freeze → quiebre), 3) $ venta perdida concreta por cada retailer en quiebre],
     "riesgos": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste"}, ... 2-3 máximo],
+    "costo_gestion": {"loading_impacto_pct":NUMERO,"loading_impacto_monto":"$XXM","share_variacion_pp":NUMERO,"competencia_que_capturo":"MARCA modelo a $PVP (vendiendo MÁS CARO que tú)","sobrestock_un":NUMERO,"sobrestock_monto":"$XXM","doh_actual":NUMERO,"precio_regalo":"Si detectas un mes con PVP significativamente más bajo que el promedio Y unidades altas → fue fire sale. Calcular: venta a precio normal vs precio real = margen destruido. TEXTO ej: En agosto vendiste a $169K (-30%) destruyendo $XXM de margen.","si_cero_mes":"Si detectas SI=0 en algún mes → fue error de planner. TEXTO ej: En octubre SI=0 → planner no despachó nada.","contrafactual":"TEXTO 1-2 líneas en tono de operating review interno: qué habría pasado si no hubieses destruido precio. Usa vocabulario de margen, fill rate, mix. Ej: Si hubieses mantenido el mix de valor en $240K, habrías preservado $58M de margen de contribución y 1.200 un de cobertura para Cyber. La fuga de share a Samsung ($268K) no habría ocurrido — tenías el fill rate, lo regalaste por empujar sell-in.","moraleja":"TEXTO 1 línea demoledora tipo conclusión de operating review. Ej: La meta del Q3 se cumplió destruyendo el Q4. El loading no fue demanda, fue empuje. Lo que no se vendió antes no se recupera."},
     "foda": {"fortalezas":"TEXTO 1-2 líneas","debilidades":"TEXTO 1-2 líneas","oportunidades":"TEXTO 1-2 líneas","amenazas":"TEXTO 1-2 líneas"},
     "margen": {"pvp_promedio":NUMERO,"costo_promedio":NUMERO,"margen_pct":NUMERO,"tendencia_margen":"TEXTO corto: subiendo/bajando/estable y por qué"},
     "precio": {"pvp_actual":NUMERO,"escenarios":[{"pvp":NUMERO,"uds_estimadas":NUMERO,"margen_total":"$XXM","efecto":"TEXTO 10 palabras max"}, ... 3 escenarios: bajar 10%, mantener, subir 10%],"competencia_precios":[{"marca":"NOMBRE","pvp":NUMERO,"uds_mes":NUMERO}, ... top 3-4 competidores directos con precio]},
@@ -297,7 +313,7 @@ Genera un análisis en JSON con EXACTAMENTE esta estructura. Usa los números RE
     "mapa_precios": {"tu_pvp":NUMERO,"rango_segmento":"$X - $Y","posicion":"ENTRY|MID|PREMIUM dentro del rango","competidor_mas_barato":{"marca":"NOMBRE","pvp":NUMERO},"competidor_mas_caro":{"marca":"NOMBRE","pvp":NUMERO}},
     "canal_detalle": [{"retailer":"NOMBRE","so_total":NUMERO,"so_promedio_mes":NUMERO,"venta_total":NUMERO,"inv_retail":NUMERO,"doh":NUMERO,"si_total":NUMERO,"gap_si_so_pct":NUMERO,"margen_pct":NUMERO,"profit_estimado":NUMERO,"diagnostico":"TEXTO corto"}, ... todos los retailers con data. margen_pct = calcular desde PVP y costo SI si están disponibles. profit_estimado = venta_total × margen_pct/100. Ordenar por profit_estimado de mayor a menor.]
   },
-  "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO corto","detalle":"TEXTO 2-3 líneas max con números reales","accion":"TEXTO 1 línea acción específica","source":"TEXTO corto: qué fuentes cruzaste para llegar a esta conclusión, ej: SO×SI×Inv.Retail o GfK×SO×Estacionalidad"}, ... mínimo 3, máximo 6]
+  "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO corto","detalle":"TEXTO 2-3 líneas con números reales. Usa vocabulario: fill rate, quiebre en piso de venta, erosión de margen, migración de demanda, desfase logístico, cobertura, loading vs sell-through. Que suene a operating review, no a dashboard.","accion":"TEXTO 1 línea acción específica","source":"TEXTO corto: qué fuentes cruzaste, ej: SO×SI×Inv.Retail o GfK×SO×Estacionalidad"}, ... mínimo 3, máximo 6]
 }
 
 REGLAS FORECAST CRUZADO (NO es SO + 10%, es un forecast inteligente):
@@ -359,6 +375,7 @@ REGLAS ALERTAS:
     result.fuentes = fuentes;
     result.total_filas = soFiltered.length + siFiltered.length + idFiltered.length + irFiltered.length + gfkRows.length;
     result.serie_historica = soAgg.serie;
+    result.serie_si = siAgg ? siAgg.serie : null;
     
     // Serie por retailer (monthly breakdown)
     const porRetailerMes = {};
