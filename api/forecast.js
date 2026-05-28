@@ -281,20 +281,21 @@ Genera un análisis en JSON con EXACTAMENTE esta estructura. Usa los números RE
   "forecast_ajustado": NUMERO,
   "forecast_factores": [{"factor":"TEXTO corto","impacto":"TEXTO 1 línea","efecto":"+X%" o "-X%"}, ... 3-5 factores],
   "historial": {
+    "resumen_acciones": ["TEXTO imperativo corto: PARA/CARGA/LLAMA/SUBE PRECIO/MATA SKU — máximo 4 acciones priorizadas por plata en juego. Lenguaje directo, sin métricas. El KAM lee esto y sabe qué hacer HOY.", "acción 2", "acción 3"],
     "resumen": "TEXTO 3-4 líneas: qué pasó con este SKU en el período analizado",
     "tendencia": "CRECIENDO|ESTABLE|CAYENDO|ERRÁTICO",
     "so_total": NUMERO,
     "so_promedio_mes": NUMERO,
-    "mejor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"TEXTO corto"},
-    "peor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"TEXTO corto"},
+    "mejor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"SOLO DATOS: X un/mes, DOH Y meses, gap SI/SO Z%. NO interpretar motivaciones ni especular. Números."},
+    "peor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"SOLO DATOS: X un/mes, DOH Y meses, gap SI/SO Z%. NO interpretar motivaciones ni especular. Números."},
     "oportunidades_perdidas": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste"}, ... 2-3 máximo],
     "riesgos": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste"}, ... 2-3 máximo],
     "foda": {"fortalezas":"TEXTO 1-2 líneas","debilidades":"TEXTO 1-2 líneas","oportunidades":"TEXTO 1-2 líneas","amenazas":"TEXTO 1-2 líneas"},
     "margen": {"pvp_promedio":NUMERO,"costo_promedio":NUMERO,"margen_pct":NUMERO,"tendencia_margen":"TEXTO corto: subiendo/bajando/estable y por qué"},
-    "precio": {"elasticidad":"ALTA|MEDIA|BAJA","explicacion":"TEXTO 1-2 líneas: cuando bajó precio qué pasó con volumen","pvp_vs_competencia":"TEXTO 1 línea: tu precio vs Samsung/Midea/LG equivalente según GfK"},
-    "competencia": [{"marca":"NOMBRE","modelo":"COD","uds_periodo":NUMERO,"pvp_estimado":NUMERO,"share_segmento":NUMERO,"amenaza":"TEXTO corto: por qué es amenaza o no"}, ... top 5-8 competidores del segmento desde GfK],
+    "precio": {"pvp_actual":NUMERO,"escenarios":[{"pvp":NUMERO,"uds_estimadas":NUMERO,"margen_total":"$XXM","efecto":"TEXTO 10 palabras max"}, ... 3 escenarios: bajar 10%, mantener, subir 10%],"competencia_precios":[{"marca":"NOMBRE","pvp":NUMERO,"uds_mes":NUMERO}, ... top 3-4 competidores directos con precio]},
+    "competencia": [{"marca":"NOMBRE","modelo":"COD","uds_periodo":NUMERO,"pvp_estimado":NUMERO,"share_segmento":NUMERO,"amenaza":"TEXTO corto: por qué es amenaza o no"}, ... top 5-8 competidores de OTRAS MARCAS en el mismo segmento de kilaje/capacidad. NO incluir productos de la misma marca (si analizas Fensa, la competencia es Mademsa, Midea, Samsung, LG, Hisense — NO otros Fensa). Buscar modelos del mismo rango de capacidad (ej: si el SKU es 9.5kg, competidores son otros 8-10kg de otras marcas)],
     "mapa_precios": {"tu_pvp":NUMERO,"rango_segmento":"$X - $Y","posicion":"ENTRY|MID|PREMIUM dentro del rango","competidor_mas_barato":{"marca":"NOMBRE","pvp":NUMERO},"competidor_mas_caro":{"marca":"NOMBRE","pvp":NUMERO}},
-    "canal_detalle": [{"retailer":"NOMBRE","so_total":NUMERO,"so_promedio_mes":NUMERO,"inv_retail":NUMERO,"doh":NUMERO,"si_total":NUMERO,"gap_si_so_pct":NUMERO,"diagnostico":"TEXTO corto"}, ... todos los retailers con data]
+    "canal_detalle": [{"retailer":"NOMBRE","so_total":NUMERO,"so_promedio_mes":NUMERO,"venta_total":NUMERO,"inv_retail":NUMERO,"doh":NUMERO,"si_total":NUMERO,"gap_si_so_pct":NUMERO,"margen_pct":NUMERO,"profit_estimado":NUMERO,"diagnostico":"TEXTO corto"}, ... todos los retailers con data. margen_pct = calcular desde PVP y costo SI si están disponibles. profit_estimado = venta_total × margen_pct/100. Ordenar por profit_estimado de mayor a menor.]
   },
   "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO corto","detalle":"TEXTO 2-3 líneas max con números reales","accion":"TEXTO 1 línea acción específica","source":"TEXTO corto: qué fuentes cruzaste para llegar a esta conclusión, ej: SO×SI×Inv.Retail o GfK×SO×Estacionalidad"}, ... mínimo 3, máximo 6]
 }
@@ -358,6 +359,21 @@ REGLAS ALERTAS:
     result.fuentes = fuentes;
     result.total_filas = soFiltered.length + siFiltered.length + idFiltered.length + irFiltered.length + gfkRows.length;
     result.serie_historica = soAgg.serie;
+    
+    // Serie por retailer (monthly breakdown)
+    const porRetailerMes = {};
+    soFiltered.forEach(r => {
+      const fecha = getField(r, 'Fecha', 'Mes', 'Periodo', 'Period');
+      const ret = getField(r, 'Retailer', 'Retail', 'Cliente', 'Canal');
+      const uds = toNum(getField(r, 'Unidades', 'Un.', 'Qty', 'Cantidad'));
+      const venta = toNum(getField(r, 'Venta sin IVA', 'Venta Total sin IVA', 'Venta', 'Monto'));
+      if (!fecha || !ret) return;
+      if (!porRetailerMes[ret]) porRetailerMes[ret] = {};
+      if (!porRetailerMes[ret][fecha]) porRetailerMes[ret][fecha] = { uds: 0, venta: 0 };
+      porRetailerMes[ret][fecha].uds += uds;
+      porRetailerMes[ret][fecha].venta += venta;
+    });
+    result.serie_por_retailer = porRetailerMes;
     result.sku = filtroSKU;
     result.retailer = filtroRetailer;
     result.marca = filtroMarca;
