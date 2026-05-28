@@ -323,6 +323,74 @@ svg+="</svg>";
 h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>SELL OUT vs SELL IN (unidades/mes, total retailers)</div>";
 h+=svg;
 }
+// ─── PRECIO vs COMPETENCIA MÁS BARATA (data real GfK) ───
+if(se.length&&D.serie_gfk_marcas){
+var gm=D.serie_gfk_marcas;var brands=Object.keys(gm);
+// Find cheapest competitor (lowest avg PVP, excluding our brand)
+var ourBrand=(D.marca||"fensa").toLowerCase();
+var cheapest=null;var cheapPvp=Infinity;
+brands.forEach(function(b){if(b.toLowerCase().indexOf(ourBrand)>=0||b.toLowerCase().indexOf("fen")>=0||b.toLowerCase().indexOf("mad")>=0||b.toLowerCase().indexOf("elec")>=0)return;var ap=0;var n=0;gm[b].forEach(function(d){if(d.pvp>0){ap+=d.pvp;n++}});if(n>0&&ap/n<cheapPvp){cheapPvp=ap/n;cheapest=b}});
+if(cheapest&&gm[cheapest]){
+var comp=gm[cheapest];var compMap={};comp.forEach(function(d){compMap[d.fecha]=d});
+// Our PVP from serie_historica
+var meses=se.map(function(d){return d.fecha});
+var W=600;var H2=90;var padL2=50;var n2=meses.length;var pw2=W-padL2-10;
+// Calc ranges
+var allPvp=[];se.forEach(function(d){if(d.uds>0)allPvp.push(Math.round(d.venta/d.uds))});
+meses.forEach(function(m){var c=compMap[m];if(c&&c.pvp>0)allPvp.push(c.pvp)});
+var pvpMax=Math.max.apply(null,allPvp)*1.05;var pvpMin=Math.min.apply(null,allPvp)*0.95;var pvpR=pvpMax-pvpMin||1;
+function px2(i){return padL2+i/(n2-1)*pw2}function pyP(v){return 15+65*(1-(v-pvpMin)/pvpR)}
+var svgP="<svg viewBox='0 0 "+W+" "+(H2+5)+"' style='width:100%;margin:4px 0' xmlns='http://www.w3.org/2000/svg'>";
+// Grid
+for(var gi=0;gi<3;gi++){var gy=15+65/2*gi;var gv=Math.round(pvpMax-(pvpMax-pvpMin)/2*gi);svgP+="<line x1='"+padL2+"' y1='"+gy+"' x2='"+(W-10)+"' y2='"+gy+"' stroke='rgba(0,0,0,.04)'/>";svgP+="<text x='"+(padL2-4)+"' y='"+(gy+3)+"' font-size='7' fill='#999' text-anchor='end'>$"+(gv>1000?Math.round(gv/1000)+"K":gv)+"</text>"}
+// Our PVP line
+var ptsP=[];se.forEach(function(d,i){var pvp=d.uds>0?Math.round(d.venta/d.uds):0;if(pvp>0)ptsP.push(px2(i)+","+pyP(pvp))});
+if(ptsP.length)svgP+="<polyline points='"+ptsP.join(" ")+"' fill='none' stroke='#1a0d47' stroke-width='3.5' stroke-linejoin='round'/>";
+// Competitor PVP line
+var ptsC=[];meses.forEach(function(m,i){var c=compMap[m];if(c&&c.pvp>0)ptsC.push(px2(i)+","+pyP(c.pvp))});
+if(ptsC.length)svgP+="<polyline points='"+ptsC.join(" ")+"' fill='none' stroke='#b85c00' stroke-width='2' stroke-linejoin='round' opacity='0.7'/>";
+// X labels sparse
+meses.forEach(function(m,i){if(i===0||i===n2-1||m.endsWith("-01")||m.endsWith("-07"))svgP+="<text x='"+px2(i)+"' y='"+(H2-2)+"' font-size='7' fill='#666' text-anchor='middle'>"+m.slice(2)+"</text>"});
+svgP+="<text x='"+(W-8)+"' y='20' font-size='7' fill='#1a0d47' text-anchor='end'>Tú</text>";
+svgP+="<text x='"+(W-8)+"' y='30' font-size='7' fill='#b85c00' text-anchor='end'>"+cheapest+"</text>";
+svgP+="</svg>";
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:12px 0 2px'>PRECIO vs "+cheapest.toUpperCase()+"</div>";
+h+=svgP;
+// Volume comparison chart
+var allUn=[];se.forEach(function(d){allUn.push(d.uds)});meses.forEach(function(m){var c=compMap[m];if(c)allUn.push(c.uds)});
+var unMax=Math.max.apply(null,allUn)*1.1;
+function pyU(v){return 15+65*(1-v/unMax)}
+var svgU="<svg viewBox='0 0 "+W+" "+(H2+5)+"' style='width:100%;margin:4px 0' xmlns='http://www.w3.org/2000/svg'>";
+for(var gi=0;gi<3;gi++){var gy=15+65/2*gi;var gv=Math.round(unMax-unMax/2*gi);svgU+="<line x1='"+padL2+"' y1='"+gy+"' x2='"+(W-10)+"' y2='"+gy+"' stroke='rgba(0,0,0,.04)'/>";svgU+="<text x='"+(padL2-4)+"' y='"+(gy+3)+"' font-size='7' fill='#999' text-anchor='end'>"+gv+"</text>"}
+var ptsU=se.map(function(d,i){return px2(i)+","+pyU(d.uds)}).join(" ");
+svgU+="<polyline points='"+ptsU+"' fill='none' stroke='#1a0d47' stroke-width='3.5' stroke-linejoin='round'/>";
+var ptsUC=[];meses.forEach(function(m,i){var c=compMap[m];if(c)ptsUC.push(px2(i)+","+pyU(c.uds))});
+if(ptsUC.length)svgU+="<polyline points='"+ptsUC.join(" ")+"' fill='none' stroke='#b85c00' stroke-width='2' stroke-linejoin='round' opacity='0.7'/>";
+meses.forEach(function(m,i){if(i===0||i===n2-1||m.endsWith("-01")||m.endsWith("-07"))svgU+="<text x='"+px2(i)+"' y='"+(H2-2)+"' font-size='7' fill='#666' text-anchor='middle'>"+m.slice(2)+"</text>"});
+svgU+="<text x='"+(W-8)+"' y='20' font-size='7' fill='#1a0d47' text-anchor='end'>Tú</text>";
+svgU+="<text x='"+(W-8)+"' y='30' font-size='7' fill='#b85c00' text-anchor='end'>"+cheapest+"</text>";
+svgU+="</svg>";
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:8px 0 2px'>UNIDADES vs "+cheapest.toUpperCase()+"</div>";
+h+=svgU;
+}
+}
+// ─── HEATMAP COBERTURA (mes × retailer, data real) ───
+if(D.serie_por_retailer&&se.length&&hi&&hi.canal_detalle){
+var spr=D.serie_por_retailer;var meses=se.map(function(d){return d.fecha});
+var rets=hi.canal_detalle.map(function(c){return c.retailer});
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:12px 0 4px'>COBERTURA POR RETAILER</div>";
+h+="<div style='display:grid;grid-template-columns:70px repeat("+meses.length+",1fr);gap:1px;font-size:7px'>";
+h+="<div></div>";meses.forEach(function(m){h+="<div style='text-align:center;color:var(--text3)'>"+m.slice(5)+"</div>"});
+rets.forEach(function(r){
+h+="<div style='font-size:8px;color:var(--dk);padding:1px 2px'>"+r+"</div>";
+meses.forEach(function(m){
+var d=spr[r]&&spr[r][m];var u=d?Math.round(d.uds):0;
+var clr=u<=3?"#c0392b":u<20?"#b85c00":"#0f7173";
+var op=u<=3?0.7:u<20?0.3:Math.min(0.15+u/200,0.7);
+h+="<div style='background:"+clr+";opacity:"+op+";border-radius:2px;height:14px' title='"+r+" "+m+": "+u+" un'></div>"})});
+h+="</div>";
+h+="<div style='display:flex;gap:8px;margin-top:3px;font-size:7px;color:var(--text3)'><span style='display:inline-block;width:10px;height:10px;background:#0f7173;opacity:0.5;border-radius:2px;vertical-align:middle'></span> stock ok <span style='display:inline-block;width:10px;height:10px;background:#b85c00;opacity:0.4;border-radius:2px;vertical-align:middle;margin-left:8px'></span> bajo <span style='display:inline-block;width:10px;height:10px;background:#c0392b;opacity:0.7;border-radius:2px;vertical-align:middle;margin-left:8px'></span> quiebre</div>";
+}
 // ─── CARDS DE IMPACTO (cruzando GfK) ───
 if(hi&&hi.costo_gestion){
 var cg=hi.costo_gestion;
