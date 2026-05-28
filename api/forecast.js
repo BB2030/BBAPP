@@ -312,12 +312,23 @@ REGLAS ALERTAS:
       messages: [{ role: 'user', content: prompt }]
     });
 
-    const raw = response.content[0].text.trim()
+    const rawText = response.content[0].text.trim();
+    const raw = rawText
       .replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
     const first = raw.indexOf('{');
     const last = raw.lastIndexOf('}');
     if (first >= 0 && last > first) {
-      result = JSON.parse(raw.substring(first, last + 1));
+      let jsonStr = raw.substring(first, last + 1);
+      // Fix common Claude JSON issues
+      jsonStr = jsonStr.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']'); // trailing commas
+      jsonStr = jsonStr.replace(/'/g, '"'); // single quotes
+      jsonStr = jsonStr.replace(/[\x00-\x1F\x7F]/g, ' '); // control chars
+      try {
+        result = JSON.parse(jsonStr);
+      } catch(e2) {
+        console.error('JSON parse error:', e2.message, 'Raw first 200:', jsonStr.substring(0, 200));
+        return res.status(200).json({ error: 'JSON parse error: ' + e2.message + ' | Inicio: ' + jsonStr.substring(0, 150) });
+      }
     }
 
     if (!result || !result.forecast) {
