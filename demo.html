@@ -218,10 +218,7 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);font-s
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 var RR={electrohogar:["Electrolux Group","Midea Carrier","Whirlpool Chile","LG Electronics","Samsung Chile","BSH Chile","Mabe","Haier","Hisense"],tecnologia:["Intcomex","PCFactory","Lenovo Chile"],decohogar:["Casa Ideas","Homy","Rosen"],belleza:["Coty Chile","Henkel Chile"],jugueteria:["Hasbro Chile","Mattel Chile","LEGO Chile"],consumo:["Unilever Chile","Nestle Chile","Carozzi"],ferreteria:["Stanley Chile","Bosch Chile"]};
-var CC={"Electrolux Group":{marcas:["Electrolux","Fensa","Mademsa"],cats:[{v:"lavado",l:"Lavado y Secado",sub:[["todas","Todas"],["lav-cs","Lavadora Carga Superior"],["lav-cf","Lavadora Carga Frontal"],["lavaseca","Lava-Seca"],["secadora","Secadora"],["lav-semi","Semiautomática"],["centrifuga","Centrífuga"]]},{v:"refri",l:"Refrigeración",sub:[["todas","Todas"],["nf","No Frost"],["fd","Frío Directo"],["nf-2p","No Frost 2 Puertas"],["nf-3p","No Frost 3 Puertas"],["freezer","Freezer"],["minifridge","Frigobar"]]},{v:"coccion",l:"Cocinas y Hornos",sub:[["todas","Todas"],["cocina-gas","Cocina a Gas"],["cocina-elec","Cocina Eléctrica"],["horno-emp","Horno Empotrable"],["micro","Microondas"],["campana","Campana Extractora"],["encimera","Encimera"]]},{v:"lavaplatos",l:"Lavavajillas",sub:[["todas","Todas"],["60cm","60cm"],["45cm","45cm Slim"]]},{v:"aspirado",l:"Aspirado y Cuidado",sub:[["todas","Todas"],["aspira","Aspiradora"],["robot","Robot Aspirador"],["stick","Aspiradora Stick"]]},{v:"climatizacion",l:"Climatización",sub:[["todas","Todas"],["split","Split Muro"],["portatil","Portátil"],["ventilador","Ventilador"]]},{v:"calefaccion",l:"Calefacción",sub:[["todas","Todas"],["convector","Convector"],["estufa","Estufa"]]},{v:"otros",l:"Otros Electrodomésticos",sub:[["todas","Todas"],["plancha","Plancha"],["licuadora","Licuadora"],["tostador","Tostador"]]}],skus:[{v:"FEN-PC9.5SZ",l:"PC9.5SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC12SZ",l:"PC12SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC14SZ",l:"PC14SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ZS",l:"PC16ZS Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ONX",l:"PC16ONX Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18SZ",l:"PC18SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18NEG",l:"PC18NEG Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC20SZ",l:"PC20SZ Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21",l:"PC21 Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21ONX",l:"PC21ONX Fensa",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-VC8WD",l:"VC8WD Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-UM11WD",l:"UM11WD Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC8",l:"PERC8 Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC11",l:"PERC11 Fensa",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PC9D",l:"PC9D Fensa",m:"fensa",s:"secadora",c:"lavado"},{v:"MAD-9.5BZG",l:"9.5BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-9.5SZG",l:"9.5SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12BZG",l:"12BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12SZG",l:"12SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-14BZG",l:"14BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-16BZG",l:"16BZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-18SZG",l:"18SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-20SZG",l:"20SZG Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-21ONX",l:"21ONX Mademsa",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-TW5100",l:"TW5100 Mademsa",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-TW5300",l:"TW5300 Mademsa",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-PR5N",l:"PR5N Mademsa",m:"mademsa",s:"centrifuga",c:"lavado"},{v:"MAD-7DBZG",l:"7DBZG Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-7DPRO",l:"7DPRO Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DSZG",l:"9DSZG Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DPRO",l:"9DPRO Mademsa",m:"mademsa",s:"secadora",c:"lavado"},{v:"ELX-LEB21",l:"LEB21 Electrolux",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-LS22Y",l:"LS22Y Electrolux",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-EFLWM12O",l:"EFLWM12O Electrolux",m:"electrolux",s:"lav-cf",c:"lavado"},{v:"ELX-EFLWD12W",l:"EFLWD12W Electrolux",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-FLWD12AU",l:"FLWD12AU Electrolux",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-ETDHP8SZ",l:"ETDHP8SZ Electrolux",m:"electrolux",s:"secadora",c:"lavado"},
-{v:"FEN-NFM250",l:"NFM250 Fensa",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM320",l:"NFM320 Fensa",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM380",l:"NFM380 Fensa",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM430",l:"NFM430 Fensa",m:"fensa",s:"nf-3p",c:"refri"},{v:"FEN-NFM500",l:"NFM500 Fensa",m:"fensa",s:"nf-3p",c:"refri"},{v:"MAD-R250",l:"R250 Mademsa",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-R300",l:"R300 Mademsa",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-FZ180",l:"FZ180 Mademsa",m:"mademsa",s:"freezer",c:"refri"},{v:"ELX-ERFP38K2HUS",l:"ERFP38K2HUS Electrolux",m:"electrolux",s:"nf-3p",c:"refri"},
-{v:"FEN-CG64",l:"CG64 Fensa",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG76",l:"CG76 Fensa",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG86",l:"CG86 Fensa",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG55",l:"CG55 Mademsa",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG76",l:"CG76 Mademsa",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"ELX-EOED60",l:"EOED60 Electrolux",m:"electrolux",s:"horno-emp",c:"coccion"},{v:"ELX-EMS30400OX",l:"EMS30400OX Electrolux",m:"electrolux",s:"micro",c:"coccion"}
-]}};
+var CC={"Electrolux Group":{marcas:["Electrolux","Fensa","Mademsa"],cats:[{v:"lavado",l:"Lavado y Secado",sub:[["todas","Todas"],["lav-cs","Lavadora Carga Superior"],["lav-cf","Lavadora Carga Frontal"],["lavaseca","Lava-Seca"],["secadora","Secadora"],["lav-semi","Semiautomática"],["centrifuga","Centrífuga"]]},{v:"refri",l:"Refrigeración",sub:[["todas","Todas"],["nf","No Frost"],["fd","Frío Directo"],["nf-2p","No Frost 2 Puertas"],["nf-3p","No Frost 3 Puertas"],["freezer","Freezer"],["minifridge","Frigobar"]]},{v:"coccion",l:"Cocinas y Hornos",sub:[["todas","Todas"],["cocina-gas","Cocina a Gas"],["cocina-elec","Cocina Eléctrica"],["horno-emp","Horno Empotrable"],["micro","Microondas"],["campana","Campana Extractora"],["encimera","Encimera"]]},{v:"lavaplatos",l:"Lavavajillas",sub:[["todas","Todas"],["60cm","60cm"],["45cm","45cm Slim"]]},{v:"aspirado",l:"Aspirado y Cuidado",sub:[["todas","Todas"],["aspira","Aspiradora"],["robot","Robot Aspirador"],["stick","Aspiradora Stick"]]},{v:"climatizacion",l:"Climatización",sub:[["todas","Todas"],["split","Split Muro"],["portatil","Portátil"],["ventilador","Ventilador"]]},{v:"calefaccion",l:"Calefacción",sub:[["todas","Todas"],["convector","Convector"],["estufa","Estufa"]]},{v:"otros",l:"Otros Electrodomésticos",sub:[["todas","Todas"],["plancha","Plancha"],["licuadora","Licuadora"],["tostador","Tostador"]]}],skus:[{v:"FEN-PC8.5SZ",l:"PC8.5SZ Fensa 8.5kg Silver",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC8.5ONX",l:"PC8.5ONX Fensa 8.5kg Onix",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC9.5SZ",l:"PC9.5SZ Fensa 9.5kg Silver",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC9.5ONX",l:"PC9.5ONX Fensa 9.5kg Onix",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC12SZ",l:"PC12SZ Fensa 12kg Silver",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC12ONX",l:"PC12ONX Fensa 12kg Onix",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC14SZ",l:"PC14SZ Fensa 14kg Silver",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC14ONX",l:"PC14ONX Fensa 14kg Onix",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC14NEG",l:"PC14NEG Fensa 14kg Negro",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16SZ",l:"PC16SZ Fensa 16kg Silver",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16ONX",l:"PC16ONX Fensa 16kg Onix",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC16NEG",l:"PC16NEG Fensa 16kg Negro",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18SZ",l:"PC18SZ Fensa 18kg Silver",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18ONX",l:"PC18ONX Fensa 18kg Onix",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC18NEG",l:"PC18NEG Fensa 18kg Negro",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC20SZ",l:"PC20SZ Fensa 20kg Silver",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC20ONX",l:"PC20ONX Fensa 20kg Onix",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC20NEG",l:"PC20NEG Fensa 20kg Negro",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21",l:"PC21 Fensa 21kg",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21ONX",l:"PC21ONX Fensa 21kg Onix",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-PC21NEG",l:"PC21NEG Fensa 21kg Negro",m:"fensa",s:"lav-cs",c:"lavado"},{v:"FEN-EFLW10O",l:"EFLW10O Fensa CF 10kg",m:"fensa",s:"lav-cf",c:"lavado"},{v:"FEN-EFLW12O",l:"EFLW12O Fensa CF 12kg",m:"fensa",s:"lav-cf",c:"lavado"},{v:"FEN-EFLW14O",l:"EFLW14O Fensa CF 14kg",m:"fensa",s:"lav-cf",c:"lavado"},{v:"FEN-VC8WD",l:"VC8WD Fensa Lava-Seca 8kg",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-UM11WD",l:"UM11WD Fensa Lava-Seca 11kg",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC8",l:"PERC8 Fensa Lava-Seca 8kg Inverter",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC11",l:"PERC11 Fensa Lava-Seca 11kg Inverter",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PERC14",l:"PERC14 Fensa Lava-Seca 14kg Inverter",m:"fensa",s:"lavaseca",c:"lavado"},{v:"FEN-PC7D",l:"PC7D Fensa Secadora 7kg",m:"fensa",s:"secadora",c:"lavado"},{v:"FEN-PC9D",l:"PC9D Fensa Secadora 9kg",m:"fensa",s:"secadora",c:"lavado"},{v:"FEN-PC11D",l:"PC11D Fensa Secadora 11kg",m:"fensa",s:"secadora",c:"lavado"},{v:"MAD-8.5BZG",l:"8.5BZG Mademsa 8.5kg Blanco",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-8.5SZG",l:"8.5SZG Mademsa 8.5kg Silver",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-9.5BZG",l:"9.5BZG Mademsa 9.5kg Blanco",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-9.5SZG",l:"9.5SZG Mademsa 9.5kg Silver",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12BZG",l:"12BZG Mademsa 12kg Blanco",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-12SZG",l:"12SZG Mademsa 12kg Silver",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-14BZG",l:"14BZG Mademsa 14kg Blanco",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-14SZG",l:"14SZG Mademsa 14kg Silver",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-16BZG",l:"16BZG Mademsa 16kg Blanco",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-16SZG",l:"16SZG Mademsa 16kg Silver",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-18SZG",l:"18SZG Mademsa 18kg Silver",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-18ONX",l:"18ONX Mademsa 18kg Onix",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-20SZG",l:"20SZG Mademsa 20kg Silver",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-20ONX",l:"20ONX Mademsa 20kg Onix",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-21ONX",l:"21ONX Mademsa 21kg Onix",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-21NEG",l:"21NEG Mademsa 21kg Negro",m:"mademsa",s:"lav-cs",c:"lavado"},{v:"MAD-TW5100",l:"TW5100 Mademsa Semi-Auto 5kg",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-TW5300",l:"TW5300 Mademsa Semi-Auto 5.3kg",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-TW5500",l:"TW5500 Mademsa Semi-Auto 5.5kg",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-TW7100",l:"TW7100 Mademsa Semi-Auto 7kg",m:"mademsa",s:"lav-semi",c:"lavado"},{v:"MAD-PR5N",l:"PR5N Mademsa Centrífuga 5kg",m:"mademsa",s:"centrifuga",c:"lavado"},{v:"MAD-PR6N",l:"PR6N Mademsa Centrífuga 6kg",m:"mademsa",s:"centrifuga",c:"lavado"},{v:"MAD-7DBZG",l:"7DBZG Mademsa Secadora 7kg Blanco",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-7DPRO",l:"7DPRO Mademsa Secadora 7kg Pro",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DSZG",l:"9DSZG Mademsa Secadora 9kg Silver",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-9DPRO",l:"9DPRO Mademsa Secadora 9kg Pro",m:"mademsa",s:"secadora",c:"lavado"},{v:"MAD-11DPRO",l:"11DPRO Mademsa Secadora 11kg Pro",m:"mademsa",s:"secadora",c:"lavado"},{v:"ELX-LEB21",l:"LEB21 Electrolux CS 21kg",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-LS22Y",l:"LS22Y Electrolux CS 22kg",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-LEF18",l:"LEF18 Electrolux CS 18kg Inverter",m:"electrolux",s:"lav-cs",c:"lavado"},{v:"ELX-EFLWM12O",l:"EFLWM12O Electrolux CF 12kg",m:"electrolux",s:"lav-cf",c:"lavado"},{v:"ELX-EFLWM14O",l:"EFLWM14O Electrolux CF 14kg",m:"electrolux",s:"lav-cf",c:"lavado"},{v:"ELX-EFLWM10O",l:"EFLWM10O Electrolux CF 10kg",m:"electrolux",s:"lav-cf",c:"lavado"},{v:"ELX-EFLWD12W",l:"EFLWD12W Electrolux Lava-Seca LS 12kg",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-FLWD12AU",l:"FLWD12AU Electrolux Lava-Seca LS 12kg AU",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-EFLWD14W",l:"EFLWD14W Electrolux Lava-Seca LS 14kg",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-EFLWD10W",l:"EFLWD10W Electrolux Lava-Seca LS 10kg",m:"electrolux",s:"lavaseca",c:"lavado"},{v:"ELX-ETDHP8SZ",l:"ETDHP8SZ Electrolux Secadora 8kg",m:"electrolux",s:"secadora",c:"lavado"},{v:"ELX-ETDHP9SZ",l:"ETDHP9SZ Electrolux Secadora 9kg",m:"electrolux",s:"secadora",c:"lavado"},{v:"ELX-ETDHP11",l:"ETDHP11 Electrolux Secadora 11kg",m:"electrolux",s:"secadora",c:"lavado"},{v:"FEN-NFM220",l:"NFM220 Fensa NF 220L",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM250",l:"NFM250 Fensa NF 250L",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM280",l:"NFM280 Fensa NF 280L",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM320",l:"NFM320 Fensa NF 320L",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM350",l:"NFM350 Fensa NF 350L",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM380",l:"NFM380 Fensa NF 380L",m:"fensa",s:"nf-2p",c:"refri"},{v:"FEN-NFM430",l:"NFM430 Fensa NF 3P 430L",m:"fensa",s:"nf-3p",c:"refri"},{v:"FEN-NFM500",l:"NFM500 Fensa NF 3P 500L",m:"fensa",s:"nf-3p",c:"refri"},{v:"FEN-NFM560",l:"NFM560 Fensa NF 3P 560L",m:"fensa",s:"nf-3p",c:"refri"},{v:"FEN-FRG90",l:"FRG90 Fensa Frigobar 90L",m:"fensa",s:"minifridge",c:"refri"},{v:"FEN-FRG130",l:"FRG130 Fensa Frigobar 130L",m:"fensa",s:"minifridge",c:"refri"},{v:"MAD-R180",l:"R180 Mademsa FD 180L",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-R220",l:"R220 Mademsa FD 220L",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-R250",l:"R250 Mademsa FD 250L",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-R300",l:"R300 Mademsa FD 300L",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-R350",l:"R350 Mademsa FD 350L",m:"mademsa",s:"fd",c:"refri"},{v:"MAD-NF250",l:"NF250 Mademsa NF 250L",m:"mademsa",s:"nf",c:"refri"},{v:"MAD-NF320",l:"NF320 Mademsa NF 320L",m:"mademsa",s:"nf",c:"refri"},{v:"MAD-NF380",l:"NF380 Mademsa NF 380L",m:"mademsa",s:"nf",c:"refri"},{v:"MAD-FZ100",l:"FZ100 Mademsa Freezer 100L",m:"mademsa",s:"freezer",c:"refri"},{v:"MAD-FZ150",l:"FZ150 Mademsa Freezer 150L",m:"mademsa",s:"freezer",c:"refri"},{v:"MAD-FZ180",l:"FZ180 Mademsa Freezer 180L",m:"mademsa",s:"freezer",c:"refri"},{v:"MAD-FZ250",l:"FZ250 Mademsa Freezer 250L",m:"mademsa",s:"freezer",c:"refri"},{v:"MAD-FZ300",l:"FZ300 Mademsa Freezer 300L",m:"mademsa",s:"freezer",c:"refri"},{v:"ELX-ERFP38K2HUS",l:"ERFP38K2HUS Electrolux NF 3P 380L",m:"electrolux",s:"nf-3p",c:"refri"},{v:"ELX-ERQP52K2HSS",l:"ERQP52K2HSS Electrolux SBS 520L",m:"electrolux",s:"nf-3p",c:"refri"},{v:"ELX-ERFG36K2HQS",l:"ERFG36K2HQS Electrolux French Door 360L",m:"electrolux",s:"nf-3p",c:"refri"},{v:"ELX-ERDM26F2HPS",l:"ERDM26F2HPS Electrolux NF 260L",m:"electrolux",s:"nf-3p",c:"refri"},{v:"ELX-ERDM31F2HPS",l:"ERDM31F2HPS Electrolux NF 310L",m:"electrolux",s:"nf-3p",c:"refri"},{v:"ELX-ERQP46K2HSS",l:"ERQP46K2HSS Electrolux SBS 460L",m:"electrolux",s:"nf-3p",c:"refri"},{v:"FEN-CG54",l:"CG54 Fensa Cocina Gas 54cm",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG60",l:"CG60 Fensa Cocina Gas 60cm",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG64",l:"CG64 Fensa Cocina Gas 64cm",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG68",l:"CG68 Fensa Cocina Gas 68cm",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG76",l:"CG76 Fensa Cocina Gas 76cm",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CG86",l:"CG86 Fensa Cocina Gas 86cm",m:"fensa",s:"cocina-gas",c:"coccion"},{v:"FEN-CE60",l:"CE60 Fensa Cocina Eléctrica 60cm",m:"fensa",s:"cocina-elec",c:"coccion"},{v:"FEN-CE76",l:"CE76 Fensa Cocina Eléctrica 76cm",m:"fensa",s:"cocina-elec",c:"coccion"},{v:"FEN-EG60",l:"EG60 Fensa Encimera Gas 60cm",m:"fensa",s:"encimera",c:"coccion"},{v:"FEN-EG70",l:"EG70 Fensa Encimera Gas 70cm",m:"fensa",s:"encimera",c:"coccion"},{v:"FEN-EG90",l:"EG90 Fensa Encimera Gas 90cm",m:"fensa",s:"encimera",c:"coccion"},{v:"FEN-EI60",l:"EI60 Fensa Encimera Inducción 60cm",m:"fensa",s:"encimera",c:"coccion"},{v:"FEN-EI90",l:"EI90 Fensa Encimera Inducción 90cm",m:"fensa",s:"encimera",c:"coccion"},{v:"FEN-CAMCE60",l:"CAMCE60 Fensa Campana 60cm",m:"fensa",s:"campana",c:"coccion"},{v:"FEN-CAMCE70",l:"CAMCE70 Fensa Campana 70cm",m:"fensa",s:"campana",c:"coccion"},{v:"FEN-CAMCE90",l:"CAMCE90 Fensa Campana 90cm",m:"fensa",s:"campana",c:"coccion"},{v:"FEN-CAMCI60",l:"CAMCI60 Fensa Campana Isla 60cm",m:"fensa",s:"campana",c:"coccion"},{v:"FEN-CAMCI90",l:"CAMCI90 Fensa Campana Isla 90cm",m:"fensa",s:"campana",c:"coccion"},{v:"FEN-HE60",l:"HE60 Fensa Horno Eléctrico 60cm",m:"fensa",s:"horno-emp",c:"coccion"},{v:"FEN-HE70",l:"HE70 Fensa Horno Eléctrico 70cm",m:"fensa",s:"horno-emp",c:"coccion"},{v:"FEN-HG60",l:"HG60 Fensa Horno Gas 60cm",m:"fensa",s:"horno-emp",c:"coccion"},{v:"MAD-CG45",l:"CG45 Mademsa Cocina Gas 45cm",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG50",l:"CG50 Mademsa Cocina Gas 50cm",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG55",l:"CG55 Mademsa Cocina Gas 55cm",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG60",l:"CG60 Mademsa Cocina Gas 60cm",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG68",l:"CG68 Mademsa Cocina Gas 68cm",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"MAD-CG76",l:"CG76 Mademsa Cocina Gas 76cm",m:"mademsa",s:"cocina-gas",c:"coccion"},{v:"ELX-EOED60",l:"EOED60 Electrolux Horno 60cm",m:"electrolux",s:"horno-emp",c:"coccion"},{v:"ELX-EOEE60",l:"EOEE60 Electrolux Horno Eléc 60cm",m:"electrolux",s:"horno-emp",c:"coccion"},{v:"ELX-EOEG60",l:"EOEG60 Electrolux Horno Gas 60cm",m:"electrolux",s:"horno-emp",c:"coccion"},{v:"ELX-EMS30400OX",l:"EMS30400OX Electrolux Micro 30L",m:"electrolux",s:"micro",c:"coccion"},{v:"ELX-EMS26400OX",l:"EMS26400OX Electrolux Micro 26L",m:"electrolux",s:"micro",c:"coccion"},{v:"ELX-EME28400",l:"EME28400 Electrolux Micro 28L",m:"electrolux",s:"micro",c:"coccion"},{v:"ELX-EMS20400",l:"EMS20400 Electrolux Micro 20L",m:"electrolux",s:"micro",c:"coccion"},{v:"ELX-EIV63440",l:"EIV63440 Electrolux Encimera Inducción 60cm",m:"electrolux",s:"encimera",c:"coccion"},{v:"ELX-EGT76G3NE",l:"EGT76G3NE Electrolux Encimera Gas 76cm",m:"electrolux",s:"encimera",c:"coccion"},{v:"FEN-ME25",l:"ME25 Fensa Microondas 25L",m:"fensa",s:"micro",c:"coccion"},{v:"FEN-ME30",l:"ME30 Fensa Microondas 30L",m:"fensa",s:"micro",c:"coccion"},{v:"MAD-ME20",l:"ME20 Mademsa Microondas 20L",m:"mademsa",s:"micro",c:"coccion"},{v:"MAD-ME25",l:"ME25 Mademsa Microondas 25L",m:"mademsa",s:"micro",c:"coccion"},{v:"FEN-LV14",l:"LV14 Fensa LV 14 Cubiertos",m:"fensa",s:"60cm",c:"lavaplatos"},{v:"FEN-LV10",l:"LV10 Fensa LV 10 Cubiertos",m:"fensa",s:"60cm",c:"lavaplatos"},{v:"FEN-LV8",l:"LV8 Fensa LV 8 Cubiertos",m:"fensa",s:"45cm",c:"lavaplatos"},{v:"ELX-EHFB13T4PS",l:"EHFB13T4PS Electrolux LV 13C",m:"electrolux",s:"60cm",c:"lavaplatos"},{v:"ELX-EHFB14T4PS",l:"EHFB14T4PS Electrolux LV 14C",m:"electrolux",s:"60cm",c:"lavaplatos"},{v:"ELX-ESF5534LOW",l:"ESF5534LOW Electrolux LV Slim 10C",m:"electrolux",s:"45cm",c:"lavaplatos"},{v:"ELX-ESF5542LOW",l:"ESF5542LOW Electrolux LV Slim 9C",m:"electrolux",s:"45cm",c:"lavaplatos"},{v:"ELX-ERG36",l:"ERG36 Electrolux Aspiradora 1600W",m:"electrolux",s:"aspira",c:"aspirado"},{v:"ELX-ERG38",l:"ERG38 Electrolux Aspiradora 1800W",m:"electrolux",s:"aspira",c:"aspirado"},{v:"ELX-ERG40",l:"ERG40 Electrolux Aspiradora 2000W",m:"electrolux",s:"aspira",c:"aspirado"},{v:"ELX-EERC72",l:"EERC72 Electrolux Robot",m:"electrolux",s:"robot",c:"aspirado"},{v:"ELX-EERC80",l:"EERC80 Electrolux Robot Pro",m:"electrolux",s:"robot",c:"aspirado"},{v:"ELX-EHVS5110",l:"EHVS5110 Electrolux Stick 21.6V",m:"electrolux",s:"stick",c:"aspirado"},{v:"ELX-EHVS5220",l:"EHVS5220 Electrolux Stick 25.2V",m:"electrolux",s:"stick",c:"aspirado"},{v:"ELX-EHVS6350",l:"EHVS6350 Electrolux Stick Pro 28.8V",m:"electrolux",s:"stick",c:"aspirado"},{v:"FEN-EAFI09",l:"EAFI09 Fensa Split 9000BTU",m:"fensa",s:"split",c:"climatizacion"},{v:"FEN-EAFI12",l:"EAFI12 Fensa Split 12000BTU",m:"fensa",s:"split",c:"climatizacion"},{v:"FEN-EAFI18",l:"EAFI18 Fensa Split 18000BTU",m:"fensa",s:"split",c:"climatizacion"},{v:"FEN-EAFI24",l:"EAFI24 Fensa Split 24000BTU",m:"fensa",s:"split",c:"climatizacion"},{v:"FEN-EAFP09",l:"EAFP09 Fensa Portátil 9000BTU",m:"fensa",s:"portatil",c:"climatizacion"},{v:"FEN-EAFP12",l:"EAFP12 Fensa Portátil 12000BTU",m:"fensa",s:"portatil",c:"climatizacion"},{v:"FEN-EAFP14",l:"EAFP14 Fensa Portátil 14000BTU",m:"fensa",s:"portatil",c:"climatizacion"},{v:"FEN-VN40",l:"VN40 Fensa Ventilador Pedestal 40cm",m:"fensa",s:"ventilador",c:"climatizacion"},{v:"FEN-VN50",l:"VN50 Fensa Ventilador Pedestal 50cm",m:"fensa",s:"ventilador",c:"climatizacion"},{v:"FEN-VT20",l:"VT20 Fensa Ventilador Torre 20",m:"fensa",s:"ventilador",c:"climatizacion"},{v:"MAD-CF10N",l:"CF10N Mademsa Calefont 10L",m:"mademsa",s:"convector",c:"calefaccion"},{v:"MAD-CF14N",l:"CF14N Mademsa Calefont 14L",m:"mademsa",s:"convector",c:"calefaccion"},{v:"MAD-CF16N",l:"CF16N Mademsa Calefont 16L",m:"mademsa",s:"convector",c:"calefaccion"},{v:"FEN-CF10T",l:"CF10T Fensa Calefont 10L",m:"fensa",s:"convector",c:"calefaccion"},{v:"FEN-CF14T",l:"CF14T Fensa Calefont 14L",m:"fensa",s:"convector",c:"calefaccion"},{v:"FEN-CF16T",l:"CF16T Fensa Calefont 16L",m:"fensa",s:"convector",c:"calefaccion"},{v:"MAD-EK2000",l:"EK2000 Mademsa Estufa 2000W",m:"mademsa",s:"estufa",c:"calefaccion"},{v:"MAD-EK3000",l:"EK3000 Mademsa Estufa 3000W",m:"mademsa",s:"estufa",c:"calefaccion"},{v:"MAD-EK5000",l:"EK5000 Mademsa Estufa 5000W",m:"mademsa",s:"estufa",c:"calefaccion"},{v:"MAD-EP1500",l:"EP1500 Mademsa Estufa Parafina 1500W",m:"mademsa",s:"estufa",c:"calefaccion"},{v:"MAD-EP3000",l:"EP3000 Mademsa Estufa Parafina 3000W",m:"mademsa",s:"estufa",c:"calefaccion"},{v:"FEN-TM50",l:"TM50 Fensa Termo 50L",m:"fensa",s:"convector",c:"calefaccion"},{v:"FEN-TM80",l:"TM80 Fensa Termo 80L",m:"fensa",s:"convector",c:"calefaccion"},{v:"FEN-TM100",l:"TM100 Fensa Termo 100L",m:"fensa",s:"convector",c:"calefaccion"}]}};
 var F={},emp="",rub="",cfg=null,sks=[];
 function tf(id){var el=document.getElementById(id);el.style.display=el.style.display==='none'?'block':'none'}
 function setupDrop(boxId,fileId){var b=document.getElementById(boxId);if(!b)return;b.ondragover=function(e){e.preventDefault();b.style.borderColor="var(--dk)"};b.ondragleave=function(){b.style.borderColor="var(--border)"};b.ondrop=function(e){e.preventDefault();b.style.borderColor="var(--border)";var f=document.getElementById(fileId);var dt=new DataTransfer();dt.items.add(e.dataTransfer.files[0]);f.files=dt.files;f.dispatchEvent(new Event("change"))}}
@@ -231,7 +228,7 @@ function cg(){document.getElementById("gbn").disabled=!(document.getElementById(
 function go(){rub=document.getElementById("gr").selectedOptions[0].text;emp=document.getElementById("ge").value;document.getElementById("gate").style.display="none";document.getElementById("main").style.display="block";document.getElementById("ctx").textContent=rub+" · "+emp;lc()}
 function lc(){cfg=CC[emp]||null;if(!cfg)return;sks=cfg.skus;var c=document.getElementById("fc");c.innerHTML="<option value='todas'>Todas</option>";cfg.cats.forEach(function(x){c.innerHTML+="<option value='"+x.v+"'>"+x.l+"</option>"});var m=document.getElementById("fm");m.innerHTML="<option value='todas'>Todas</option>";cfg.marcas.forEach(function(x){m.innerHTML+="<option value='"+x.toLowerCase()+"'>"+x+"</option>"});us();uk()}
 function us(){var v=document.getElementById("fc").value,s=document.getElementById("fb");s.innerHTML="<option value='todas'>Todas</option>";if(!cfg)return;cfg.cats.forEach(function(c){if(v==="todas"||c.v===v)c.sub.forEach(function(x){if(x[0]!=="todas")s.innerHTML+="<option value='"+x[0]+"'>"+x[1]+"</option>"})})}
-function uk(){var cv=document.getElementById("fc").value,sv=document.getElementById("fb").value,mv=document.getElementById("fm").value,sl=document.getElementById("fk"),f=sks.filter(function(x){if(cv!=="todas"&&x.c!==cv)return false;if(sv!=="todas"&&x.s!==sv)return false;if(mv!=="todas"&&x.m!==mv)return false;return true});sl.innerHTML="<option value='todos'>Todos ("+f.length+")</option>";f.forEach(function(x){sl.innerHTML+="<option value='"+x.v+"'>"+x.l+"</option>"})}
+function uk(){var cv=document.getElementById("fc").value,sv=document.getElementById("fb").value,mv=document.getElementById("fm").value,sl=document.getElementById("fk"),f=sks.filter(function(x){if(cv!=="todas"&&x.c!==cv)return false;if(sv!=="todas"&&x.s!==sv)return false;if(mv!=="todas"&&x.m!==mv)return false;return true});sl.innerHTML="<option value='todos'>Todos</option>";f.forEach(function(x){sl.innerHTML+="<option value='"+x.v+"'>"+x.l+"</option>"})}
 function up(inp,key){if(!inp.files[0])return;F[key]=inp.files[0];document.getElementById("n-"+key).textContent="✓ "+inp.files[0].name;var card=document.getElementById("u-"+key);card.style.borderColor="var(--aqua)";card.style.background="rgba(15,113,115,.04)";document.getElementById("gobtn").disabled=false}
 function az(){document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";document.getElementById("pt").textContent="Leyendo archivos...";
 var ks=Object.keys(F),p=ks.length,CSV={};
@@ -242,26 +239,230 @@ document.getElementById("pt").textContent="Analizando con IA...";
 var cat=document.getElementById("fc");var catName=cat&&cat.selectedOptions[0]&&cat.selectedOptions[0].value!=="todas"?cat.selectedOptions[0].text:"Lavado y Secado";
 var sub=document.getElementById("fb");var subName=sub&&sub.selectedOptions[0]&&sub.selectedOptions[0].value!=="todas"?sub.selectedOptions[0].text:"Todas";
 var marc=document.getElementById("fm");var marcaName=marc&&marc.selectedOptions[0]&&marc.selectedOptions[0].value!=="todas"?marc.selectedOptions[0].text:"Todas";
-var ret=document.getElementById("fr");var retName=ret&&ret.selectedOptions[0]&&ret.selectedOptions[0].value!=="todos"?ret.selectedOptions[0].value:"Todos";
+var ret=document.getElementById("fr");var retName="Todos";
 var sku=document.getElementById("fk");var skuName=sku&&sku.selectedOptions[0]&&sku.selectedOptions[0].value!=="todos"?sku.selectedOptions[0].value:"Todos";
-fetch("/api/forecast",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({so:CSV.so||null,si:CSV.si||null,id:CSV.id||null,ir:CSV.ir||null,gfk:CSV.gfk||null,empresa:emp,rubro:rub,categoria:catName,subcategoria:subName,marca:marcaName,retailer:retName,sku:skuName})})
+fetch("/api/forecast",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({so:CSV.so||null,si:CSV.si||null,id:CSV.id||null,ir:CSV.ir||null,gfk:CSV.gfk||null,empresa:emp,rubro:rub,categoria:catName,subcategoria:subName,marca:marcaName,retailer:"Todos",sku:skuName})})
 .then(function(r){return r.json()})
 .then(function(data){
-if(data.error){document.getElementById("pt").textContent="⚠️ "+data.error;return}
+if(data.error){document.getElementById("pt").textContent="⚠️ "+(typeof data.error==="string"?data.error:JSON.stringify(data.error));return}
 window.BBDATA=data;
 document.getElementById("proc").style.display="none";
 document.getElementById("res").style.display="block";
-render(data);
+showModes(data);
 })
 .catch(function(err){document.getElementById("pt").textContent="Error de conexión: "+err.message});
 }
-function render(D){var h="";var nc=D.fuentes?D.fuentes.length:1;
-// ─── 1. FORECAST ───
+function showModes(D){
+var nc=D.fuentes?D.fuentes.length:1;
+var skuLbl=(D.sku||emp)+(D.retailer&&D.retailer!=="Todos"?" · "+D.retailer:"");
+var h="<div style='text-align:center;margin-bottom:20px'><div style='font-size:11px;color:var(--text3);font-weight:300;margin-bottom:4px'>Análisis listo — "+nc+" fuentes · "+(D.total_filas||0).toLocaleString("es-CL")+" filas</div>";
+h+="<div style='font-family:Libre Baskerville,serif;font-size:18px;font-weight:700;color:var(--dk);margin-bottom:16px'>"+skuLbl+"</div>";
+h+="<div style='font-size:13px;color:var(--text2);margin-bottom:16px'>¿Qué quieres ver?</div>";
+h+="<div style='display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:500px;margin:0 auto'>";
+h+="<button onclick='renderMode(\"historial\")' style='flex:1;min-width:140px;padding:14px 12px;background:var(--white);border:1.5px solid var(--border);cursor:pointer;font-family:Lato,sans-serif;transition:all .12s' onmouseover='this.style.borderColor=\"var(--dk)\"' onmouseout='this.style.borderColor=\"var(--border)\"'><div style='font-size:20px;margin-bottom:4px'>📜</div><div style='font-size:12px;font-weight:700;color:var(--dk)'>Historial SKU</div><div style='font-size:10px;color:var(--text3);font-weight:300'>La historia completa</div></button>";
+h+="<button onclick='renderMode(\"forecast\")' style='flex:1;min-width:140px;padding:14px 12px;background:var(--white);border:1.5px solid var(--border);cursor:pointer;font-family:Lato,sans-serif;transition:all .12s' onmouseover='this.style.borderColor=\"var(--dk)\"' onmouseout='this.style.borderColor=\"var(--border)\"'><div style='font-size:20px;margin-bottom:4px'>📊</div><div style='font-size:12px;font-weight:700;color:var(--dk)'>Forecast</div><div style='font-size:10px;color:var(--text3);font-weight:300'>Próximos 12 meses</div></button>";
+h+="<button onclick='renderMode(\"alertas\")' style='flex:1;min-width:140px;padding:14px 12px;background:var(--white);border:1.5px solid var(--border);cursor:pointer;font-family:Lato,sans-serif;transition:all .12s' onmouseover='this.style.borderColor=\"var(--dk)\"' onmouseout='this.style.borderColor=\"var(--border)\"'><div style='font-size:20px;margin-bottom:4px'>🔥</div><div style='font-size:12px;font-weight:700;color:var(--dk)'>Alertas</div><div style='font-size:10px;color:var(--text3);font-weight:300'>Acciones urgentes</div></button>";
+h+="<button onclick='renderMode(\"todo\")' style='flex:1;min-width:140px;padding:14px 12px;background:var(--dk);border:1.5px solid var(--dk);cursor:pointer;font-family:Lato,sans-serif;transition:all .12s'><div style='font-size:20px;margin-bottom:4px'>📋</div><div style='font-size:12px;font-weight:700;color:var(--gold)'>Reporte Completo</div><div style='font-size:10px;color:rgba(255,255,255,.5);font-weight:300'>Todo junto</div></button>";
+h+="</div></div>";
+document.getElementById("rt").textContent="";document.getElementById("rs").textContent="";document.getElementById("rc").innerHTML=h;
+}
+function renderMode(mode){
+var D=window.BBDATA;if(!D)return;var h="";
+h+="<div style='margin-bottom:12px'><span onclick='showModes(window.BBDATA)' style='font-size:11px;color:var(--text3);cursor:pointer;font-weight:700'>← Cambiar vista</span></div>";
+if(mode==="historial")h+=renderHistorial(D);
+if(mode==="benchmark"&&D.benchmark)h+=renderBenchmark(D);
+if(mode==="forecast"||mode==="todo")h+=renderForecast(D);
+if(mode==="alertas"||mode==="todo")h+=renderAlertas(D);
+if(mode==="historial")h+=renderHistorialExcel();
+if(mode==="todo")h+=renderExcel();
+document.getElementById("rt").textContent=(D.sku||D.empresa||emp)+(D.retailer&&D.retailer!=="Todos"?" · "+D.retailer:"");
+document.getElementById("rs").textContent=(D.fuentes?D.fuentes.length:1)+" fuentes";
+document.getElementById("rc").innerHTML=h;
+}
+function renderHistorial(D){var h="";var hi=D.historial;var se=D.serie_historica||[];
+// ─── HEADER ───
+h+="<div style='padding:16px;background:var(--white);border:1px solid var(--border);margin-bottom:14px'>";
+h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:12px'>📜 Historial SKU — "+(D.sku||"")+"</div>";
+// ─── RESUMEN + TENDENCIA ───
+if(hi){
+var tc=hi.tendencia==="CAYENDO"?"#c0392b":hi.tendencia==="CRECIENDO"?"var(--aqua)":"var(--text2)";
+h+="<div style='display:flex;gap:8px;margin-bottom:14px'>";
+h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:18px;font-weight:700;color:var(--dk)'>"+(hi.so_total||0).toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3)'>un vendidas total</div></div>";
+h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:18px;font-weight:700;color:var(--dk)'>"+(hi.so_promedio_mes||0).toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3)'>un/mes promedio</div></div>";
+h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center;border-left:3px solid "+tc+"'><div style='font-size:18px;font-weight:700;color:"+tc+"'>"+(hi.tendencia||"—")+"</div><div style='font-size:10px;color:var(--text3)'>tendencia</div></div>";
+h+="</div>";
+h+="<div style='font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px;font-weight:300'>"+hi.resumen+"</div>";
+}
+// ─── GRÁFICO HISTÓRICO ───
+if(se.length){
+var mx=Math.max.apply(null,se.map(function(d){return d.uds}));
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:6px'>SELL OUT MENSUAL</div>";
+h+="<div style='display:flex;align-items:flex-end;gap:2px;height:70px;margin-bottom:4px'>";
+se.forEach(function(d){var pct=Math.round(d.uds/mx*100);h+="<div style='flex:1;height:"+pct+"%;background:var(--blue);border-radius:2px 2px 0 0;min-height:2px' title='"+d.fecha+": "+d.uds+" un'></div>"});
+h+="</div><div style='display:flex;gap:2px;margin-bottom:14px'>";
+se.forEach(function(d,i){if(i%3===0){h+="<div style='flex:3;font-size:7px;color:var(--text3)'>"+d.fecha+"</div>"}});
+h+="</div>";
+}
+// ─── MEJOR / PEOR RETAILER ───
+if(hi&&hi.mejor_retailer&&hi.peor_retailer){
+h+="<div style='display:flex;gap:8px;margin-bottom:14px'>";
+h+="<div style='flex:1;padding:10px;background:rgba(15,113,115,.04);border-left:3px solid var(--aqua)'><div style='font-size:10px;font-weight:700;color:var(--aqua);letter-spacing:.5px'>MEJOR RETAILER</div><div style='font-size:14px;font-weight:700;color:var(--dk);margin:4px 0'>"+hi.mejor_retailer.nombre+"</div><div style='font-size:11px;color:var(--text2)'>"+hi.mejor_retailer.uds.toLocaleString("es-CL")+" un — "+hi.mejor_retailer.por_que+"</div></div>";
+h+="<div style='flex:1;padding:10px;background:rgba(192,57,43,.04);border-left:3px solid #c0392b'><div style='font-size:10px;font-weight:700;color:#c0392b;letter-spacing:.5px'>PEOR RETAILER</div><div style='font-size:14px;font-weight:700;color:var(--dk);margin:4px 0'>"+hi.peor_retailer.nombre+"</div><div style='font-size:11px;color:var(--text2)'>"+hi.peor_retailer.uds.toLocaleString("es-CL")+" un — "+hi.peor_retailer.por_que+"</div></div>";
+h+="</div>";
+}
+// ─── OPORTUNIDADES PERDIDAS + RIESGOS ───
+if(hi&&hi.oportunidades_perdidas){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:6px'>OPORTUNIDADES PERDIDAS</div>";
+hi.oportunidades_perdidas.forEach(function(o){var txt=typeof o==="string"?o:o.texto;var src=typeof o==="object"&&o.source?o.source:"";h+="<div style='padding:6px 10px;margin-bottom:4px;background:rgba(15,113,115,.04);font-size:11px;color:var(--dk);font-weight:300'>⚡ "+txt+(src?"<span style='font-size:9px;color:var(--text3);font-style:italic;margin-left:8px'>📎 "+src+"</span>":"")+"</div>"});
+}
+if(hi&&hi.riesgos){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:10px 0 6px'>RIESGOS ACTIVOS</div>";
+hi.riesgos.forEach(function(r){var txt=typeof r==="string"?r:r.texto;var src=typeof r==="object"&&r.source?r.source:"";h+="<div style='padding:6px 10px;margin-bottom:4px;background:rgba(192,57,43,.04);font-size:11px;color:var(--dk);font-weight:300'>⚠️ "+txt+(src?"<span style='font-size:9px;color:var(--text3);font-style:italic;margin-left:8px'>📎 "+src+"</span>":"")+"</div>"});
+}
+// ─── FODA ───
+if(hi&&hi.foda){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>ANÁLISIS FODA</div>";
+h+="<div style='display:grid;grid-template-columns:1fr 1fr;gap:6px'>";
+h+="<div style='padding:10px;background:rgba(15,113,115,.06);font-size:11px'><div style='font-weight:700;color:var(--aqua);margin-bottom:4px'>FORTALEZAS</div><div style='color:var(--text2);font-weight:300'>"+hi.foda.fortalezas+"</div></div>";
+h+="<div style='padding:10px;background:rgba(192,57,43,.06);font-size:11px'><div style='font-weight:700;color:#c0392b;margin-bottom:4px'>DEBILIDADES</div><div style='color:var(--text2);font-weight:300'>"+hi.foda.debilidades+"</div></div>";
+h+="<div style='padding:10px;background:rgba(90,79,232,.06);font-size:11px'><div style='font-weight:700;color:var(--blue);margin-bottom:4px'>OPORTUNIDADES</div><div style='color:var(--text2);font-weight:300'>"+hi.foda.oportunidades+"</div></div>";
+h+="<div style='padding:10px;background:rgba(184,92,0,.06);font-size:11px'><div style='font-weight:700;color:#b85c00;margin-bottom:4px'>AMENAZAS</div><div style='color:var(--text2);font-weight:300'>"+hi.foda.amenazas+"</div></div>";
+h+="</div>";
+}
+// ─── MARGEN + PRECIO ───
+if(hi&&hi.margen){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>MARGEN Y PRECIO</div>";
+h+="<div style='display:flex;gap:8px;margin-bottom:10px'>";
+h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:16px;font-weight:700;color:var(--dk)'>$"+(hi.margen.pvp_promedio||0).toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3)'>PVP promedio</div></div>";
+h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:16px;font-weight:700;color:var(--dk)'>$"+(hi.margen.costo_promedio||0).toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3)'>costo promedio</div></div>";
+var mc=hi.margen.margen_pct>40?"var(--aqua)":hi.margen.margen_pct<30?"#c0392b":"var(--text2)";
+h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center;border-left:3px solid "+mc+"'><div style='font-size:16px;font-weight:700;color:"+mc+"'>"+(hi.margen.margen_pct||0)+"%</div><div style='font-size:10px;color:var(--text3)'>margen bruto</div></div>";
+h+="</div>";
+h+="<div style='font-size:11px;color:var(--text2);font-weight:300;margin-bottom:8px'>"+hi.margen.tendencia_margen+"</div>";
+}
+if(hi&&hi.precio){
+var ec=hi.precio.elasticidad==="ALTA"?"#c0392b":hi.precio.elasticidad==="BAJA"?"var(--aqua)":"var(--text2)";
+h+="<div style='display:flex;gap:8px;margin-bottom:10px'>";
+h+="<div style='flex:0 0 auto;padding:10px 16px;background:var(--bg);text-align:center;border-left:3px solid "+ec+"'><div style='font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.5px'>ELASTICIDAD</div><div style='font-size:14px;font-weight:700;color:"+ec+"'>"+hi.precio.elasticidad+"</div></div>";
+h+="<div style='flex:1;padding:10px;font-size:11px;color:var(--text2);font-weight:300;line-height:1.5'>"+hi.precio.explicacion+"<br><span style='color:var(--dk);font-weight:600'>vs competencia: </span>"+hi.precio.pvp_vs_competencia+"</div>";
+h+="</div>";
+}
+// ─── MAPA DE PRECIOS ───
+if(hi&&hi.mapa_precios){
+var mp=hi.mapa_precios;
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>MAPA DE PRECIOS — SEGMENTO</div>";
+h+="<div style='padding:12px;background:var(--bg);margin-bottom:10px'>";
+h+="<div style='display:flex;align-items:center;gap:6px;margin-bottom:8px'><div style='font-size:11px;color:var(--text3)'>"+mp.rango_segmento+"</div><div style='flex:1;height:8px;background:linear-gradient(90deg,var(--sky),var(--blue),var(--aqua));border-radius:4px;position:relative'>";
+var pos=mp.posicion==="ENTRY"?"15%":mp.posicion==="PREMIUM"?"85%":"50%";
+h+="<div style='position:absolute;top:-6px;left:"+pos+";width:20px;height:20px;background:var(--dk);border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center'><span style='font-size:7px;color:var(--gold);font-weight:700'>TÚ</span></div>";
+h+="</div></div>";
+h+="<div style='display:flex;justify-content:space-between;font-size:10px'><span style='color:var(--text3)'>Más barato: "+(mp.competidor_mas_barato?mp.competidor_mas_barato.marca+" $"+mp.competidor_mas_barato.pvp.toLocaleString("es-CL"):"—")+"</span><span style='font-weight:700;color:var(--dk)'>Tú: $"+(mp.tu_pvp||0).toLocaleString("es-CL")+"</span><span style='color:var(--text3)'>Más caro: "+(mp.competidor_mas_caro?mp.competidor_mas_caro.marca+" $"+mp.competidor_mas_caro.pvp.toLocaleString("es-CL"):"—")+"</span></div>";
+h+="</div>";
+}
+// ─── COMPETENCIA ───
+if(hi&&hi.competencia&&hi.competencia.length){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>COMPETENCIA DIRECTA — TOP MODELOS SEGMENTO</div>";
+h+="<table style='width:100%;border-collapse:collapse;font-size:11px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>MARCA</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>MODELO</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>UNIDADES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>PVP EST.</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SHARE</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>AMENAZA</th></tr>";
+hi.competencia.forEach(function(c){var isTu=c.marca.toLowerCase().includes("fen")||c.modelo.includes(D.sku||"");h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5);"+(isTu?"background:rgba(15,113,115,.04)":"")+"'><td style='padding:5px 4px;font-weight:"+(isTu?"700":"400")+";color:var(--dk)'>"+c.marca+"</td><td style='padding:5px 4px;color:var(--text2)'>"+c.modelo+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+(c.uds_periodo||0).toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>$"+(c.pvp_estimado||0).toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;font-weight:700;color:var(--text2)'>"+(c.share_segmento||0)+"%</td><td style='padding:5px 4px;font-size:10px;color:var(--text2)'>"+c.amenaza+"</td></tr>"});
+h+="</table>";
+}
+// ─── DETALLE POR CANAL ───
+if(hi&&hi.canal_detalle&&hi.canal_detalle.length){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>DETALLE POR RETAILER</div>";
+h+="<table style='width:100%;border-collapse:collapse;font-size:11px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>RETAILER</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SO TOT</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SO/MES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>INV.R</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>DOH</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>GAP SI/SO</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>DIAGNÓSTICO</th></tr>";
+hi.canal_detalle.forEach(function(c){var gc=(c.gap_si_so_pct||0)>20?"#c0392b":(c.gap_si_so_pct||0)<-5?"var(--aqua)":"var(--text2)";var dc=(c.doh||0)>90?"#c0392b":(c.doh||0)<20?"#b85c00":"var(--text2)";h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5)'><td style='padding:5px 4px;font-weight:600;color:var(--dk)'>"+c.retailer+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+(c.so_total||0).toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+(c.so_promedio_mes||0)+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+(c.inv_retail||0).toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;font-weight:700;color:"+dc+"'>"+(c.doh||0)+"d</td><td style='padding:5px 4px;text-align:right;font-weight:700;color:"+gc+"'>"+(c.gap_si_so_pct>0?"+":"")+(c.gap_si_so_pct||0)+"%</td><td style='padding:5px 4px;font-size:10px;color:var(--text2)'>"+c.diagnostico+"</td></tr>"});
+h+="</table>";
+}
+h+="</div>";return h;
+}
+function renderHistorialExcel(){
+return "<div style='text-align:center;margin:14px 0'><button onclick='dlHistorial()' style='padding:12px 28px;background:#217346;color:white;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:Lato,sans-serif;letter-spacing:.3px;display:inline-flex;align-items:center;gap:8px'><span style='font-size:18px'>📗</span> Descargar Historial Excel</button></div>";
+}
+function dlHistorial(){
+var D=window.BBDATA;if(!D)return;var wb=XLSX.utils.book_new();var hi=D.historial||{};var se=D.serie_historica||[];
+// SHEET 1: SERIE HISTÓRICA
+var s1=[["HISTORIAL SKU — "+(D.sku||emp)],["Generado: "+new Date().toLocaleDateString("es-CL")],[""],["Mes","Unidades","Venta CLP"]];
+se.forEach(function(d){s1.push([d.fecha,d.uds,d.venta||""])});
+var ws1=XLSX.utils.aoa_to_sheet(s1);ws1["!cols"]=[{wch:14},{wch:12},{wch:18}];
+XLSX.utils.book_append_sheet(wb,ws1,"Serie Historica");
+// SHEET 2: RESUMEN EJECUTIVO
+var s2=[["ANÁLISIS HISTORIAL — "+(D.sku||"")],[""],["RESUMEN"],["",hi.resumen||""],[""],["TENDENCIA","",hi.tendencia||""],["SO TOTAL","",hi.so_total||0],["SO PROMEDIO MES","",hi.so_promedio_mes||0],[""],["MEJOR RETAILER"],["",hi.mejor_retailer?hi.mejor_retailer.nombre:"","",hi.mejor_retailer?hi.mejor_retailer.uds:0,"",hi.mejor_retailer?hi.mejor_retailer.por_que:""],["PEOR RETAILER"],["",hi.peor_retailer?hi.peor_retailer.nombre:"","",hi.peor_retailer?hi.peor_retailer.uds:0,"",hi.peor_retailer?hi.peor_retailer.por_que:""]];
+var ws2=XLSX.utils.aoa_to_sheet(s2);ws2["!cols"]=[{wch:20},{wch:30},{wch:16},{wch:12}];
+XLSX.utils.book_append_sheet(wb,ws2,"Resumen");
+// SHEET 3: FODA
+if(hi.foda){
+var s3=[["ANÁLISIS FODA — "+(D.sku||"")],[""],["FORTALEZAS","",hi.foda.fortalezas],["DEBILIDADES","",hi.foda.debilidades],["OPORTUNIDADES","",hi.foda.oportunidades],["AMENAZAS","",hi.foda.amenazas]];
+if(hi.oportunidades_perdidas){s3.push([""],["OPORTUNIDADES PERDIDAS"],["Detalle","","Fuente"]);hi.oportunidades_perdidas.forEach(function(o){var txt=typeof o==="string"?o:o.texto;var src=typeof o==="object"&&o.source?o.source:"";s3.push([txt,"",src])})}
+if(hi.riesgos){s3.push([""],["RIESGOS ACTIVOS"],["Detalle","","Fuente"]);hi.riesgos.forEach(function(r){var txt=typeof r==="string"?r:r.texto;var src=typeof r==="object"&&r.source?r.source:"";s3.push([txt,"",src])})}
+if(hi.margen){s3.push([""],["MARGEN Y PRECIO"],["PVP Promedio","",hi.margen.pvp_promedio],["Costo Promedio","",hi.margen.costo_promedio],["Margen Bruto","",hi.margen.margen_pct+"%"],["Tendencia","",hi.margen.tendencia_margen])}
+if(hi.precio){s3.push([""],["ELASTICIDAD DE PRECIO"],["Elasticidad","",hi.precio.elasticidad],["Explicación","",hi.precio.explicacion],["vs Competencia","",hi.precio.pvp_vs_competencia])}
+if(hi.mapa_precios){s3.push([""],["MAPA DE PRECIOS"],["Tu PVP","","$"+(hi.mapa_precios.tu_pvp||0)],["Rango Segmento","",hi.mapa_precios.rango_segmento||""],["Posición","",hi.mapa_precios.posicion||""],["Más Barato","",hi.mapa_precios.competidor_mas_barato?hi.mapa_precios.competidor_mas_barato.marca+" $"+hi.mapa_precios.competidor_mas_barato.pvp:""],["Más Caro","",hi.mapa_precios.competidor_mas_caro?hi.mapa_precios.competidor_mas_caro.marca+" $"+hi.mapa_precios.competidor_mas_caro.pvp:""])}
+var ws3=XLSX.utils.aoa_to_sheet(s3);ws3["!cols"]=[{wch:22},{wch:4},{wch:60}];
+XLSX.utils.book_append_sheet(wb,ws3,"FODA y Precio");
+}
+// SHEET: COMPETENCIA
+if(hi.competencia&&hi.competencia.length){
+var sc=[["COMPETENCIA DIRECTA — "+(D.sku||"")],[""],["Marca","Modelo","Unidades","PVP Estimado","Share %","Amenaza"]];
+hi.competencia.forEach(function(c){sc.push([c.marca,c.modelo,c.uds_periodo,"$"+(c.pvp_estimado||0),c.share_segmento+"%",c.amenaza])});
+var wsc=XLSX.utils.aoa_to_sheet(sc);wsc["!cols"]=[{wch:16},{wch:18},{wch:12},{wch:14},{wch:10},{wch:40}];
+XLSX.utils.book_append_sheet(wb,wsc,"Competencia");
+}
+// SHEET: DETALLE POR CANAL
+if(hi.canal_detalle&&hi.canal_detalle.length){
+var sd=[["DETALLE POR RETAILER — "+(D.sku||"")],[""],["Retailer","SO Total","SO/Mes","Inv Retail","DOH","SI Total","Gap SI/SO","Diagnóstico"]];
+hi.canal_detalle.forEach(function(c){sd.push([c.retailer,c.so_total,c.so_promedio_mes,c.inv_retail,c.doh+"d",c.si_total,(c.gap_si_so_pct>0?"+":"")+c.gap_si_so_pct+"%",c.diagnostico])});
+var wsd=XLSX.utils.aoa_to_sheet(sd);wsd["!cols"]=[{wch:16},{wch:10},{wch:10},{wch:12},{wch:8},{wch:10},{wch:12},{wch:30}];
+XLSX.utils.book_append_sheet(wb,wsd,"Por Retailer");
+}
+// SHEET 4: ALERTAS
+if(D.alertas&&D.alertas.length){
+var s4=[["ALERTAS CRUZADAS"],[""],["Tipo","Monto","Título","Detalle","Acción"]];
+D.alertas.forEach(function(a){s4.push([a.tipo,a.monto,a.titulo,a.detalle,a.accion])});
+var ws4=XLSX.utils.aoa_to_sheet(s4);ws4["!cols"]=[{wch:12},{wch:12},{wch:28},{wch:50},{wch:40}];
+XLSX.utils.book_append_sheet(wb,ws4,"Alertas");
+}
+XLSX.writeFile(wb,"Historial_"+(D.sku||"SKU").replace(/\s/g,"_")+"_"+new Date().toISOString().slice(0,10)+".xlsx");
+}
+function renderBenchmark(D){var h="";var b=D.benchmark;
+h+="<div style='padding:16px;background:var(--white);border:1px solid var(--border);margin-bottom:14px'>";
+h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:4px'>📈 Benchmark — Mercado GfK</div>";
+h+="<div style='font-size:11px;color:var(--text2);font-weight:300;margin-bottom:14px'>"+(b.descripcion||"Top marcas y modelos en tu segmento")+"</div>";
+if(b.top_marcas&&b.top_marcas.length){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:8px'>TOP MARCAS POR VOLUMEN</div>";
+var mx=b.top_marcas[0].uds||1;
+b.top_marcas.forEach(function(m){var pct=Math.round(m.uds/mx*100);h+="<div style='display:flex;align-items:center;gap:10px;margin-bottom:6px'><div style='width:80px;font-size:11px;font-weight:600;color:var(--dk)'>"+m.marca+"</div><div style='flex:1;height:18px;background:var(--bg);border-radius:3px;overflow:hidden'><div style='height:100%;width:"+pct+"%;background:"+(m.marca.toLowerCase().includes('fen')||m.marca.toLowerCase().includes('mad')||m.marca.toLowerCase().includes('elec')?"var(--aqua)":"var(--border)")+";border-radius:3px;display:flex;align-items:center;padding-left:6px'><span style='font-size:9px;font-weight:700;color:var(--dk)'>"+m.uds.toLocaleString("es-CL")+" un</span></div></div><div style='width:40px;text-align:right;font-size:10px;font-weight:700;color:var(--text2)'>"+(m.share||"—")+"%</div></div>"});
+}
+if(b.top_skus&&b.top_skus.length){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:16px 0 8px'>TOP MODELOS</div>";
+h+="<table style='width:100%;border-collapse:collapse;font-size:11px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>MODELO</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>MARCA</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>UNIDADES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SHARE</th></tr>";
+b.top_skus.forEach(function(s){h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5)'><td style='padding:5px 4px;font-weight:600;color:var(--dk)'>"+s.cod+"</td><td style='padding:5px 4px;color:var(--text2)'>"+s.marca+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+s.uds.toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;font-weight:700;color:var(--text2)'>"+(s.share||"—")+"%</td></tr>"});
+h+="</table>";
+}
+h+="</div>";return h;
+}
+function renderForecast(D){var h="";
 if(D.forecast&&D.forecast.length){
 var fc=D.forecast,tu=0,tv=0;fc.forEach(function(r){tu+=r.uds;tv+=(r.venta||0)});
 var mx=Math.max.apply(null,fc.map(function(r){return r.uds}));
 h+="<div style='padding:16px;background:var(--white);border:1px solid var(--border);margin-bottom:14px'>";
 h+="<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:14px'><div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk)'>📊 Forecast Sell Out — Próximos 12 meses</div><div style='font-size:11px;color:var(--text3);font-weight:300'>"+(D.sku||D.empresa||emp)+(D.retailer&&D.retailer!=="Todos"?" · "+D.retailer:"")+"</div></div>";
+// ─── BASE vs AJUSTADO ───
+if(D.forecast_base&&D.forecast_ajustado){
+var diff=D.forecast_ajustado-D.forecast_base;var diffPct=D.forecast_base>0?Math.round(diff/D.forecast_base*100):0;
+var diffClr=diff<0?"#c0392b":diff>0?"var(--aqua)":"var(--text2)";
+h+="<div style='display:flex;gap:8px;margin-bottom:14px'>";
+h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center;border-left:3px solid var(--text3)'><div style='font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:4px'>BASE (SO trend)</div><div style='font-size:18px;font-weight:700;color:var(--text3);text-decoration:line-through'>"+D.forecast_base.toLocaleString("es-CL")+"</div></div>";
+h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center;border-left:3px solid var(--dk)'><div style='font-size:9px;font-weight:700;color:var(--dk);letter-spacing:.5px;margin-bottom:4px'>AJUSTADO (5 fuentes)</div><div style='font-size:18px;font-weight:700;color:var(--dk)'>"+D.forecast_ajustado.toLocaleString("es-CL")+"</div></div>";
+h+="<div style='flex:1;padding:10px;background:"+(diff<0?"rgba(192,57,43,.06)":"rgba(15,113,115,.06)")+";text-align:center;border-left:3px solid "+diffClr+"'><div style='font-size:9px;font-weight:700;color:"+diffClr+";letter-spacing:.5px;margin-bottom:4px'>DIFERENCIA</div><div style='font-size:18px;font-weight:700;color:"+diffClr+"'>"+(diff>0?"+":"")+diffPct+"%</div></div>";
+h+="</div>";
+}
+// ─── FACTORES DE AJUSTE ───
+if(D.forecast_factores&&D.forecast_factores.length){
+h+="<div style='margin-bottom:14px'><div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:8px'>POR QUÉ EL AJUSTE</div>";
+D.forecast_factores.forEach(function(f){var neg=f.efecto&&f.efecto.includes("-");h+="<div style='display:flex;align-items:center;gap:8px;margin-bottom:5px;padding:6px 10px;background:var(--bg);font-size:11px'><span style='font-weight:700;color:"+(neg?"#c0392b":"var(--aqua)")+";width:45px;text-align:right;flex-shrink:0'>"+f.efecto+"</span><span style='font-weight:600;color:var(--dk)'>"+f.factor+"</span><span style='color:var(--text2);font-weight:300;margin-left:auto'>"+f.impacto+"</span></div>"});
+h+="</div>";
+}
+// ─── TOTALES ───
 h+="<div style='display:flex;gap:10px;margin-bottom:16px'><div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:20px;font-weight:700;color:var(--dk)'>"+tu.toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3);font-weight:300'>unidades proyectadas</div></div>"+(tv?"<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:20px;font-weight:700;color:var(--dk)'>$"+(tv>1e6?(tv/1e6).toFixed(0)+"M":tv.toLocaleString("es-CL"))+"</div><div style='font-size:10px;color:var(--text3);font-weight:300'>venta CLP</div></div>":"")+"</div>";
 h+="<div style='display:flex;align-items:flex-end;gap:3px;height:90px;margin-bottom:6px'>";
 fc.forEach(function(r){var pct=Math.round(r.uds/mx*100);var clr=pct>=85?"var(--aqua)":pct<=50?"var(--sky)":"var(--blue)";h+="<div style='flex:1;display:flex;flex-direction:column;align-items:center;gap:2px'><div style='font-size:8px;font-weight:700;color:var(--dk)'>"+r.uds.toLocaleString("es-CL")+"</div><div style='width:100%;height:"+pct+"%;background:"+clr+";border-radius:2px 2px 0 0;min-height:4px'></div></div>"});
@@ -272,18 +473,19 @@ h+="<table style='width:100%;border-collapse:collapse;margin-top:14px;font-size:
 fc.forEach(function(r){h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5)'><td style='padding:5px 4px;font-weight:600;color:var(--dk)'>"+(r.mes||r.fecha)+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+r.uds.toLocaleString("es-CL")+"</td>"+(tv?"<td style='padding:5px 4px;text-align:right;color:var(--text2)'>$"+(r.venta?r.venta.toLocaleString("es-CL"):"—")+"</td>":"")+"</tr>"});
 h+="<tr style='border-top:2px solid var(--dk)'><td style='padding:6px 4px;font-weight:700;color:var(--dk)'>TOTAL</td><td style='padding:6px 4px;text-align:right;font-weight:700;color:var(--dk)'>"+tu.toLocaleString("es-CL")+"</td>"+(tv?"<td style='padding:6px 4px;text-align:right;font-weight:700;color:var(--dk)'>$"+tv.toLocaleString("es-CL")+"</td>":"")+"</tr></table></div>";
 }
-// ─── 5. ALERTAS ───
+return h;
+}
+function renderAlertas(D){var h="";var nc=D.fuentes?D.fuentes.length:1;
 if(D.alertas&&D.alertas.length){
 h+="<div style='padding:16px;background:var(--white);border:1px solid var(--border);margin-bottom:14px'>";
 h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:4px'>🔥 Alertas Cruzadas — "+nc+" fuentes</div>";
 h+="<div style='font-size:11px;color:var(--text2);font-weight:300;margin-bottom:14px'>Señales que solo aparecen cruzando tus datos.</div>";
-D.alertas.forEach(function(a){var t=(a.tipo||"").toUpperCase();var cls=t==="CRITICA"||t==="CRÍTICA"?"r":t==="OPORTUNIDAD"?"g":"o";h+="<div class='al "+cls+"'><div class='al-h'><span class='al-tg'>"+t+"</span><span class='al-m'>"+(a.monto||"")+"</span></div><div class='al-t'>"+(a.titulo||"")+"</div><div class='al-d'>"+(a.detalle||"")+"</div><div class='al-a'>→ "+(a.accion||"")+"</div></div>"});
+D.alertas.forEach(function(a){var t=(a.tipo||"").toUpperCase();var cls=t==="CRITICA"||t==="CRÍTICA"?"r":t==="OPORTUNIDAD"?"g":"o";h+="<div class='al "+cls+"'><div class='al-h'><span class='al-tg'>"+t+"</span><span class='al-m'>"+(a.monto||"")+"</span></div><div class='al-t'>"+(a.titulo||"")+"</div><div class='al-d'>"+(a.detalle||"")+"</div><div class='al-a'>→ "+(a.accion||"")+"</div>"+(a.source?"<div style='font-size:9px;color:var(--text3);margin-top:6px;font-weight:300;font-style:italic'>📎 "+a.source+"</div>":"")+"</div>"});
 h+="</div>";
 }
-// ─── 6. EXCEL ───
-h+="<div style='text-align:center;margin-bottom:14px'><button onclick='dlFC()' style='padding:12px 28px;background:#217346;color:white;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:Lato,sans-serif;letter-spacing:.3px;display:inline-flex;align-items:center;gap:8px'><span style='font-size:18px'>📗</span> Descargar Forecast Excel</button></div>";
-document.getElementById("rt").textContent=D.empresa||emp;document.getElementById("rs").textContent=nc+" fuentes · "+(D.total_filas||0).toLocaleString("es-CL")+" filas";document.getElementById("rc").innerHTML=h;
+return h;
 }
+function renderExcel(){return "<div style='text-align:center;margin-bottom:14px'><button onclick='dlFC()' style='padding:12px 28px;background:#217346;color:white;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:Lato,sans-serif;letter-spacing:.3px;display:inline-flex;align-items:center;gap:8px'><span style='font-size:18px'>📗</span> Descargar Forecast Excel</button></div>";}
 function dlFC(){
 var D=window.BBDATA;if(!D||!D.forecast)return alert("No hay datos. Analiza primero.");
 var wb=XLSX.utils.book_new();
@@ -326,20 +528,31 @@ XLSX.writeFile(wb,"APP_"+emp.replace(/\s/g,"_")+"_"+new Date().toISOString().sli
 }
 function autoF(){
 if(!emp){rub="Electrodomésticos / Electrohogar";emp="Electrolux Group";document.getElementById("gate").style.display="none";document.getElementById("main").style.display="block";document.getElementById("ctx").textContent=rub+" · "+emp;lc()}
-var sk=["FEN-PC9.5SZ","FEN-PC12SZ","FEN-PC14SZ","FEN-PC16ZS","FEN-PC16ONX","FEN-PC18SZ","FEN-PC18NEG","FEN-PC20SZ","FEN-PC21","FEN-PC21ONX","FEN-VC8WD","FEN-UM11WD","FEN-PERC8","FEN-PERC11","FEN-PC9D","MAD-9.5BZG","MAD-9.5SZG","MAD-12BZG","MAD-12SZG","MAD-14BZG","MAD-16BZG","MAD-18SZG","MAD-20SZG","MAD-21ONX","MAD-TW5100","MAD-TW5300","MAD-PR5N","MAD-7DBZG","MAD-9DSZG","ELX-LEB21","ELX-LS22Y","ELX-EFLWM12O","ELX-EFLWD12W","ELX-ETDHP8SZ"];
-var rt=["Falabella","Ripley","Paris","Hites","La Polar","Lider","Sodimac","Easy","MercadoLibre"];
-var ms=["2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12"];
+var cv=document.getElementById("fc").value;
+var sv=document.getElementById("fb").value;
+var mv=document.getElementById("fm").value;
+var allSk=cfg?cfg.skus:[];
+var sk=allSk.filter(function(x){
+if(cv!=="todas"&&x.c!==cv)return false;
+if(sv!=="todas"&&x.s!==sv)return false;
+if(mv!=="todas"&&x.m!==mv.toLowerCase())return false;
+return true;
+}).map(function(x){return x.v});
+if(!sk.length)sk=allSk.map(function(x){return x.v});
+var rt=["Falabella","Ripley","Paris","Hites","La Polar","Lider","Sodimac"];
+var ms=["2025-07","2025-08","2025-09","2025-10","2025-11","2025-12"];
 var hd=["Fecha","Retailer","Marca","Cod. Producto","Unidades","Venta Total sin IVA","PVP Promedio"];
 var SO=hd.join(",")+"\n";var SI="Fecha,Retailer,Marca,Cod. Producto,Unidades,Venta sin IVA,Costo unit.\n";
 var ID="Fecha Corte,Bodega,Cod. Producto,Disponible\n";var IR="Fecha Corte,Retail,Cod. Producto,Stock Total\n";
 var GK="Period,BRAND,Item,Sales Units,Sales Value,Price CLP\n";
 var bd=["Stgo Centro","Bodega Norte","Valparaíso"];
-ms.forEach(function(m){rt.forEach(function(r){sk.forEach(function(s){var u=Math.round(20+Math.random()*80);var pvp=Math.round(180000+Math.random()*200000);
-SO+=m+","+r+","+s.split("-")[0]+","+s+","+u+","+Math.round(u*pvp*0.81)+","+pvp+"\n";
-SI+=m+","+r+","+s.split("-")[0]+","+s+","+Math.round(u*1.1)+","+Math.round(u*pvp*0.77)+","+Math.round(pvp*0.55)+"\n"})});
+var brandMap={"FEN":"Fensa","MAD":"Mademsa","ELX":"Electrolux"};
+ms.forEach(function(m){rt.forEach(function(r){sk.forEach(function(s){var u=Math.round(20+Math.random()*80);var pvp=Math.round(180000+Math.random()*200000);var marca=brandMap[s.split("-")[0]]||s.split("-")[0];
+SO+=m+","+r+","+marca+","+s+","+u+","+Math.round(u*pvp*0.81)+","+pvp+"\n";
+SI+=m+","+r+","+marca+","+s+","+Math.round(u*1.1)+","+Math.round(u*pvp*0.77)+","+Math.round(pvp*0.55)+"\n"})});
 sk.forEach(function(s){bd.forEach(function(b){ID+=m+","+b+","+s+","+Math.round(10+Math.random()*200)+"\n"});
 rt.forEach(function(r){IR+=m+","+r+","+s+","+Math.round(5+Math.random()*120)+"\n"})});
-sk.forEach(function(s){GK+=m.replace("-"," ")+","+s.split("-")[0]+","+s+","+Math.round(50+Math.random()*300)+","+Math.round(15000000+Math.random()*40000000)+","+Math.round(200000+Math.random()*250000)+"\n"})});
+sk.forEach(function(s){GK+=m.replace("-"," ")+","+(brandMap[s.split("-")[0]]||s.split("-")[0])+","+s+","+Math.round(50+Math.random()*300)+","+Math.round(15000000+Math.random()*40000000)+","+Math.round(200000+Math.random()*250000)+"\n"})});
 ["so","si","id","ir","gfk"].forEach(function(k){document.getElementById("n-"+k).textContent="✓ demo_"+k+".xlsx";var c=document.getElementById("u-"+k);c.style.borderColor="var(--aqua)";c.style.background="rgba(15,113,115,.04)"});
 document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";
 document.getElementById("pt").textContent="Analizando con IA...";
