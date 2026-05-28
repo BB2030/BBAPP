@@ -280,7 +280,23 @@ Genera un análisis en JSON con EXACTAMENTE esta estructura. Usa los números RE
   "forecast_base": NUMERO,
   "forecast_ajustado": NUMERO,
   "forecast_factores": [{"factor":"TEXTO corto","impacto":"TEXTO 1 línea","efecto":"+X%" o "-X%"}, ... 3-5 factores],
-  "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO corto","detalle":"TEXTO 2-3 líneas max con números reales","accion":"TEXTO 1 línea acción específica"}, ... mínimo 3, máximo 6]
+  "historial": {
+    "resumen": "TEXTO 3-4 líneas: qué pasó con este SKU en el período analizado",
+    "tendencia": "CRECIENDO|ESTABLE|CAYENDO|ERRÁTICO",
+    "so_total": NUMERO,
+    "so_promedio_mes": NUMERO,
+    "mejor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"TEXTO corto"},
+    "peor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"TEXTO corto"},
+    "oportunidades_perdidas": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste"}, ... 2-3 máximo],
+    "riesgos": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste"}, ... 2-3 máximo],
+    "foda": {"fortalezas":"TEXTO 1-2 líneas","debilidades":"TEXTO 1-2 líneas","oportunidades":"TEXTO 1-2 líneas","amenazas":"TEXTO 1-2 líneas"},
+    "margen": {"pvp_promedio":NUMERO,"costo_promedio":NUMERO,"margen_pct":NUMERO,"tendencia_margen":"TEXTO corto: subiendo/bajando/estable y por qué"},
+    "precio": {"elasticidad":"ALTA|MEDIA|BAJA","explicacion":"TEXTO 1-2 líneas: cuando bajó precio qué pasó con volumen","pvp_vs_competencia":"TEXTO 1 línea: tu precio vs Samsung/Midea/LG equivalente según GfK"},
+    "competencia": [{"marca":"NOMBRE","modelo":"COD","uds_periodo":NUMERO,"pvp_estimado":NUMERO,"share_segmento":NUMERO,"amenaza":"TEXTO corto: por qué es amenaza o no"}, ... top 5-8 competidores del segmento desde GfK],
+    "mapa_precios": {"tu_pvp":NUMERO,"rango_segmento":"$X - $Y","posicion":"ENTRY|MID|PREMIUM dentro del rango","competidor_mas_barato":{"marca":"NOMBRE","pvp":NUMERO},"competidor_mas_caro":{"marca":"NOMBRE","pvp":NUMERO}},
+    "canal_detalle": [{"retailer":"NOMBRE","so_total":NUMERO,"so_promedio_mes":NUMERO,"inv_retail":NUMERO,"doh":NUMERO,"si_total":NUMERO,"gap_si_so_pct":NUMERO,"diagnostico":"TEXTO corto"}, ... todos los retailers con data]
+  },
+  "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO corto","detalle":"TEXTO 2-3 líneas max con números reales","accion":"TEXTO 1 línea acción específica","source":"TEXTO corto: qué fuentes cruzaste para llegar a esta conclusión, ej: SO×SI×Inv.Retail o GfK×SO×Estacionalidad"}, ... mínimo 3, máximo 6]
 }
 
 REGLAS FORECAST CRUZADO (NO es SO + 10%, es un forecast inteligente):
@@ -308,7 +324,7 @@ REGLAS ALERTAS:
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 4000,
+      max_tokens: 8000,
       messages: [{ role: 'user', content: prompt }]
     });
 
