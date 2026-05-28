@@ -321,6 +321,8 @@ REGLAS ALERTAS:
       let jsonStr = raw.substring(first, last + 1);
       // Fix common Claude JSON issues
       jsonStr = jsonStr.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']'); // trailing commas
+      jsonStr = jsonStr.replace(/(\d),(\d{3})/g, '$1$2'); // thousand separators: 94,500,000 → 94500000
+      jsonStr = jsonStr.replace(/(\d),(\d{3})/g, '$1$2'); // run twice for 94,500,000
       jsonStr = jsonStr.replace(/'/g, '"'); // single quotes
       jsonStr = jsonStr.replace(/[\x00-\x1F\x7F]/g, ' '); // control chars
       try {
