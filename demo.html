@@ -283,6 +283,13 @@ function renderHistorial(D){var h="";var hi=D.historial;var se=D.serie_historica
 // ─── HEADER ───
 h+="<div style='padding:16px;background:var(--white);border:1px solid var(--border);margin-bottom:14px'>";
 h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:12px'>📜 Historial SKU — "+(D.sku||"")+"</div>";
+// ─── RESUMEN ACCIONABLE (arriba de todo) ───
+if(hi&&hi.resumen_acciones&&hi.resumen_acciones.length){
+h+="<div style='padding:14px;background:var(--dk);margin-bottom:16px'>";
+h+="<div style='font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:10px'>QUÉ HACER AHORA</div>";
+hi.resumen_acciones.forEach(function(a,i){h+="<div style='font-size:13px;color:#F2F0EC;font-weight:"+(i===0?"700":"300")+";margin-bottom:8px;padding-left:8px;border-left:3px solid "+(i===0?"var(--gold)":"rgba(242,240,236,.3)")+"'>"+a+"</div>"});
+h+="</div>";
+}
 // ─── RESUMEN + TENDENCIA ───
 if(hi){
 var tc=hi.tendencia==="CAYENDO"?"#c0392b":hi.tendencia==="CRECIENDO"?"var(--aqua)":"var(--text2)";
@@ -293,42 +300,79 @@ h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center;borde
 h+="</div>";
 h+="<div style='font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px;font-weight:300'>"+hi.resumen+"</div>";
 }
-// ─── GRÁFICO HISTÓRICO ───
+// ─── GRÁFICO LÍNEA + PROYECCIÓN ───
 if(se.length){
 var mx=Math.max.apply(null,se.map(function(d){return d.uds}));
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:6px'>SELL OUT MENSUAL</div>";
-h+="<div style='display:flex;align-items:flex-end;gap:2px;height:70px;margin-bottom:4px'>";
-se.forEach(function(d){var pct=Math.round(d.uds/mx*100);h+="<div style='flex:1;height:"+pct+"%;background:var(--blue);border-radius:2px 2px 0 0;min-height:2px' title='"+d.fecha+": "+d.uds+" un'></div>"});
-h+="</div><div style='display:flex;gap:2px;margin-bottom:14px'>";
-se.forEach(function(d,i){if(i%3===0){h+="<div style='flex:3;font-size:7px;color:var(--text3)'>"+d.fecha+"</div>"}});
-h+="</div>";
+var mn=Math.min.apply(null,se.map(function(d){return d.uds}));
+var rng=mx-mn||1;var W=600;var H=120;var pad=30;var pw=W-pad*2;var ph=H-pad;
+// Calcular proyección simple (últimos 3 meses trend)
+var last3=se.slice(-3);var avgDelta=last3.length>1?(last3[last3.length-1].uds-last3[0].uds)/(last3.length-1):0;
+var proj=[];for(var pi=1;pi<=4;pi++){proj.push(Math.max(0,Math.round(se[se.length-1].uds+avgDelta*pi)))}
+var allVals=se.map(function(d){return d.uds}).concat(proj);
+var amx=Math.max.apply(null,allVals);var amn=Math.min.apply(null,allVals);var arng=amx-amn||1;
+var totalPts=se.length+proj.length;
+function px(i){return pad+i/(totalPts-1)*pw}
+function py(v){return pad+ph-(v-amn)/arng*ph}
+// Build SVG
+var svg="<svg viewBox='0 0 "+W+" "+(H+20)+"' style='width:100%;margin:8px 0' xmlns='http://www.w3.org/2000/svg'>";
+// Grid lines
+for(var gi=0;gi<4;gi++){var gy=pad+ph/3*gi;svg+="<line x1='"+pad+"' y1='"+gy+"' x2='"+(W-pad)+"' y2='"+gy+"' stroke='rgba(0,0,0,.06)' stroke-width='1'/>";svg+="<text x='"+(pad-4)+"' y='"+(gy+3)+"' font-size='8' fill='#999' text-anchor='end'>"+Math.round(amx-arng/3*gi)+"</text>"}
+// Historical line
+var pts=se.map(function(d,i){return px(i)+","+py(d.uds)}).join(" ");
+svg+="<polyline points='"+pts+"' fill='none' stroke='#1a0d47' stroke-width='2.5' stroke-linejoin='round'/>";
+// Dots on historical
+se.forEach(function(d,i){svg+="<circle cx='"+px(i)+"' cy='"+py(d.uds)+"' r='3' fill='#1a0d47'/>"});
+// Projection line (dashed)
+var projPts=px(se.length-1)+","+py(se[se.length-1].uds);
+proj.forEach(function(v,i){projPts+=" "+px(se.length+i)+","+py(v)});
+svg+="<polyline points='"+projPts+"' fill='none' stroke='#c0392b' stroke-width='2' stroke-dasharray='6,4' stroke-linejoin='round'/>";
+proj.forEach(function(v,i){svg+="<circle cx='"+px(se.length+i)+"' cy='"+py(v)+"' r='2.5' fill='none' stroke='#c0392b' stroke-width='1.5'/>"});
+// X labels
+se.forEach(function(d,i){if(i%2===0||i===se.length-1){svg+="<text x='"+px(i)+"' y='"+(H+12)+"' font-size='8' fill='#666' text-anchor='middle'>"+d.fecha.slice(5)+"</text>"}});
+svg+="<text x='"+px(se.length+1)+"' y='"+(H+12)+"' font-size='8' fill='#c0392b' text-anchor='middle' font-style='italic'>proyección</text>";
+// Legend
+svg+="<line x1='"+pad+"' y1='"+(H+18)+"' x2='"+(pad+20)+"' y2='"+(H+18)+"' stroke='#1a0d47' stroke-width='2'/><text x='"+(pad+24)+"' y='"+(H+20)+"' font-size='7' fill='#666'>Histórico</text>";
+svg+="<line x1='"+(pad+80)+"' y1='"+(H+18)+"' x2='"+(pad+100)+"' y2='"+(H+18)+"' stroke='#c0392b' stroke-width='2' stroke-dasharray='4,3'/><text x='"+(pad+104)+"' y='"+(H+20)+"' font-size='7' fill='#c0392b'>Tendencia</text>";
+svg+="</svg>";
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>SELL OUT MENSUAL</div>";
+h+=svg;
 }
-// ─── MEJOR / PEOR RETAILER ───
-if(hi&&hi.mejor_retailer&&hi.peor_retailer){
-h+="<div style='display:flex;gap:8px;margin-bottom:14px'>";
-h+="<div style='flex:1;padding:10px;background:rgba(15,113,115,.04);border-left:3px solid var(--aqua)'><div style='font-size:10px;font-weight:700;color:var(--aqua);letter-spacing:.5px'>MEJOR RETAILER</div><div style='font-size:14px;font-weight:700;color:var(--dk);margin:4px 0'>"+hi.mejor_retailer.nombre+"</div><div style='font-size:11px;color:var(--text2)'>"+hi.mejor_retailer.uds.toLocaleString("es-CL")+" un — "+hi.mejor_retailer.por_que+"</div></div>";
-h+="<div style='flex:1;padding:10px;background:rgba(192,57,43,.04);border-left:3px solid #c0392b'><div style='font-size:10px;font-weight:700;color:#c0392b;letter-spacing:.5px'>PEOR RETAILER</div><div style='font-size:14px;font-weight:700;color:var(--dk);margin:4px 0'>"+hi.peor_retailer.nombre+"</div><div style='font-size:11px;color:var(--text2)'>"+hi.peor_retailer.uds.toLocaleString("es-CL")+" un — "+hi.peor_retailer.por_que+"</div></div>";
-h+="</div>";
+// ─── LÍNEAS POR RETAILER ───
+if(hi&&hi.canal_detalle&&hi.canal_detalle.length&&D.serie_por_retailer){
+var spr=D.serie_por_retailer;var se2=D.serie_historica||[];
+var meses=se2.map(function(d){return d.fecha});
+var cd=hi.canal_detalle.slice().sort(function(a,b){return(b.so_total||0)-(a.so_total||0)});
+var colors=["#1a0d47","#0f7173","#5B4FE8","#b85c00","#c0392b","#666","#999","#333","#aaa"];
+// Find max value across all retailers/months
+var allVals=[];cd.forEach(function(c){meses.forEach(function(m){var d=spr[c.retailer]&&spr[c.retailer][m];if(d)allVals.push(d.venta||d.uds*240000)})});
+var amx=Math.max.apply(null,allVals)||1;var amn=0;
+var W=600;var H=160;var pad=50;var padR=100;var pw=W-pad-padR;var ph=H-40;
+var svg="<svg viewBox='0 0 "+W+" "+(H+10)+"' style='width:100%;margin:8px 0' xmlns='http://www.w3.org/2000/svg'>";
+// Grid
+for(var gi=0;gi<4;gi++){var gy=20+ph/3*gi;var gv=amx-amx/3*gi;svg+="<line x1='"+pad+"' y1='"+gy+"' x2='"+(W-padR)+"' y2='"+gy+"' stroke='rgba(0,0,0,.05)' stroke-width='1'/>";svg+="<text x='"+(pad-4)+"' y='"+(gy+3)+"' font-size='7' fill='#999' text-anchor='end'>$"+(gv>1e6?(gv/1e6).toFixed(0)+"M":Math.round(gv/1000)+"K")+"</text>"}
+// X labels
+meses.forEach(function(m,i){var x=pad+i/(meses.length-1)*pw;svg+="<text x='"+x+"' y='"+(H)+"' font-size='8' fill='#666' text-anchor='middle'>"+m.slice(5)+"</text>"});
+// Lines per retailer
+cd.forEach(function(c,ci){
+var pts=[];meses.forEach(function(m,i){var d=spr[c.retailer]&&spr[c.retailer][m];var v=d?(d.venta||d.uds*240000):0;var x=pad+i/(meses.length-1)*pw;var y=20+ph-(v/amx)*ph;pts.push(x+","+y)});
+if(pts.length){
+svg+="<polyline points='"+pts.join(" ")+"' fill='none' stroke='"+colors[ci%colors.length]+"' stroke-width='"+(ci<3?"2":"1.5")+"' stroke-linejoin='round' opacity='"+(ci<3?"1":"0.6")+"'/>";
+// Label at end
+var lastPt=pts[pts.length-1].split(",");
+svg+="<text x='"+(parseFloat(lastPt[0])+6)+"' y='"+lastPt[1]+"' font-size='8' fill='"+colors[ci%colors.length]+"' font-weight='"+(ci<3?"700":"400")+"' dominant-baseline='middle'>"+c.retailer+"</text>";
+}});
+svg+="</svg>";
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 2px'>VENTA $ POR RETAILER</div>";
+h+=svg;
+// Totals row below chart - ranked by profit
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:6px 0 6px'>RANKING POR PROFIT ESTIMADO</div>";
+var cdp=cd.slice().sort(function(a,b){return(b.profit_estimado||0)-(a.profit_estimado||0)});
+h+="<table style='width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:4px;font-size:9px;color:var(--text3)'></th><th style='text-align:left;padding:4px;font-size:9px;color:var(--text3)'>RETAILER</th><th style='text-align:right;padding:4px;font-size:9px;color:var(--text3)'>VENTA</th><th style='text-align:right;padding:4px;font-size:9px;color:var(--text3)'>MARGEN</th><th style='text-align:right;padding:4px;font-size:9px;color:var(--text3)'>PROFIT EST.</th></tr>";
+cdp.forEach(function(c,ci){var pclr=ci===0?"var(--aqua)":ci>=cdp.length-1?"#c0392b":"var(--text2)";
+h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5)'><td style='padding:4px'><div style='width:10px;height:10px;background:"+colors[cd.indexOf(c)%colors.length]+";border-radius:2px'></div></td><td style='padding:4px;font-weight:"+(ci===0?"700":"400")+";color:var(--dk)'>"+c.retailer+"</td><td style='padding:4px;text-align:right;color:var(--text2)'>$"+((c.venta_total||0)>1e6?((c.venta_total||0)/1e6).toFixed(0)+"M":(c.venta_total||0).toLocaleString("es-CL"))+"</td><td style='padding:4px;text-align:right;color:var(--text2)'>"+(c.margen_pct||0)+"%</td><td style='padding:4px;text-align:right;font-weight:700;color:"+pclr+"'>$"+((c.profit_estimado||0)>1e6?((c.profit_estimado||0)/1e6).toFixed(0)+"M":(c.profit_estimado||0).toLocaleString("es-CL"))+"</td></tr>"});
+h+="</table>";
 }
-// ─── OPORTUNIDADES PERDIDAS + RIESGOS ───
-if(hi&&hi.oportunidades_perdidas){
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:6px'>OPORTUNIDADES PERDIDAS</div>";
-hi.oportunidades_perdidas.forEach(function(o){var txt=typeof o==="string"?o:o.texto;var src=typeof o==="object"&&o.source?o.source:"";h+="<div style='padding:6px 10px;margin-bottom:4px;background:rgba(15,113,115,.04);font-size:11px;color:var(--dk);font-weight:300'>⚡ "+txt+(src?"<span style='font-size:9px;color:var(--text3);font-style:italic;margin-left:8px'>📎 "+src+"</span>":"")+"</div>"});
-}
-if(hi&&hi.riesgos){
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:10px 0 6px'>RIESGOS ACTIVOS</div>";
-hi.riesgos.forEach(function(r){var txt=typeof r==="string"?r:r.texto;var src=typeof r==="object"&&r.source?r.source:"";h+="<div style='padding:6px 10px;margin-bottom:4px;background:rgba(192,57,43,.04);font-size:11px;color:var(--dk);font-weight:300'>⚠️ "+txt+(src?"<span style='font-size:9px;color:var(--text3);font-style:italic;margin-left:8px'>📎 "+src+"</span>":"")+"</div>"});
-}
-// ─── FODA ───
-if(hi&&hi.foda){
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>ANÁLISIS FODA</div>";
-h+="<div style='display:grid;grid-template-columns:1fr 1fr;gap:6px'>";
-h+="<div style='padding:10px;background:rgba(15,113,115,.06);font-size:11px'><div style='font-weight:700;color:var(--aqua);margin-bottom:4px'>FORTALEZAS</div><div style='color:var(--text2);font-weight:300'>"+hi.foda.fortalezas+"</div></div>";
-h+="<div style='padding:10px;background:rgba(192,57,43,.06);font-size:11px'><div style='font-weight:700;color:#c0392b;margin-bottom:4px'>DEBILIDADES</div><div style='color:var(--text2);font-weight:300'>"+hi.foda.debilidades+"</div></div>";
-h+="<div style='padding:10px;background:rgba(90,79,232,.06);font-size:11px'><div style='font-weight:700;color:var(--blue);margin-bottom:4px'>OPORTUNIDADES</div><div style='color:var(--text2);font-weight:300'>"+hi.foda.oportunidades+"</div></div>";
-h+="<div style='padding:10px;background:rgba(184,92,0,.06);font-size:11px'><div style='font-weight:700;color:#b85c00;margin-bottom:4px'>AMENAZAS</div><div style='color:var(--text2);font-weight:300'>"+hi.foda.amenazas+"</div></div>";
-h+="</div>";
-}
+// ─── MARGEN + PRECIO (oportunidades, riesgos y FODA solo en Excel) ───
 // ─── MARGEN + PRECIO ───
 if(hi&&hi.margen){
 h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>MARGEN Y PRECIO</div>";
@@ -341,11 +385,16 @@ h+="</div>";
 h+="<div style='font-size:11px;color:var(--text2);font-weight:300;margin-bottom:8px'>"+hi.margen.tendencia_margen+"</div>";
 }
 if(hi&&hi.precio){
-var ec=hi.precio.elasticidad==="ALTA"?"#c0392b":hi.precio.elasticidad==="BAJA"?"var(--aqua)":"var(--text2)";
-h+="<div style='display:flex;gap:8px;margin-bottom:10px'>";
-h+="<div style='flex:0 0 auto;padding:10px 16px;background:var(--bg);text-align:center;border-left:3px solid "+ec+"'><div style='font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.5px'>ELASTICIDAD</div><div style='font-size:14px;font-weight:700;color:"+ec+"'>"+hi.precio.elasticidad+"</div></div>";
-h+="<div style='flex:1;padding:10px;font-size:11px;color:var(--text2);font-weight:300;line-height:1.5'>"+hi.precio.explicacion+"<br><span style='color:var(--dk);font-weight:600'>vs competencia: </span>"+hi.precio.pvp_vs_competencia+"</div>";
-h+="</div>";
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>ESCENARIOS DE PRECIO</div>";
+if(hi.precio.escenarios&&hi.precio.escenarios.length){
+h+="<table style='width:100%;border-collapse:collapse;font-size:11px;margin-bottom:10px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SI PONES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>VENDES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>MARGEN</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>EFECTO</th></tr>";
+hi.precio.escenarios.forEach(function(e){var isAct=e.pvp===hi.precio.pvp_actual;h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5);"+(isAct?"background:rgba(15,113,115,.04)":"")+"'><td style='padding:6px 4px;font-weight:700;color:var(--dk)'>$"+(e.pvp||0).toLocaleString("es-CL")+"</td><td style='padding:6px 4px;text-align:right;color:var(--text2)'>"+(e.uds_estimadas||0).toLocaleString("es-CL")+" un/mes</td><td style='padding:6px 4px;text-align:right;font-weight:700;color:var(--dk)'>"+(e.margen_total||"")+"</td><td style='padding:6px 4px;font-size:10px;color:var(--text2)'>"+(e.efecto||"")+"</td></tr>"});
+h+="</table>";
+}
+if(hi.precio.competencia_precios&&hi.precio.competencia_precios.length){
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:6px'>COMPETENCIA — A CUÁNTO VENDEN</div>";
+hi.precio.competencia_precios.forEach(function(c){h+="<div style='display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:11px'><span style='width:80px;font-weight:600;color:var(--dk)'>"+c.marca+"</span><span style='font-weight:700;color:var(--text2)'>$"+(c.pvp||0).toLocaleString("es-CL")+"</span><span style='color:var(--text3);font-weight:300'>→ "+(c.uds_mes||0)+" un/mes</span></div>"});
+}
 }
 // ─── MAPA DE PRECIOS ───
 if(hi&&hi.mapa_precios){
@@ -381,13 +430,34 @@ return "<div style='text-align:center;margin:14px 0'><button onclick='dlHistoria
 function dlHistorial(){
 var D=window.BBDATA;if(!D)return;var wb=XLSX.utils.book_new();var hi=D.historial||{};var se=D.serie_historica||[];
 // SHEET 1: SERIE HISTÓRICA
-var s1=[["HISTORIAL SKU — "+(D.sku||emp)],["Generado: "+new Date().toLocaleDateString("es-CL")],[""],["Mes","Unidades","Venta CLP"]];
-se.forEach(function(d){s1.push([d.fecha,d.uds,d.venta||""])});
-var ws1=XLSX.utils.aoa_to_sheet(s1);ws1["!cols"]=[{wch:14},{wch:12},{wch:18}];
+var s1=[["HISTORIAL SKU — "+(D.sku||emp)],["Generado: "+new Date().toLocaleDateString("es-CL")],["Valores sin IVA"],[""],["Mes","Unidades","Venta CLP (sin IVA)","PVP Promedio","Margen Est. %"]];
+se.forEach(function(d){var pvp=d.uds>0?Math.round(d.venta/d.uds):0;var margen=hi&&hi.margen&&hi.margen.margen_pct?hi.margen.margen_pct:0;s1.push([d.fecha,d.uds,d.venta||"",pvp?("$"+pvp):"",margen?margen+"%":""])});
+var ws1=XLSX.utils.aoa_to_sheet(s1);ws1["!cols"]=[{wch:14},{wch:12},{wch:22},{wch:16},{wch:14}];
 XLSX.utils.book_append_sheet(wb,ws1,"Serie Historica");
 // SHEET 2: RESUMEN EJECUTIVO
-var s2=[["ANÁLISIS HISTORIAL — "+(D.sku||"")],[""],["RESUMEN"],["",hi.resumen||""],[""],["TENDENCIA","",hi.tendencia||""],["SO TOTAL","",hi.so_total||0],["SO PROMEDIO MES","",hi.so_promedio_mes||0],[""],["MEJOR RETAILER"],["",hi.mejor_retailer?hi.mejor_retailer.nombre:"","",hi.mejor_retailer?hi.mejor_retailer.uds:0,"",hi.mejor_retailer?hi.mejor_retailer.por_que:""],["PEOR RETAILER"],["",hi.peor_retailer?hi.peor_retailer.nombre:"","",hi.peor_retailer?hi.peor_retailer.uds:0,"",hi.peor_retailer?hi.peor_retailer.por_que:""]];
-var ws2=XLSX.utils.aoa_to_sheet(s2);ws2["!cols"]=[{wch:20},{wch:30},{wch:16},{wch:12}];
+var s2=[
+["RESUMEN EJECUTIVO — "+(D.sku||"")],
+["Generado: "+new Date().toLocaleDateString("es-CL"),"","","","","Valores sin IVA"],
+[""],
+["SKU",(D.sku||""),"","Tendencia",(hi.tendencia||"")],
+["SO Total",(hi.so_total||0),"un","SO Promedio/Mes",(hi.so_promedio_mes||0),"un"],
+["PVP Promedio",hi.margen?"$"+hi.margen.pvp_promedio:"","","Costo Promedio",hi.margen?"$"+hi.margen.costo_promedio:""],
+["Margen Bruto",hi.margen?hi.margen.margen_pct+"%":"","","Elasticidad",hi.precio?hi.precio.elasticidad:""],
+[""],
+["RESUMEN"],
+[hi.resumen||""],
+[""],
+["DETALLE POR RETAILER"],
+["Retailer","SO Total","SO/Mes","Inv. Retail","DOH","SI Total","Gap SI/SO","Diagnóstico"]
+];
+if(hi.canal_detalle){hi.canal_detalle.forEach(function(c){s2.push([c.retailer,c.so_total,c.so_promedio_mes,c.inv_retail,c.doh+"d",c.si_total,(c.gap_si_so_pct>0?"+":"")+c.gap_si_so_pct+"%",c.diagnostico])})}
+s2.push([""]);
+s2.push(["MEJOR RETAILER",hi.mejor_retailer?hi.mejor_retailer.nombre:"",hi.mejor_retailer?hi.mejor_retailer.uds+" un":"","",hi.mejor_retailer?hi.mejor_retailer.por_que:""]);
+s2.push(["PEOR RETAILER",hi.peor_retailer?hi.peor_retailer.nombre:"",hi.peor_retailer?hi.peor_retailer.uds+" un":"","",hi.peor_retailer?hi.peor_retailer.por_que:""]);
+s2.push([""]);
+s2.push(["QUÉ HACER AHORA"]);
+if(hi.resumen_acciones){hi.resumen_acciones.forEach(function(a){s2.push(["→",typeof a==="string"?a:a.texto])})}
+var ws2=XLSX.utils.aoa_to_sheet(s2);ws2["!cols"]=[{wch:18},{wch:14},{wch:12},{wch:14},{wch:14},{wch:12},{wch:12},{wch:45}];
 XLSX.utils.book_append_sheet(wb,ws2,"Resumen");
 // SHEET 3: FODA
 if(hi.foda){
@@ -395,7 +465,12 @@ var s3=[["ANÁLISIS FODA — "+(D.sku||"")],[""],["FORTALEZAS","",hi.foda.fortal
 if(hi.oportunidades_perdidas){s3.push([""],["OPORTUNIDADES PERDIDAS"],["Detalle","","Fuente"]);hi.oportunidades_perdidas.forEach(function(o){var txt=typeof o==="string"?o:o.texto;var src=typeof o==="object"&&o.source?o.source:"";s3.push([txt,"",src])})}
 if(hi.riesgos){s3.push([""],["RIESGOS ACTIVOS"],["Detalle","","Fuente"]);hi.riesgos.forEach(function(r){var txt=typeof r==="string"?r:r.texto;var src=typeof r==="object"&&r.source?r.source:"";s3.push([txt,"",src])})}
 if(hi.margen){s3.push([""],["MARGEN Y PRECIO"],["PVP Promedio","",hi.margen.pvp_promedio],["Costo Promedio","",hi.margen.costo_promedio],["Margen Bruto","",hi.margen.margen_pct+"%"],["Tendencia","",hi.margen.tendencia_margen])}
-if(hi.precio){s3.push([""],["ELASTICIDAD DE PRECIO"],["Elasticidad","",hi.precio.elasticidad],["Explicación","",hi.precio.explicacion],["vs Competencia","",hi.precio.pvp_vs_competencia])}
+if(hi.precio){
+s3.push([""],["ESCENARIOS DE PRECIO"],["Si Pones","Vendes","Margen","Efecto"]);
+if(hi.precio.escenarios){hi.precio.escenarios.forEach(function(e){s3.push(["$"+(e.pvp||0),(e.uds_estimadas||0)+" un/mes",e.margen_total||"",e.efecto||""])})}
+s3.push([""],["COMPETENCIA — PRECIOS"],["Marca","PVP","Un/Mes"]);
+if(hi.precio.competencia_precios){hi.precio.competencia_precios.forEach(function(c){s3.push([c.marca,"$"+(c.pvp||0),(c.uds_mes||0)+" un/mes"])})}
+}
 if(hi.mapa_precios){s3.push([""],["MAPA DE PRECIOS"],["Tu PVP","","$"+(hi.mapa_precios.tu_pvp||0)],["Rango Segmento","",hi.mapa_precios.rango_segmento||""],["Posición","",hi.mapa_precios.posicion||""],["Más Barato","",hi.mapa_precios.competidor_mas_barato?hi.mapa_precios.competidor_mas_barato.marca+" $"+hi.mapa_precios.competidor_mas_barato.pvp:""],["Más Caro","",hi.mapa_precios.competidor_mas_caro?hi.mapa_precios.competidor_mas_caro.marca+" $"+hi.mapa_precios.competidor_mas_caro.pvp:""])}
 var ws3=XLSX.utils.aoa_to_sheet(s3);ws3["!cols"]=[{wch:22},{wch:4},{wch:60}];
 XLSX.utils.book_append_sheet(wb,ws3,"FODA y Precio");
@@ -407,11 +482,18 @@ hi.competencia.forEach(function(c){sc.push([c.marca,c.modelo,c.uds_periodo,"$"+(
 var wsc=XLSX.utils.aoa_to_sheet(sc);wsc["!cols"]=[{wch:16},{wch:18},{wch:12},{wch:14},{wch:10},{wch:40}];
 XLSX.utils.book_append_sheet(wb,wsc,"Competencia");
 }
-// SHEET: DETALLE POR CANAL
+// SHEET: DETALLE POR CANAL (HISTÓRICO MENSUAL)
 if(hi.canal_detalle&&hi.canal_detalle.length){
-var sd=[["DETALLE POR RETAILER — "+(D.sku||"")],[""],["Retailer","SO Total","SO/Mes","Inv Retail","DOH","SI Total","Gap SI/SO","Diagnóstico"]];
+var meses=D.serie_historica?D.serie_historica.map(function(d){return d.fecha}):[];
+var spr=D.serie_por_retailer||{};
+var sd=[["HISTORIAL POR RETAILER — "+(D.sku||"")],["Período: "+(meses.length?meses[0]+" a "+meses[meses.length-1]:""),"","","","Valores sin IVA"],[""],["UNIDADES POR MES"]];
+var hdr=["Retailer"];meses.forEach(function(m){hdr.push(m)});hdr.push("TOTAL");hdr.push("Promedio/Mes");sd.push(hdr);
+hi.canal_detalle.forEach(function(c){var row=[c.retailer];var tot=0;meses.forEach(function(m){var v=spr[c.retailer]&&spr[c.retailer][m]?Math.round(spr[c.retailer][m].uds):0;row.push(v);tot+=v});row.push(tot);row.push(Math.round(tot/Math.max(meses.length,1)));sd.push(row)});
+sd.push([""]);sd.push(["RESUMEN POR RETAILER"]);
+sd.push(["Retailer","SO Total","SO/Mes","Inv Retail","DOH","SI Total","Gap SI/SO","Diagnóstico"]);
 hi.canal_detalle.forEach(function(c){sd.push([c.retailer,c.so_total,c.so_promedio_mes,c.inv_retail,c.doh+"d",c.si_total,(c.gap_si_so_pct>0?"+":"")+c.gap_si_so_pct+"%",c.diagnostico])});
-var wsd=XLSX.utils.aoa_to_sheet(sd);wsd["!cols"]=[{wch:16},{wch:10},{wch:10},{wch:12},{wch:8},{wch:10},{wch:12},{wch:30}];
+var colsd=[{wch:14}];meses.forEach(function(){colsd.push({wch:10})});colsd.push({wch:10});colsd.push({wch:12});
+var wsd=XLSX.utils.aoa_to_sheet(sd);wsd["!cols"]=colsd;
 XLSX.utils.book_append_sheet(wb,wsd,"Por Retailer");
 }
 // SHEET 4: ALERTAS
