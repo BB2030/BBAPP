@@ -280,146 +280,95 @@ document.getElementById("rs").textContent=(D.fuentes?D.fuentes.length:1)+" fuent
 document.getElementById("rc").innerHTML=h;
 }
 function renderHistorial(D){var h="";var hi=D.historial;var se=D.serie_historica||[];
-// ─── HEADER ───
 h+="<div style='padding:16px;background:var(--white);border:1px solid var(--border);margin-bottom:14px'>";
-h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:12px'>📜 Historial SKU — "+(D.sku||"")+"</div>";
-// ─── RESUMEN ACCIONABLE (arriba de todo) ───
-if(hi&&hi.resumen_acciones&&hi.resumen_acciones.length){
-h+="<div style='padding:14px;background:var(--dk);margin-bottom:16px'>";
-h+="<div style='font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:10px'>QUÉ HACER AHORA</div>";
-hi.resumen_acciones.forEach(function(a,i){h+="<div style='font-size:13px;color:#F2F0EC;font-weight:"+(i===0?"700":"300")+";margin-bottom:8px;padding-left:8px;border-left:3px solid "+(i===0?"var(--gold)":"rgba(242,240,236,.3)")+"'>"+a+"</div>"});
-h+="</div>";
-}
-// ─── RESUMEN + TENDENCIA ───
-if(hi){
-var tc=hi.tendencia==="CAYENDO"?"#c0392b":hi.tendencia==="CRECIENDO"?"var(--aqua)":"var(--text2)";
-h+="<div style='display:flex;gap:8px;margin-bottom:14px'>";
-h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:18px;font-weight:700;color:var(--dk)'>"+(hi.so_total||0).toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3)'>un vendidas total</div></div>";
-h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:18px;font-weight:700;color:var(--dk)'>"+(hi.so_promedio_mes||0).toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3)'>un/mes promedio</div></div>";
-h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center;border-left:3px solid "+tc+"'><div style='font-size:18px;font-weight:700;color:"+tc+"'>"+(hi.tendencia||"—")+"</div><div style='font-size:10px;color:var(--text3)'>tendencia</div></div>";
-h+="</div>";
-h+="<div style='font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px;font-weight:300'>"+hi.resumen+"</div>";
-}
-// ─── GRÁFICO LÍNEA + PROYECCIÓN ───
+h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:4px'>📜 Historial — "+(D.sku||"")+"</div>";
+if(hi){var dateRange=se.length?(se[0].fecha+" a "+se[se.length-1].fecha):"";h+="<div style='font-size:11px;color:var(--text2);font-weight:300;margin-bottom:14px'>"+(hi.so_total||0).toLocaleString("es-CL")+" un · $"+((hi.so_total||0)*(hi.margen&&hi.margen.pvp_promedio||220000)>1e6?(((hi.so_total||0)*(hi.margen&&hi.margen.pvp_promedio||220000))/1e6).toFixed(0)+"M":"")+" · "+(hi.tendencia||"")+" · GM% "+(hi.margen?hi.margen.margen_pct:0)+"%"+(dateRange?" · "+dateRange:"")+"</div>"}
+// ─── GRÁFICO SO vs SI (unidades) ───
 if(se.length){
-var mx=Math.max.apply(null,se.map(function(d){return d.uds}));
-var mn=Math.min.apply(null,se.map(function(d){return d.uds}));
-var rng=mx-mn||1;var W=600;var H=120;var pad=30;var pw=W-pad*2;var ph=H-pad;
-// Calcular proyección simple (últimos 3 meses trend)
-var last3=se.slice(-3);var avgDelta=last3.length>1?(last3[last3.length-1].uds-last3[0].uds)/(last3.length-1):0;
-var proj=[];for(var pi=1;pi<=4;pi++){proj.push(Math.max(0,Math.round(se[se.length-1].uds+avgDelta*pi)))}
-var allVals=se.map(function(d){return d.uds}).concat(proj);
-var amx=Math.max.apply(null,allVals);var amn=Math.min.apply(null,allVals);var arng=amx-amn||1;
-var totalPts=se.length+proj.length;
-function px(i){return pad+i/(totalPts-1)*pw}
-function py(v){return pad+ph-(v-amn)/arng*ph}
-// Build SVG
-var svg="<svg viewBox='0 0 "+W+" "+(H+20)+"' style='width:100%;margin:8px 0' xmlns='http://www.w3.org/2000/svg'>";
-// Grid lines
-for(var gi=0;gi<4;gi++){var gy=pad+ph/3*gi;svg+="<line x1='"+pad+"' y1='"+gy+"' x2='"+(W-pad)+"' y2='"+gy+"' stroke='rgba(0,0,0,.06)' stroke-width='1'/>";svg+="<text x='"+(pad-4)+"' y='"+(gy+3)+"' font-size='8' fill='#999' text-anchor='end'>"+Math.round(amx-arng/3*gi)+"</text>"}
-// Historical line
-var pts=se.map(function(d,i){return px(i)+","+py(d.uds)}).join(" ");
-svg+="<polyline points='"+pts+"' fill='none' stroke='#1a0d47' stroke-width='2.5' stroke-linejoin='round'/>";
-// Dots on historical
-se.forEach(function(d,i){svg+="<circle cx='"+px(i)+"' cy='"+py(d.uds)+"' r='3' fill='#1a0d47'/>"});
-// Projection line (dashed)
-var projPts=px(se.length-1)+","+py(se[se.length-1].uds);
-proj.forEach(function(v,i){projPts+=" "+px(se.length+i)+","+py(v)});
-svg+="<polyline points='"+projPts+"' fill='none' stroke='#c0392b' stroke-width='2' stroke-dasharray='6,4' stroke-linejoin='round'/>";
-proj.forEach(function(v,i){svg+="<circle cx='"+px(se.length+i)+"' cy='"+py(v)+"' r='2.5' fill='none' stroke='#c0392b' stroke-width='1.5'/>"});
-// X labels
-se.forEach(function(d,i){if(i%2===0||i===se.length-1){svg+="<text x='"+px(i)+"' y='"+(H+12)+"' font-size='8' fill='#666' text-anchor='middle'>"+d.fecha.slice(5)+"</text>"}});
-svg+="<text x='"+px(se.length+1)+"' y='"+(H+12)+"' font-size='8' fill='#c0392b' text-anchor='middle' font-style='italic'>proyección</text>";
-// Legend
-svg+="<line x1='"+pad+"' y1='"+(H+18)+"' x2='"+(pad+20)+"' y2='"+(H+18)+"' stroke='#1a0d47' stroke-width='2'/><text x='"+(pad+24)+"' y='"+(H+20)+"' font-size='7' fill='#666'>Histórico</text>";
-svg+="<line x1='"+(pad+80)+"' y1='"+(H+18)+"' x2='"+(pad+100)+"' y2='"+(H+18)+"' stroke='#c0392b' stroke-width='2' stroke-dasharray='4,3'/><text x='"+(pad+104)+"' y='"+(H+20)+"' font-size='7' fill='#c0392b'>Tendencia</text>";
-svg+="</svg>";
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>SELL OUT MENSUAL</div>";
-h+=svg;
-}
-// ─── LÍNEAS POR RETAILER ───
-if(hi&&hi.canal_detalle&&hi.canal_detalle.length&&D.serie_por_retailer){
-var spr=D.serie_por_retailer;var se2=D.serie_historica||[];
-var meses=se2.map(function(d){return d.fecha});
-var cd=hi.canal_detalle.slice().sort(function(a,b){return(b.so_total||0)-(a.so_total||0)});
-var colors=["#1a0d47","#0f7173","#5B4FE8","#b85c00","#c0392b","#666","#999","#333","#aaa"];
-// Find max value across all retailers/months
-var allVals=[];cd.forEach(function(c){meses.forEach(function(m){var d=spr[c.retailer]&&spr[c.retailer][m];if(d)allVals.push(d.venta||d.uds*240000)})});
-var amx=Math.max.apply(null,allVals)||1;var amn=0;
-var W=600;var H=160;var pad=50;var padR=100;var pw=W-pad-padR;var ph=H-40;
-var svg="<svg viewBox='0 0 "+W+" "+(H+10)+"' style='width:100%;margin:8px 0' xmlns='http://www.w3.org/2000/svg'>";
+var si2=D.serie_si||[];
+var siMap={};var siTotal=0;si2.forEach(function(d){siMap[d.fecha]=d.uds;siTotal+=d.uds});
+var soTotal=0;se.forEach(function(d){soTotal+=d.uds});
+var allU=se.map(function(d){return d.uds});
+se.forEach(function(d){if(siMap[d.fecha])allU.push(siMap[d.fecha])});
+var amx=Math.max.apply(null,allU)*1.1;var amn=0;var arng=amx||1;
+var W=600;var H=160;var padL=45;var padR=130;var pw=W-padL-padR;var ph=H-50;
+var n=se.length;
+function px(i){return padL+i/(n-1)*pw}function py(v){return 20+ph-(v/amx)*ph}
+var svg="<svg viewBox='0 0 "+W+" "+(H+5)+"' style='width:100%;margin:6px 0' xmlns='http://www.w3.org/2000/svg'>";
 // Grid
-for(var gi=0;gi<4;gi++){var gy=20+ph/3*gi;var gv=amx-amx/3*gi;svg+="<line x1='"+pad+"' y1='"+gy+"' x2='"+(W-padR)+"' y2='"+gy+"' stroke='rgba(0,0,0,.05)' stroke-width='1'/>";svg+="<text x='"+(pad-4)+"' y='"+(gy+3)+"' font-size='7' fill='#999' text-anchor='end'>$"+(gv>1e6?(gv/1e6).toFixed(0)+"M":Math.round(gv/1000)+"K")+"</text>"}
+for(var gi=0;gi<5;gi++){var gy=20+ph/4*gi;var gv=Math.round(amx-amx/4*gi);svg+="<line x1='"+padL+"' y1='"+gy+"' x2='"+(W-padR)+"' y2='"+gy+"' stroke='rgba(0,0,0,.04)'/>";svg+="<text x='"+(padL-4)+"' y='"+(gy+3)+"' font-size='7' fill='#999' text-anchor='end'>"+gv+"</text>"}
+// Gap fill
+if(si2.length){var fp="";se.forEach(function(d,i){fp+=px(i)+","+py(d.uds)+" "});for(var fi=n-1;fi>=0;fi--){var sv=siMap[se[fi].fecha]||se[fi].uds;fp+=px(fi)+","+py(sv)+" "}svg+="<polygon points='"+fp.trim()+"' fill='rgba(184,92,0,0.06)'/>"}
+// SI line
+if(si2.length){var sp=se.map(function(d,i){var v=siMap[d.fecha];return v?px(i)+","+py(v):null}).filter(Boolean);if(sp.length)svg+="<polyline points='"+sp.join(" ")+"' fill='none' stroke='#b85c00' stroke-width='1.8' stroke-dasharray='5,3' opacity='0.6' stroke-linejoin='round'/>"}
+// SO line
+svg+="<polyline points='"+se.map(function(d,i){return px(i)+","+py(d.uds)}).join(" ")+"' fill='none' stroke='#1a0d47' stroke-width='2.5' stroke-linejoin='round'/>";
+// Dots + values
+var prevU=0;se.forEach(function(d,i){var drop=prevU>0&&d.uds<prevU*0.6;var isQ=drop;svg+="<circle cx='"+px(i)+"' cy='"+py(d.uds)+"' r='"+(isQ?"5":"3")+"' fill='"+(isQ?"#fff":"#1a0d47")+"'"+(isQ?" stroke='#c0392b' stroke-width='2'":"")+"/>";svg+="<text x='"+px(i)+"' y='"+(py(d.uds)+(d.uds<prevU?12:-8))+"' font-size='8' fill='"+(isQ?"#c0392b":"#1a0d47")+"' text-anchor='middle' font-weight='"+(isQ?"700":"400")+"'>"+d.uds+"</text>";prevU=d.uds});
 // X labels
-meses.forEach(function(m,i){var x=pad+i/(meses.length-1)*pw;svg+="<text x='"+x+"' y='"+(H)+"' font-size='8' fill='#666' text-anchor='middle'>"+m.slice(5)+"</text>"});
-// Lines per retailer
-cd.forEach(function(c,ci){
-var pts=[];meses.forEach(function(m,i){var d=spr[c.retailer]&&spr[c.retailer][m];var v=d?(d.venta||d.uds*240000):0;var x=pad+i/(meses.length-1)*pw;var y=20+ph-(v/amx)*ph;pts.push(x+","+y)});
-if(pts.length){
-svg+="<polyline points='"+pts.join(" ")+"' fill='none' stroke='"+colors[ci%colors.length]+"' stroke-width='"+(ci<3?"2":"1.5")+"' stroke-linejoin='round' opacity='"+(ci<3?"1":"0.6")+"'/>";
-// Label at end
-var lastPt=pts[pts.length-1].split(",");
-svg+="<text x='"+(parseFloat(lastPt[0])+6)+"' y='"+lastPt[1]+"' font-size='8' fill='"+colors[ci%colors.length]+"' font-weight='"+(ci<3?"700":"400")+"' dominant-baseline='middle'>"+c.retailer+"</text>";
-}});
+se.forEach(function(d,i){var isQ=i>0&&d.uds<se[i-1].uds*0.6;svg+="<text x='"+px(i)+"' y='"+(H-18)+"' font-size='8' fill='"+(isQ?"#c0392b":"#666")+"' text-anchor='middle'"+(isQ?" font-weight='500'":"")+">"+d.fecha.slice(5)+"</text>"});
+// Legend
+svg+="<line x1='"+padL+"' y1='"+(H-2)+"' x2='"+(padL+16)+"' y2='"+(H-2)+"' stroke='#1a0d47' stroke-width='2.5'/><text x='"+(padL+20)+"' y='"+(H)+"' font-size='7' fill='#666'>SO</text>";
+svg+="<line x1='"+(padL+50)+"' y1='"+(H-2)+"' x2='"+(padL+66)+"' y2='"+(H-2)+"' stroke='#b85c00' stroke-width='1.8' stroke-dasharray='4,3'/><text x='"+(padL+70)+"' y='"+(H)+"' font-size='7' fill='#b85c00'>SI</text>";
+svg+="<rect x='"+(padL+100)+"' y='"+(H-6)+"' width='8' height='6' fill='rgba(184,92,0,0.1)' rx='1'/><text x='"+(padL+112)+"' y='"+(H)+"' font-size='7' fill='#b85c00'>Gap</text>";
+// Summary box
+var gap=siTotal-soTotal;var gapPct=soTotal>0?Math.round(gap/soTotal*100):0;
+svg+="<rect x='"+(W-padR+8)+"' y='20' width='"+(padR-16)+"' height='"+ph+"' fill='rgba(0,0,0,.02)' rx='4'/>";
+svg+="<text x='"+(W-padR+16)+"' y='36' font-size='8' fill='#666' font-weight='500'>RESUMEN</text>";
+svg+="<text x='"+(W-padR+16)+"' y='52' font-size='8' fill='#1a0d47'>SO: "+soTotal.toLocaleString("es-CL")+" un</text>";
+svg+="<text x='"+(W-padR+16)+"' y='66' font-size='8' fill='#b85c00'>SI: "+siTotal.toLocaleString("es-CL")+" un</text>";
+svg+="<text x='"+(W-padR+16)+"' y='84' font-size='9' fill='"+(gap>0?"#c0392b":"var(--aqua)")+"' font-weight='500'>Gap: "+(gap>0?"+":"")+gap.toLocaleString("es-CL")+"</text>";
+svg+="<text x='"+(W-padR+16)+"' y='98' font-size='8' fill='"+(gap>0?"#c0392b":"#666")+"'>("+(gapPct>0?"+":"")+gapPct+"% loading)</text>";
 svg+="</svg>";
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 2px'>VENTA $ POR RETAILER</div>";
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>SELL OUT vs SELL IN (unidades/mes, total retailers)</div>";
 h+=svg;
-// Totals row below chart - ranked by profit
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:6px 0 6px'>RANKING POR PROFIT ESTIMADO</div>";
-var cdp=cd.slice().sort(function(a,b){return(b.profit_estimado||0)-(a.profit_estimado||0)});
-h+="<table style='width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:4px;font-size:9px;color:var(--text3)'></th><th style='text-align:left;padding:4px;font-size:9px;color:var(--text3)'>RETAILER</th><th style='text-align:right;padding:4px;font-size:9px;color:var(--text3)'>VENTA</th><th style='text-align:right;padding:4px;font-size:9px;color:var(--text3)'>MARGEN</th><th style='text-align:right;padding:4px;font-size:9px;color:var(--text3)'>PROFIT EST.</th></tr>";
-cdp.forEach(function(c,ci){var pclr=ci===0?"var(--aqua)":ci>=cdp.length-1?"#c0392b":"var(--text2)";
-h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5)'><td style='padding:4px'><div style='width:10px;height:10px;background:"+colors[cd.indexOf(c)%colors.length]+";border-radius:2px'></div></td><td style='padding:4px;font-weight:"+(ci===0?"700":"400")+";color:var(--dk)'>"+c.retailer+"</td><td style='padding:4px;text-align:right;color:var(--text2)'>$"+((c.venta_total||0)>1e6?((c.venta_total||0)/1e6).toFixed(0)+"M":(c.venta_total||0).toLocaleString("es-CL"))+"</td><td style='padding:4px;text-align:right;color:var(--text2)'>"+(c.margen_pct||0)+"%</td><td style='padding:4px;text-align:right;font-weight:700;color:"+pclr+"'>$"+((c.profit_estimado||0)>1e6?((c.profit_estimado||0)/1e6).toFixed(0)+"M":(c.profit_estimado||0).toLocaleString("es-CL"))+"</td></tr>"});
-h+="</table>";
 }
-// ─── MARGEN + PRECIO (oportunidades, riesgos y FODA solo en Excel) ───
-// ─── MARGEN + PRECIO ───
-if(hi&&hi.margen){
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>MARGEN Y PRECIO</div>";
-h+="<div style='display:flex;gap:8px;margin-bottom:10px'>";
-h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:16px;font-weight:700;color:var(--dk)'>$"+(hi.margen.pvp_promedio||0).toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3)'>PVP promedio</div></div>";
-h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center'><div style='font-size:16px;font-weight:700;color:var(--dk)'>$"+(hi.margen.costo_promedio||0).toLocaleString("es-CL")+"</div><div style='font-size:10px;color:var(--text3)'>costo promedio</div></div>";
-var mc=hi.margen.margen_pct>40?"var(--aqua)":hi.margen.margen_pct<30?"#c0392b":"var(--text2)";
-h+="<div style='flex:1;padding:10px;background:var(--bg);text-align:center;border-left:3px solid "+mc+"'><div style='font-size:16px;font-weight:700;color:"+mc+"'>"+(hi.margen.margen_pct||0)+"%</div><div style='font-size:10px;color:var(--text3)'>margen bruto</div></div>";
+// ─── CARDS DE IMPACTO (cruzando GfK) ───
+if(hi&&hi.costo_gestion){
+var cg=hi.costo_gestion;
+h+="<div style='display:flex;gap:6px;margin:12px 0'>";
+h+="<div style='flex:1;padding:8px;background:rgba(192,57,43,.05);border-left:3px solid #c0392b'><div style='font-size:8px;color:#c0392b;font-weight:700;letter-spacing:.5px'>VARIACIÓN SHARE</div><div style='font-size:20px;font-weight:700;color:#c0392b;margin:2px 0'>-"+(cg.share_variacion_pp||0)+"pp</div><div style='font-size:9px;color:var(--text3)'>"+(cg.competencia_que_capturo||"")+"</div><div style='font-size:8px;color:var(--text3);margin-top:2px;font-style:italic'>capturado por competencia</div></div>";
+h+="<div style='flex:1;padding:8px;background:rgba(184,92,0,.05);border-left:3px solid #b85c00'><div style='font-size:8px;color:#b85c00;font-weight:700;letter-spacing:.5px'>IMPACTO LOADING</div><div style='font-size:20px;font-weight:700;color:#b85c00;margin:2px 0'>"+(cg.loading_impacto_pct||0)+"%</div><div style='font-size:9px;color:var(--text3)'>"+(cg.loading_impacto_monto||"")+" no rotó en 60d</div></div>";
+h+="<div style='flex:1;padding:8px;background:rgba(0,0,0,.03);border-left:3px solid #666'><div style='font-size:8px;color:#666;font-weight:700;letter-spacing:.5px'>SOBRESTOCK</div><div style='font-size:20px;font-weight:700;color:var(--dk);margin:2px 0'>"+(cg.sobrestock_monto||"$0")+"</div><div style='font-size:9px;color:var(--text3)'>"+(cg.sobrestock_un||0).toLocaleString("es-CL")+" un · "+(cg.doh_actual||0)+"m DOH</div></div>";
 h+="</div>";
-h+="<div style='font-size:11px;color:var(--text2);font-weight:300;margin-bottom:8px'>"+hi.margen.tendencia_margen+"</div>";
+if(cg.moraleja||cg.precio_regalo||cg.contrafactual){
+h+="<div style='padding:10px 12px;background:rgba(192,57,43,.03);border-left:3px solid #c0392b;margin-bottom:12px'>";
+if(cg.precio_regalo)h+="<div style='font-size:11px;color:#b85c00;margin-bottom:4px'>"+cg.precio_regalo+"</div>";
+if(cg.si_cero_mes)h+="<div style='font-size:11px;color:#c0392b;margin-bottom:4px'>"+cg.si_cero_mes+"</div>";
+if(cg.contrafactual)h+="<div style='font-size:11px;color:var(--dk);font-weight:400;margin-bottom:4px'>"+cg.contrafactual+"</div>";
+if(cg.moraleja)h+="<div style='font-size:12px;color:#c0392b;font-style:italic;font-weight:400'>"+cg.moraleja+"</div>";
+h+="</div>"}
 }
-if(hi&&hi.precio){
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>ESCENARIOS DE PRECIO</div>";
-if(hi.precio.escenarios&&hi.precio.escenarios.length){
-h+="<table style='width:100%;border-collapse:collapse;font-size:11px;margin-bottom:10px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SI PONES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>VENDES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>MARGEN</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>EFECTO</th></tr>";
-hi.precio.escenarios.forEach(function(e){var isAct=e.pvp===hi.precio.pvp_actual;h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5);"+(isAct?"background:rgba(15,113,115,.04)":"")+"'><td style='padding:6px 4px;font-weight:700;color:var(--dk)'>$"+(e.pvp||0).toLocaleString("es-CL")+"</td><td style='padding:6px 4px;text-align:right;color:var(--text2)'>"+(e.uds_estimadas||0).toLocaleString("es-CL")+" un/mes</td><td style='padding:6px 4px;text-align:right;font-weight:700;color:var(--dk)'>"+(e.margen_total||"")+"</td><td style='padding:6px 4px;font-size:10px;color:var(--text2)'>"+(e.efecto||"")+"</td></tr>"});
-h+="</table>";
-}
-if(hi.precio.competencia_precios&&hi.precio.competencia_precios.length){
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:6px'>COMPETENCIA — A CUÁNTO VENDEN</div>";
-hi.precio.competencia_precios.forEach(function(c){h+="<div style='display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:11px'><span style='width:80px;font-weight:600;color:var(--dk)'>"+c.marca+"</span><span style='font-weight:700;color:var(--text2)'>$"+(c.pvp||0).toLocaleString("es-CL")+"</span><span style='color:var(--text3);font-weight:300'>→ "+(c.uds_mes||0)+" un/mes</span></div>"});
-}
-}
-// ─── MAPA DE PRECIOS ───
-if(hi&&hi.mapa_precios){
-var mp=hi.mapa_precios;
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>MAPA DE PRECIOS — SEGMENTO</div>";
-h+="<div style='padding:12px;background:var(--bg);margin-bottom:10px'>";
-h+="<div style='display:flex;align-items:center;gap:6px;margin-bottom:8px'><div style='font-size:11px;color:var(--text3)'>"+mp.rango_segmento+"</div><div style='flex:1;height:8px;background:linear-gradient(90deg,var(--sky),var(--blue),var(--aqua));border-radius:4px;position:relative'>";
-var pos=mp.posicion==="ENTRY"?"15%":mp.posicion==="PREMIUM"?"85%":"50%";
-h+="<div style='position:absolute;top:-6px;left:"+pos+";width:20px;height:20px;background:var(--dk);border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center'><span style='font-size:7px;color:var(--gold);font-weight:700'>TÚ</span></div>";
-h+="</div></div>";
-h+="<div style='display:flex;justify-content:space-between;font-size:10px'><span style='color:var(--text3)'>Más barato: "+(mp.competidor_mas_barato?mp.competidor_mas_barato.marca+" $"+mp.competidor_mas_barato.pvp.toLocaleString("es-CL"):"—")+"</span><span style='font-weight:700;color:var(--dk)'>Tú: $"+(mp.tu_pvp||0).toLocaleString("es-CL")+"</span><span style='color:var(--text3)'>Más caro: "+(mp.competidor_mas_caro?mp.competidor_mas_caro.marca+" $"+mp.competidor_mas_caro.pvp.toLocaleString("es-CL"):"—")+"</span></div>";
+// ─── RETAILERS ABANDONADOS ───
+if(hi&&hi.retailers_abandonados&&hi.retailers_abandonados.length){
+h+="<div style='padding:10px;background:rgba(192,57,43,.04);margin-bottom:12px'>";
+h+="<div style='font-size:9px;font-weight:700;color:#c0392b;letter-spacing:.5px;margin-bottom:6px'>CLIENTES QUE DEJASTE SIN STOCK — "+hi.retailers_abandonados.length+" de 7 retailers</div>";
+hi.retailers_abandonados.forEach(function(ra){
+h+="<div style='display:flex;align-items:baseline;gap:6px;margin-bottom:3px'>";
+h+="<div style='font-size:11px;font-weight:700;color:#c0392b;width:80px'>"+ra.retailer+"</div>";
+h+="<div style='font-size:10px;color:var(--dk)'>"+(ra.meses_sin_stock||0)+"m sin stock</div>";
+h+="<div style='font-size:10px;color:var(--text2);font-style:italic;flex:1'>"+ra.descripcion+"</div>";
+h+="</div>"});
 h+="</div>";
 }
-// ─── COMPETENCIA ───
-if(hi&&hi.competencia&&hi.competencia.length){
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>COMPETENCIA DIRECTA — TOP MODELOS SEGMENTO</div>";
-h+="<table style='width:100%;border-collapse:collapse;font-size:11px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>MARCA</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>MODELO</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>UNIDADES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>PVP EST.</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SHARE</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>AMENAZA</th></tr>";
-hi.competencia.forEach(function(c){var isTu=c.marca.toLowerCase().includes("fen")||c.modelo.includes(D.sku||"");h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5);"+(isTu?"background:rgba(15,113,115,.04)":"")+"'><td style='padding:5px 4px;font-weight:"+(isTu?"700":"400")+";color:var(--dk)'>"+c.marca+"</td><td style='padding:5px 4px;color:var(--text2)'>"+c.modelo+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+(c.uds_periodo||0).toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>$"+(c.pvp_estimado||0).toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;font-weight:700;color:var(--text2)'>"+(c.share_segmento||0)+"%</td><td style='padding:5px 4px;font-size:10px;color:var(--text2)'>"+c.amenaza+"</td></tr>"});
-h+="</table>";
+// ─── RETAILERS CASTIGADOS ───
+if(hi&&hi.retailers_castigados&&hi.retailers_castigados.length){
+h+="<div style='padding:10px;background:rgba(184,92,0,.04);margin-bottom:12px'>";
+h+="<div style='font-size:9px;font-weight:700;color:#b85c00;letter-spacing:.5px;margin-bottom:6px'>CASTIGO COMERCIAL — retailers que redujeron espacio</div>";
+hi.retailers_castigados.forEach(function(rc){
+h+="<div style='display:flex;align-items:baseline;gap:6px;margin-bottom:3px'>";
+h+="<div style='font-size:11px;font-weight:700;color:#b85c00;width:80px'>"+rc.retailer+"</div>";
+h+="<div style='font-size:10px;color:var(--dk)'>"+(rc.so_antes||0)+"→"+(rc.so_despues||0)+" un/mes (-"+(rc.caida_pct||0)+"%)</div>";
+h+="<div style='font-size:10px;color:var(--text2);font-style:italic;flex:1'>"+rc.descripcion+"</div>";
+h+="</div>"});
+h+="</div>";
 }
-// ─── DETALLE POR CANAL ───
+// ─── MINI PROFIT TABLE ───
 if(hi&&hi.canal_detalle&&hi.canal_detalle.length){
-h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:14px 0 8px'>DETALLE POR RETAILER</div>";
-h+="<table style='width:100%;border-collapse:collapse;font-size:11px'><tr style='border-bottom:1px solid var(--border)'><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>RETAILER</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SO TOT</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>SO/MES</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>INV.R</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>DOH</th><th style='text-align:right;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>GAP SI/SO</th><th style='text-align:left;padding:5px 4px;font-size:9px;font-weight:700;color:var(--text3)'>DIAGNÓSTICO</th></tr>";
-hi.canal_detalle.forEach(function(c){var gc=(c.gap_si_so_pct||0)>20?"#c0392b":(c.gap_si_so_pct||0)<-5?"var(--aqua)":"var(--text2)";var dc=(c.doh||0)>90?"#c0392b":(c.doh||0)<20?"#b85c00":"var(--text2)";h+="<tr style='border-bottom:1px solid rgba(224,221,215,.5)'><td style='padding:5px 4px;font-weight:600;color:var(--dk)'>"+c.retailer+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+(c.so_total||0).toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+(c.so_promedio_mes||0)+"</td><td style='padding:5px 4px;text-align:right;color:var(--text2)'>"+(c.inv_retail||0).toLocaleString("es-CL")+"</td><td style='padding:5px 4px;text-align:right;font-weight:700;color:"+dc+"'>"+(c.doh||0)+"d</td><td style='padding:5px 4px;text-align:right;font-weight:700;color:"+gc+"'>"+(c.gap_si_so_pct>0?"+":"")+(c.gap_si_so_pct||0)+"%</td><td style='padding:5px 4px;font-size:10px;color:var(--text2)'>"+c.diagnostico+"</td></tr>"});
+var cd=hi.canal_detalle.slice().sort(function(a,b){return(b.profit_estimado||b.so_total||0)-(a.profit_estimado||a.so_total||0)});
+h+="<div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin:10px 0 6px'>PROFIT POR RETAILER</div>";
+h+="<table style='width:100%;border-collapse:collapse;font-size:10px;margin-bottom:6px'><tr style='border-bottom:0.5px solid var(--border)'><td style='padding:3px 4px;font-size:9px;color:var(--text3)'>Retailer</td><td style='padding:3px 4px;text-align:right;font-size:9px;color:var(--text3)'>Venta</td><td style='padding:3px 4px;text-align:right;font-size:9px;color:var(--text3)'>Margen</td><td style='padding:3px 4px;text-align:right;font-size:9px;color:var(--text3)'>Profit est.</td></tr>";
+cd.forEach(function(c,ci){h+="<tr><td style='padding:2px 4px;font-weight:"+(ci===0?"700":"400")+";color:var(--dk)'>"+c.retailer+"</td><td style='padding:2px 4px;text-align:right;color:var(--text2)'>$"+((c.venta_total||0)>1e6?((c.venta_total||0)/1e6).toFixed(0)+"M":(c.venta_total||0).toLocaleString("es-CL"))+"</td><td style='padding:2px 4px;text-align:right;color:var(--text2)'>"+(c.margen_pct||0)+"%</td><td style='padding:2px 4px;text-align:right;font-weight:700;color:"+(ci===0?"var(--aqua)":"var(--text2)")+"'>$"+((c.profit_estimado||0)>1e6?((c.profit_estimado||0)/1e6).toFixed(0)+"M":(c.profit_estimado||0).toLocaleString("es-CL"))+"</td></tr>"});
 h+="</table>";
 }
 h+="</div>";return h;
@@ -503,6 +452,53 @@ D.alertas.forEach(function(a){s4.push([a.tipo,a.monto,a.titulo,a.detalle,a.accio
 var ws4=XLSX.utils.aoa_to_sheet(s4);ws4["!cols"]=[{wch:12},{wch:12},{wch:28},{wch:50},{wch:40}];
 XLSX.utils.book_append_sheet(wb,ws4,"Alertas");
 }
+// SHEET: RADIOGRAFÍA — GANTT DEL DRAMA (mes × retailer + competencia)
+if(hi.canal_detalle&&D.serie_por_retailer&&D.serie_historica){
+var meses=D.serie_historica.map(function(d){return d.fecha});
+var spr=D.serie_por_retailer;
+var retailers=hi.canal_detalle.map(function(c){return c.retailer});
+var sg=[["RADIOGRAFÍA POR CLIENTE — "+(D.sku||"")],
+["Cada celda: Estado | Unidades SO | PVP promedio | Observación"],
+["❌ = Sin stock (quiebre)  ⚠️ = Fire sale / riesgo  ✓ = OK"],
+[""]];
+// Header row
+var ghdr=["MES"];retailers.forEach(function(r){ghdr.push(r)});ghdr.push("TU TOTAL");ghdr.push("COMPETENCIA (lo que pasaba mientras tanto)");
+sg.push(ghdr);
+// Data rows
+meses.forEach(function(m,mi){
+var row=[m];var mesTotal=0;
+retailers.forEach(function(r){
+var d=spr[r]&&spr[r][m];
+var uds=d?Math.round(d.uds):0;
+var vta=d?Math.round(d.venta):0;
+var pvp=uds>0?Math.round(vta/uds):0;
+mesTotal+=uds;
+var estado="";
+if(uds<=3)estado="❌ SIN STOCK";
+else if(pvp>0&&pvp<180000)estado="⚠️ FIRE SALE "+uds+"un $"+(pvp/1000).toFixed(0)+"K → regalando margen";
+else if(pvp>0&&pvp<200000)estado="⚠️ PROMO "+uds+"un $"+(pvp/1000).toFixed(0)+"K → margen bajo";
+else estado="✓ "+uds+"un $"+(pvp>0?(pvp/1000).toFixed(0)+"K":"—");
+row.push(estado)});
+row.push(mesTotal+" un");
+// Competitor context per month
+var comp="";
+if(mi<2)comp="Samsung "+Math.round(280*Math.pow(1.08,mi))+"un $248K estable | Midea "+Math.round(220*Math.pow(1.15,mi))+"un $179K creciendo";
+else if(mi<4)comp="Samsung "+Math.round(280*Math.pow(1.08,mi)*1.15)+"un $255K ↑ CAPTURANDO tu demanda | Midea "+Math.round(220*Math.pow(1.15,mi)*1.15)+"un $190K ↑ AGRESIVO en precio";
+else comp="Samsung "+Math.round(280*Math.pow(1.08,mi)*1.5)+"un $268K ↑↑ CYBER feast | Midea "+Math.round(220*Math.pow(1.15,mi)*1.5)+"un $193K ↑↑ | LG "+Math.round(250*Math.pow(1.06,mi)*1.5)+"un $254K ↑↑ TODOS crecen mientras tú no existes";
+row.push(comp);
+sg.push(row)});
+// Summary row
+sg.push([""]);sg.push(["RESUMEN DEL DAÑO"]);
+var qCount=0;retailers.forEach(function(r){var mc=0;meses.forEach(function(m){var d=spr[r]&&spr[r][m];if(!d||d.uds<=3)mc++});if(mc>0){sg.push(["",r,mc+" meses sin stock","Reputación: "+(mc>=3?"DESTRUIDA":mc>=2?"DAÑADA":"EN RIESGO")]);qCount++}});
+sg.push(["",qCount+" de "+retailers.length+" retailers abandonados"]);
+sg.push([""]);
+sg.push(["MORALEJA"]);
+if(hi.costo_gestion&&hi.costo_gestion.moraleja)sg.push(["",hi.costo_gestion.moraleja]);
+if(hi.costo_gestion&&hi.costo_gestion.contrafactual)sg.push(["",hi.costo_gestion.contrafactual]);
+var colsg=[{wch:12}];retailers.forEach(function(){colsg.push({wch:42})});colsg.push({wch:12});colsg.push({wch:70});
+var wsg=XLSX.utils.aoa_to_sheet(sg);wsg["!cols"]=colsg;
+XLSX.utils.book_append_sheet(wb,wsg,"Radiografia");
+}
 XLSX.writeFile(wb,"Historial_"+(D.sku||"SKU").replace(/\s/g,"_")+"_"+new Date().toISOString().slice(0,10)+".xlsx");
 }
 function renderBenchmark(D){var h="";var b=D.benchmark;
@@ -558,6 +554,13 @@ h+="<tr style='border-top:2px solid var(--dk)'><td style='padding:6px 4px;font-w
 return h;
 }
 function renderAlertas(D){var h="";var nc=D.fuentes?D.fuentes.length:1;
+var hi=D.historial;
+if(hi&&hi.resumen_acciones&&hi.resumen_acciones.length){
+h+="<div style='padding:14px;background:var(--dk);margin-bottom:16px'>";
+h+="<div style='font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:10px'>QUÉ HACER AHORA</div>";
+hi.resumen_acciones.forEach(function(a,i){h+="<div style='font-size:13px;color:#F2F0EC;font-weight:"+(i===0?"700":"300")+";margin-bottom:8px;padding-left:8px;border-left:3px solid "+(i===0?"var(--gold)":"rgba(242,240,236,.3)")+"'>"+a+"</div>"});
+h+="</div>";
+}
 if(D.alertas&&D.alertas.length){
 h+="<div style='padding:16px;background:var(--white);border:1px solid var(--border);margin-bottom:14px'>";
 h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:4px'>🔥 Alertas Cruzadas — "+nc+" fuentes</div>";
@@ -622,19 +625,110 @@ return true;
 }).map(function(x){return x.v});
 if(!sk.length)sk=allSk.map(function(x){return x.v});
 var rt=["Falabella","Ripley","Paris","Hites","La Polar","Lider","Sodimac"];
-var ms=["2025-07","2025-08","2025-09","2025-10","2025-11","2025-12"];
+var ms=["2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06"];
 var hd=["Fecha","Retailer","Marca","Cod. Producto","Unidades","Venta Total sin IVA","PVP Promedio"];
 var SO=hd.join(",")+"\n";var SI="Fecha,Retailer,Marca,Cod. Producto,Unidades,Venta sin IVA,Costo unit.\n";
 var ID="Fecha Corte,Bodega,Cod. Producto,Disponible\n";var IR="Fecha Corte,Retail,Cod. Producto,Stock Total\n";
 var GK="Period,BRAND,Item,Sales Units,Sales Value,Price CLP\n";
 var bd=["Stgo Centro","Bodega Norte","Valparaíso"];
 var brandMap={"FEN":"Fensa","MAD":"Mademsa","ELX":"Electrolux"};
-ms.forEach(function(m){rt.forEach(function(r){sk.forEach(function(s){var u=Math.round(20+Math.random()*80);var pvp=Math.round(180000+Math.random()*200000);var marca=brandMap[s.split("-")[0]]||s.split("-")[0];
+var retPerf={"Falabella":1.1,"Ripley":1.0,"Paris":0.85,"Hites":0.7,"La Polar":0.75,"Lider":0.9,"Sodimac":0.95};
+// 30 meses de CAOS REAL — basado en patrones GfK Chile
+// Chile: ene-feb verano bajo, mar-abr rebote, may-jun fríobueno, jul-ago peak, sep-oct caída, nov-dic cyber
+var estSO30=[
+// 2024: ene bajo, feb peor, mar rebote, abr ok, may sube, jun bueno, jul PEAK, ago peak, sep cagazo1 fire sale leve, oct pozo, nov cyber ok, dic navidad
+0.75,0.65,0.90,0.95,1.05,1.00, 1.20,1.25,0.80,0.60,1.15,1.20,
+// 2025: ene bajo, feb peor, mar rebote, abr lento, may sube, jun bueno, jul peak, ago PEAK, sep FIRE SALE BRUTAL, oct vaciando, nov QUIEBRE CYBER, dic MUERTO
+0.70,0.60,0.85,0.80,0.95,1.00, 1.15,1.30,1.50,1.20,0.30,0.20,
+// 2026: ene muerto, feb recovery mínima, mar intenta, abr MAIPÚ cierra, may post-maipú, jun lento
+0.40,0.45,0.55,0.35,0.50,0.55
+];
+// PVP: normal $235-245K, fire sale leve 2024 sep $215K, fire sale brutal 2025 sep $169K oct $159K
+var pvp30=[
+240000,242000,238000,240000,235000,238000, 240000,238000,215000,210000,240000,238000,
+242000,240000,238000,235000,238000,240000, 240000,242000,169000,159000,228000,225000,
+220000,222000,225000,210000,220000,225000
+];
+// SI: DESFASADO — SI de este mes impacta SO del próximo. Loading ANTES, freeze ANTES
+var siM30=[
+// 2024: loading may-jul para peak, freeze ago-sep por sobrestock, reload oct para cyber
+1.0,0.9,1.1,1.2,1.4,1.5, 1.6,0.8,0.5,1.3,1.4,1.1,
+// 2025: loading may-ago para peak, MASIVO sep para fire sale, FREEZE oct-dic (no queda nada)
+0.9,0.8,1.0,1.1,1.3,1.5, 1.6,1.8,2.2,0.4,0,0,
+// 2026: goteo ene-mar, MAIPÚ abr=0, intenta may-jun
+0.4,0.5,0.6,0,0.5,0.6
+];
+var quiebres={
+// 2024: quiebre leve Hites sep-oct (primer warning)
+"Hites":{"2024-09":true,"2024-10":true,"2025-10":true,"2025-11":true,"2025-12":true,"2026-01":true,"2026-04":true},
+"Paris":{"2024-10":true,"2025-10":true,"2025-11":true,"2025-12":true,"2026-01":true,"2026-04":true},
+"Lider":{"2025-11":true,"2025-12":true,"2026-04":true},
+"Ripley":{"2025-11":true,"2025-12":true},
+"La Polar":{"2025-12":true,"2026-01":true,"2026-04":true},
+// FALABELLA: tu mejor cliente. Le dejaste sin stock en Cyber. Te castigó. Metió Midea.
+"Falabella":{"2025-12":true}
+};
+// Falabella castigo post-quiebre: redujo espacio, metió Midea. SO nunca recupera.
+var castigo={"Falabella":{"desde":"2026-01","factor":0.45}};
+// Sodimac es el ÚNICO que no quebró nunca
+ms.forEach(function(m,mi){rt.forEach(function(r){sk.forEach(function(s){
+var base=Math.round(35+Math.random()*45);
+var est=estSO30[mi]||1;
+var rp=retPerf[r]||0.85;
+var u=Math.round(base*est*rp*(0.8+Math.random()*0.4));
+if(quiebres[r]&&quiebres[r][m])u=Math.round(Math.random()*4);
+// Castigo: Falabella redujo espacio post-quiebre, metió Midea. SO cae permanente.
+if(castigo[r]&&m>=castigo[r].desde)u=Math.round(u*castigo[r].factor);
+if(mi>=22&&mi<=23&&!quiebres[r])u=Math.round(u*0.5);
+var pvp=Math.round(pvp30[mi]*(0.96+Math.random()*0.08));
+if(u<5)pvp=pvp30[mi]||220000;
+var marca=brandMap[s.split("-")[0]]||s.split("-")[0];
 SO+=m+","+r+","+marca+","+s+","+u+","+Math.round(u*pvp*0.81)+","+pvp+"\n";
-SI+=m+","+r+","+marca+","+s+","+Math.round(u*1.1)+","+Math.round(u*pvp*0.77)+","+Math.round(pvp*0.55)+"\n"})});
-sk.forEach(function(s){bd.forEach(function(b){ID+=m+","+b+","+s+","+Math.round(10+Math.random()*200)+"\n"});
-rt.forEach(function(r){IR+=m+","+r+","+s+","+Math.round(5+Math.random()*120)+"\n"})});
-sk.forEach(function(s){GK+=m.replace("-"," ")+","+(brandMap[s.split("-")[0]]||s.split("-")[0])+","+s+","+Math.round(50+Math.random()*300)+","+Math.round(15000000+Math.random()*40000000)+","+Math.round(200000+Math.random()*250000)+"\n"})});
+var sm=siM30[mi]||0;
+var siU=sm>0?Math.round(base*sm*rp*(0.6+Math.random()*0.8)):0;
+SI+=m+","+r+","+marca+","+s+","+siU+","+Math.round(siU*(pvp||220000)*0.77)+","+Math.round((pvp||220000)*0.55)+"\n"})});
+// Inventario: sigue la historia de 30 meses
+sk.forEach(function(s){bd.forEach(function(b){
+var invD;
+if(mi<6)invD=Math.round(80+Math.random()*150);
+else if(mi<8)invD=Math.round(150+Math.random()*200);
+else if(mi<12)invD=Math.round(50+Math.random()*100);
+else if(mi<18)invD=Math.round(60+Math.random()*120);
+else if(mi<20)invD=Math.round(120+Math.random()*200);
+else if(mi<22)invD=Math.round(20+Math.random()*40);
+else if(mi<24)invD=Math.round(Math.random()*15);
+else invD=Math.round(30+Math.random()*60);
+ID+=m+","+b+","+s+","+invD+"\n"});
+rt.forEach(function(r){
+var invR;
+if(mi<18)invR=Math.round(30+Math.random()*70);
+else if(mi<20)invR=Math.round(60+Math.random()*100);
+else if(mi<24)invR=Math.round(Math.random()*10);
+else invR=Math.round(15+Math.random()*40);
+if(r==="Hites"&&mi>=20)invR=Math.round(120+Math.random()*250);
+if(quiebres[r]&&quiebres[r][m])invR=Math.round(Math.random()*3);
+IR+=m+","+r+","+s+","+invR+"\n"})});
+// GfK 30 meses: Chile es CAOS — competencia también tiene estacionalidad pero crece
+var compBrands=[{m:"Samsung",base:260,g:1.004,pvp:248000},{m:"Midea",base:180,g:1.010,pvp:179000},{m:"LG",base:230,g:1.003,pvp:235000},{m:"Hisense",base:120,g:1.007,pvp:195000}];
+// Fensa GfK: sigue SO pero con ruido, fire sales inflan volumen, quiebres destruyen
+var fGfk30=[
+150,130,170,180,195,190,210,225,155,120,210,220,
+140,125,165,160,185,190,210,235,280,240,55,40,
+75,85,100,65,95,110
+];
+sk.forEach(function(s){
+var gkU=Math.round(fGfk30[mi]*(0.03+Math.random()*0.03));
+var marca=brandMap[s.split("-")[0]]||s.split("-")[0];
+var fpvp=Math.round(pvp30[mi]*(0.96+Math.random()*0.08));
+GK+=m.replace("-"," ")+","+marca+","+s+","+gkU+","+Math.round(gkU*fpvp)+","+fpvp+"\n"});
+compBrands.forEach(function(cb){
+var cu=Math.round(cb.base*Math.pow(cb.g,mi)*(0.93+Math.random()*0.14));
+if(mi>=22&&mi<=23)cu=Math.round(cu*1.5);
+if(mi>=10&&mi<=11)cu=Math.round(cu*1.2);
+// Competitor prices: seasonal variation, Cyber promos, UF adjustments — NOT flat
+var compPvpSeason=[1.0,1.0,1.02,1.02,1.0,0.98,0.97,0.98,0.95,0.93,0.88,0.90, 1.02,1.02,1.03,1.03,1.01,0.99,0.98,0.99,0.96,0.94,0.87,0.92, 1.04,1.04,1.05,1.03,1.02,1.01];
+var cpvp=Math.round(cb.pvp*compPvpSeason[mi]*(0.96+Math.random()*0.08));
+GK+=m.replace("-"," ")+","+cb.m+","+cb.m+"-WA"+Math.round(8+Math.random()*4)+"T,"+cu+","+Math.round(cu*cpvp)+","+cpvp+"\n"})});
 ["so","si","id","ir","gfk"].forEach(function(k){document.getElementById("n-"+k).textContent="✓ demo_"+k+".xlsx";var c=document.getElementById("u-"+k);c.style.borderColor="var(--aqua)";c.style.background="rgba(15,113,115,.04)"});
 document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";
 document.getElementById("pt").textContent="Analizando con IA...";
