@@ -295,10 +295,10 @@ var ventaTotal=se.reduce(function(s,d){return s+d.venta},0);
 var TECHO=ventaTotal*0.5; // ningún cagazo puede superar 50% de la venta total
 // Quiebres agrupados
 var qMeses=se.filter(function(d){return d.uds<soProm*0.45});
-if(qMeses.length){var costoQ=Math.min(Math.round(qMeses.length*soProm*pvpP),TECHO);var capt="";if(D.serie_gfk_marcas){var brs=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return bl.indexOf("fen")<0&&bl.indexOf("mad")<0&&bl.indexOf("elec")<0});if(brs[0])capt="Capturado: "+brs.slice(0,2).join(" · ")}cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt,fuente:"SO × Inv.Retail × GfK"})}
+if(qMeses.length){var costoQ=Math.min(Math.round(qMeses.length*soProm*pvpP),TECHO);var capt="";if(D.serie_gfk_marcas){var brs=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return bl.indexOf("fen")<0&&bl.indexOf("mad")<0&&bl.indexOf("elec")<0});if(brs[0])capt="Capturado: "+brs.slice(0,2).join(" · ")}var detQ="Meses bajo umbral ("+Math.round(soProm*0.45)+" un): "+qMeses.map(function(d){return d.fecha+" ("+d.uds+" un)"}).join(", ")+".<br>Cálculo: "+qMeses.length+" meses × "+soProm+" un baseline × $"+Math.round(pvpP).toLocaleString()+" PVP = $"+Math.round(qMeses.length*soProm*pvpP).toLocaleString("es-CL")+" de venta no capturada.<br>Fuentes: SO detectó los meses bajo baseline · Inv.Retail confirmó stock cero · GfK identificó quién capturó.";cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt,fuente:"SO × Inv.Retail × GfK",construccion:detQ})}
 // Fire sales agrupados
 var fsMeses=se.filter(function(d){var p=d.uds>0?d.venta/d.uds:0;return p>0&&p<pvpP*0.82&&d.uds>soProm*0.5});
-if(fsMeses.length){var costoFS=Math.min(Math.round(fsMeses.reduce(function(s,d){return s+(pvpP-d.venta/d.uds)*d.uds},0)),TECHO);if(costoFS>UMBRAL)cagazos.push({titulo:"Destrucción de precio",monto:costoFS,detalle:fsMeses.length+" meses PVP bajo promedio · sin respuesta de competencia",fuente:"SO precio × GfK competencia"})}
+if(fsMeses.length){var costoFS=Math.min(Math.round(fsMeses.reduce(function(s,d){return s+(pvpP-d.venta/d.uds)*d.uds},0)),TECHO);if(costoFS>UMBRAL){var detFS="Meses con PVP bajo 82% del promedio ($"+Math.round(pvpP*0.82).toLocaleString()+"): "+fsMeses.map(function(d){var p=Math.round(d.venta/d.uds);return d.fecha+" ($"+p.toLocaleString()+", "+d.uds+" un)"}).join(", ")+".<br>Cálculo por mes: (PVP normal $"+Math.round(pvpP).toLocaleString()+" − PVP real) × unidades vendidas = margen destruido.<br>Fuentes: SO precio (tu PVP real mes a mes) × GfK (competencia NO bajó precio en los mismos meses).";cagazos.push({titulo:"Destrucción de precio",monto:costoFS,detalle:fsMeses.length+" meses PVP bajo promedio · sin respuesta de competencia",fuente:"SO precio × GfK competencia",construccion:detFS})}}
 // Castigo retailers: calcular desde serie_por_retailer REAL
 var castigados=[];
 if(D.serie_por_retailer){var spr=D.serie_por_retailer;var meses=se.map(function(d){return d.fecha});var mid=Math.floor(meses.length/2);
@@ -306,25 +306,20 @@ Object.keys(spr).forEach(function(r){
 var antes=[],despues=[];meses.forEach(function(m,mi){var u=spr[r][m]?spr[r][m].uds:0;if(mi<mid)antes.push(u);else despues.push(u)});
 var avgA=antes.length?antes.reduce(function(s,v){return s+v},0)/antes.length:0;
 var avgD=despues.length?despues.reduce(function(s,v){return s+v},0)/despues.length:0;
-// Castigo real: cayó >40% en segunda mitad Y antes era buen retailer
-if(avgA>soProm*0.1&&avgD<avgA*0.6){var mesesRest=despues.length;var costoC=Math.min(Math.round((avgA-avgD)*mesesRest*pvpP),TECHO);if(costoC>UMBRAL){castigados.push({retailer:r,antes:Math.round(avgA),despues:Math.round(avgD),costo:costoC})}}
+if(avgA>soProm*0.1&&avgD<avgA*0.6){var mesesRest=despues.length;var costoC=Math.min(Math.round((avgA-avgD)*mesesRest*pvpP),TECHO);if(costoC>UMBRAL){castigados.push({retailer:r,antes:Math.round(avgA),despues:Math.round(avgD),costo:costoC,mesesRest:mesesRest})}}
 });
 castigados.sort(function(a,b){return b.costo-a.costo});
-// Solo el peor castigo como cagazo (no 3 repetidos)
-if(castigados[0]){var c=castigados[0];cagazos.push({titulo:"Pérdida de exhibición — "+c.retailer,monto:c.costo,detalle:c.antes+" → "+c.despues+" un/mes · espacio cedido a competencia",fuente:"SO retailer × GfK share"})}
+if(castigados[0]){var c=castigados[0];var detC=c.retailer+" SO promedio primera mitad: "+c.antes+" un/mes. Segunda mitad: "+c.despues+" un/mes (caída "+Math.round((1-c.despues/c.antes)*100)+"%).<br>Cálculo: ("+c.antes+" − "+c.despues+") un × "+c.mesesRest+" meses × $"+Math.round(pvpP).toLocaleString()+" = $"+Math.round((c.antes-c.despues)*c.mesesRest*pvpP).toLocaleString("es-CL")+".<br>Fuentes: SO por retailer (drop sostenido) × GfK share (competencia ocupó el espacio).";cagazos.push({titulo:"Pérdida de exhibición — "+c.retailer,monto:c.costo,detalle:c.antes+" → "+c.despues+" un/mes · espacio cedido a competencia",fuente:"SO retailer × GfK share",construccion:detC})}
 }
 // Loading
 var siT=si3.reduce(function(s,d){return s+d.uds},0);var soT=se.reduce(function(s,d){return s+d.uds},0);
-if(siT>soT*1.15){var exceso=siT-soT;var costoL=Math.min(Math.round(exceso*pvpP*0.1),TECHO);if(costoL>UMBRAL)cagazos.push({titulo:"Loading excesivo",monto:costoL,detalle:exceso.toLocaleString("es-CL")+" un sobre demanda real · costo financiero",fuente:"SI × SO × Inv.Distribuidor"})}
+if(siT>soT*1.15){var exceso=siT-soT;var costoL=Math.min(Math.round(exceso*pvpP*0.1),TECHO);if(costoL>UMBRAL){var detL="SI total período: "+siT.toLocaleString()+" un. SO total: "+soT.toLocaleString()+" un. Exceso despachado: "+exceso.toLocaleString()+" un.<br>Cálculo: "+exceso.toLocaleString()+" un × $"+Math.round(pvpP).toLocaleString()+" × 10% (costo financiero anual del capital inmovilizado) = $"+Math.round(exceso*pvpP*0.1).toLocaleString("es-CL")+".<br>Fuentes: SI (despacho) × SO (venta real) × Inv.Distribuidor (confirma stock flotando).";cagazos.push({titulo:"Loading excesivo",monto:costoL,detalle:exceso.toLocaleString("es-CL")+" un sobre demanda real · costo financiero",fuente:"SI × SO × Inv.Distribuidor",construccion:detL})}}
 cagazos.sort(function(a,b){return b.monto-a.monto});
-// ── DETECTAR ACCIONES ──
+// ── DETECTAR ACCIONES (cálculo guardado para fase futuro) ──
 var acciones=[];
-// Oportunidad: competidor en quiebre (último mes)
 if(D.serie_gfk_marcas){Object.keys(D.serie_gfk_marcas).forEach(function(b){var bl=b.toLowerCase();if(bl.indexOf("fen")>=0||bl.indexOf("mad")>=0||bl.indexOf("elec")>=0)return;var s=D.serie_gfk_marcas[b];if(s.length>=3){var ult=s[s.length-1].uds;var prev=(s[s.length-2].uds+s[s.length-3].uds)/2;if(prev>0&&ult<prev*0.6){var caida=Math.round((1-ult/prev)*100);var pot=Math.min(Math.round(soProm*2*pvpP),TECHO);acciones.push({titulo:"Recuperar cobertura — "+b+" en quiebre",monto:pot,detalle:b+" cayó "+caida+"% · ventana estimada 60 días",fuente:"GfK último mes × tu Inv.Distribuidor"})}}})}
-// Oportunidad: recuperar el peor castigo
-if(castigados&&castigados[0]){var cc=castigados[0];acciones.push({titulo:"Renegociar planograma — "+cc.retailer,monto:cc.costo,detalle:"recuperar "+(cc.antes-cc.despues)+" un/mes de espacio cedido",fuente:"SO retailer × GfK share"})}
 acciones.sort(function(a,b){return b.monto-a.monto});
-function fmtM(v){return v>1e6?"$"+Math.round(v/1e6)+"M":"$"+Math.round(v/1000)+"K"}
+function fmtM(v){return "$"+Math.round(v).toLocaleString("es-CL")}
 // ── RENDER ──
 // Banner: contra quién comparamos (data real GfK)
 if(D.serie_gfk_marcas){
@@ -345,7 +340,7 @@ h+="</div>";
 // Conclusión
 if(hi.costo_gestion&&hi.costo_gestion.moraleja){h+="<div style='padding:12px 14px;background:var(--dk);color:white;margin-bottom:14px;border-radius:0'><div style='font-size:8px;letter-spacing:1px;opacity:.6;margin-bottom:4px'>CONCLUSIÓN</div><div style='font-size:13px;font-weight:400;line-height:1.4'>"+hi.costo_gestion.moraleja+"</div></div>"}
 // Impacto acumulado
-if(cagazos.length){h+="<div style='font-size:10px;font-weight:700;color:#c0392b;letter-spacing:.5px;margin-bottom:6px'>IMPACTO ACUMULADO — últimos meses</div>";cagazos.slice(0,4).forEach(function(c){h+="<div style='display:flex;gap:0;margin-bottom:5px'><div style='flex:1;padding:10px 12px;background:rgba(192,57,43,.04);border-left:3px solid #c0392b'><div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-size:12px;font-weight:700;color:var(--dk)'>"+c.titulo+"</div><div style='font-size:16px;font-weight:700;color:#c0392b'>-"+fmtM(c.monto)+"</div></div><div style='font-size:10px;color:var(--text2);margin-top:2px'>"+c.detalle+"</div></div><div style='width:130px;padding:10px;background:rgba(0,0,0,.02);border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center'><div style='font-size:7px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>CRUCE DE DATOS</div><div style='font-size:9px;color:var(--text2);font-weight:500;line-height:1.3'>"+c.fuente+"</div></div></div>"})}
+if(cagazos.length){h+="<div style='font-size:10px;font-weight:700;color:#c0392b;letter-spacing:.5px;margin-bottom:6px'>IMPACTO ACUMULADO — últimos meses</div>";cagazos.slice(0,4).forEach(function(c,ci){var did="det"+ci;h+="<div style='margin-bottom:5px'><div style='display:flex;gap:0'><div style='flex:1;padding:10px 12px;background:rgba(192,57,43,.04);border-left:3px solid #c0392b'><div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-size:12px;font-weight:700;color:var(--dk)'>"+c.titulo+"</div><div style='font-size:16px;font-weight:700;color:#c0392b'>-"+fmtM(c.monto)+"</div></div><div style='font-size:10px;color:var(--text2);margin-top:2px'>"+c.detalle+"</div><div onclick=\"var e=document.getElementById('"+did+"');e.style.display=e.style.display==='none'?'block':'none';this.textContent=e.style.display==='none'?'▾ ver detalles':'▴ ocultar'\" style='font-size:9px;color:var(--aqua);cursor:pointer;margin-top:6px;font-weight:700;user-select:none'>▾ ver detalles</div><div id='"+did+"' style='display:none;margin-top:8px;padding:8px 10px;background:rgba(0,0,0,.03);font-size:10px;color:var(--text2);line-height:1.5'>"+(c.construccion||"")+"</div></div><div style='width:130px;padding:10px;background:rgba(0,0,0,.02);border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center'><div style='font-size:7px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>CRUCE DE DATOS</div><div style='font-size:9px;color:var(--text2);font-weight:500;line-height:1.3'>"+c.fuente+"</div></div></div></div>"})}
 h+="<div style='border-top:1px solid var(--border);margin:14px 0 4px'></div>";
 })();
 // ─── GRÁFICO SO vs SI (unidades) ───
@@ -634,7 +629,7 @@ se.forEach(function(d){
 var pvp=d.uds>0?d.venta/d.uds:0;
 if(pvp>0&&pvp<pvpProm*0.82&&d.uds>soPromMes*0.5){
 var margenPerdido=Math.round((pvpProm-pvp)*d.uds);
-errores.push({fecha:d.fecha,tipo:"FIRE SALE",desc:"PVP $"+Math.round(pvp/1000)+"K (-"+Math.round((1-pvp/pvpProm)*100)+"% vs promedio). "+d.uds+" un vendidas a precio regalado.",costo:margenPerdido,contrafactual:"Si hubieses vendido a $"+Math.round(pvpProm/1000)+"K habrías preservado $"+Math.round(margenPerdido/1e6)+"M de margen"})
+errores.push({fecha:d.fecha,tipo:"FIRE SALE",desc:"PVP $"+Math.round(pvp/1000)+"K (-"+Math.round((1-pvp/pvpProm)*100)+"% vs promedio). "+d.uds+" un vendidas a precio regalado.",costo:margenPerdido,contrafactual:"Si hubieses vendido a $"+Math.round(pvpProm).toLocaleString("es-CL")+" habrías preservado $"+Math.round(margenPerdido).toLocaleString("es-CL")+" de margen"})
 }});
 // Detect quiebres
 se.forEach(function(d,i){
@@ -642,13 +637,13 @@ if(i<3)return;
 var prev3=Math.round((se[i-1].uds+se[i-2].uds+se[i-3].uds)/3);
 if(prev3>20&&d.uds<prev3*0.45){
 var perdido=Math.round((prev3-d.uds)*pvpProm);
-errores.push({fecha:d.fecha,tipo:"QUIEBRE",desc:"SO cayó a "+d.uds+" un (era "+prev3+" promedio). Venta perdida: $"+Math.round(perdido/1e6)+"M.",costo:perdido,contrafactual:"Si hubieses mantenido cobertura habrías vendido "+prev3+" un × $"+Math.round(pvpProm/1000)+"K"})
+errores.push({fecha:d.fecha,tipo:"QUIEBRE",desc:"SO cayó a "+d.uds+" un (era "+prev3+" promedio). Venta perdida: $"+Math.round(perdido).toLocaleString("es-CL")+".",costo:perdido,contrafactual:"Si hubieses mantenido cobertura habrías vendido "+prev3+" un × $"+Math.round(pvpProm/1000)+"K"})
 }});
 // Detect SI=0
 var si2=D.serie_si||[];var siMap2={};si2.forEach(function(d){siMap2[d.fecha]=d.uds});
 se.forEach(function(d){
 if(siMap2[d.fecha]===0&&d.uds<soPromMes*0.5){
-errores.push({fecha:d.fecha,tipo:"SI=0 DESPACHO",desc:"Cero despacho este mes. Canales sin reposición.",costo:Math.round(soPromMes*pvpProm),contrafactual:"Despachar "+soPromMes+" un habría generado $"+Math.round(soPromMes*pvpProm/1e6)+"M"})
+errores.push({fecha:d.fecha,tipo:"SI=0 DESPACHO",desc:"Cero despacho este mes. Canales sin reposición.",costo:Math.round(soPromMes*pvpProm),contrafactual:"Despachar "+soPromMes+" un habría generado $"+Math.round(soPromMes*pvpProm).toLocaleString("es-CL")})
 }});
 // Detect overloading (SI > 1.5× SO)
 se.forEach(function(d){
@@ -667,7 +662,7 @@ if(spr2[r][m].uds<=3)mesesQ.push(m);
 });
 if(mesesQ.length>=2){
 var costoR=Math.round(mesesQ.length*soPromMes/7*pvpProm);
-errores.push({fecha:mesesQ[0]+" a "+mesesQ[mesesQ.length-1],tipo:"RETAILER SIN STOCK",desc:r+": "+mesesQ.length+" meses sin cobertura. Fill rate 0%.",costo:costoR,contrafactual:r+" con stock habría generado ~$"+Math.round(costoR/1e6)+"M"})
+errores.push({fecha:mesesQ[0]+" a "+mesesQ[mesesQ.length-1],tipo:"RETAILER SIN STOCK",desc:r+": "+mesesQ.length+" meses sin cobertura. Fill rate 0%.",costo:costoR,contrafactual:r+" con stock habría generado ~$"+Math.round(costoR).toLocaleString("es-CL")})
 }});
 }
 // Sort by cost descending, take top 10
@@ -675,10 +670,10 @@ errores.sort(function(a,b){return b.costo-a.costo});
 var top10=errores.slice(0,10);
 var se2=[["TOP ERRORES — "+(D.sku||"")],["Las peores decisiones del período, rankeadas por costo"],[""],["#","Fecha","Tipo","Qué pasó","Costo estimado","Qué debió pasar"]];
 top10.forEach(function(e,i){
-se2.push([i+1,e.fecha,e.tipo,e.desc,"$"+(e.costo>1e6?Math.round(e.costo/1e6)+"M":Math.round(e.costo/1000)+"K"),e.contrafactual]);
+se2.push([i+1,e.fecha,e.tipo,e.desc,"$"+Math.round(e.costo).toLocaleString("es-CL"),e.contrafactual]);
 });
 se2.push([""]);
-se2.push(["COSTO TOTAL TOP 10","","","","$"+Math.round(top10.reduce(function(s,e){return s+e.costo},0)/1e6)+"M",""]);
+se2.push(["COSTO TOTAL TOP 10","","","","$"+Math.round(top10.reduce(function(s,e){return s+e.costo},0)).toLocaleString("es-CL"),""]);
 se2.push([""]);
 se2.push(["Nota: costos estimados basados en PVP promedio ($"+Math.round(pvpProm/1000)+"K) y SO promedio ("+soPromMes+" un/mes). No incluye costo financiero del sobrestock ni penalizaciones de retail."]);
 var wse=XLSX.utils.aoa_to_sheet(se2);wse["!cols"]=[{wch:4},{wch:22},{wch:18},{wch:60},{wch:16},{wch:60}];
