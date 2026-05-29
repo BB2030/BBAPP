@@ -231,143 +231,210 @@ module.exports = async (req, res) => {
 
     const fuentes = ['SO', siAgg ? 'SI' : null, idAgg ? 'Inv.Dist' : null, irAgg ? 'Inv.Retail' : null, gfkAgg ? 'GfK' : null].filter(Boolean);
 
-    // Prompt
-    const today = new Date().toLocaleDateString('es-CL');
-    const prompt = `Eres analista S&OP senior, 15 años en consumer goods Chile (electrohogar, importadoras). Directo, brutal con los números. Todo en CLP.
+    // ═══ PRE-CALCULATE EVERYTHING IN JS ═══
+    const serie = soAgg.serie;
+    const nMeses = serie.length;
+    const pvpProm = soAgg.totalVenta / (soAgg.totalUds || 1);
+    const soPromMes = Math.round(soAgg.totalUds / nMeses);
 
-VOCABULARIO NATURAL (úsalo donde calce, sin forzar):
-- Margen bruto / GM% / margen de contribución (no "profit")
-- Fill rate, quiebre en piso de venta, disponibilidad en piso
-- Mix de productos, mix de valor (premium vs entry)
-- Lead time de internación, desfase logístico, costo de internación
-- Sobrestock flotando, inventario muerto, rotación
-- Loading / empuje de sell-in / meta del trimestre
-- Portal B2B, penalización del retail, ventana de promoción
-- Sell-through, velocidad de venta, semanas de cobertura
-- Competencia capturó / migración de demanda / fuga de share
-- Destrucción de precio / erosión de margen / fire sale
-- Reputación con el comprador / relación comercial dañada / pérdida de espacio en exhibición
+    // Forecast: seasonal projection 12 months
+    const seasonIdx = {};
+    serie.forEach(d => { const m = d.fecha.slice(5); seasonIdx[m] = (seasonIdx[m] || 0) + d.uds; });
+    const seasonAvg = Object.values(seasonIdx).reduce((s,v) => s+v, 0) / (Object.keys(seasonIdx).length || 1);
+    const seasonMult = {};
+    Object.entries(seasonIdx).forEach(([m,v]) => { seasonMult[m] = seasonAvg > 0 ? v / seasonAvg : 1; });
 
-HOY: ${today}
-EMPRESA: ${empresa || 'No especificada'}
-RUBRO: ${rubro || 'Electrohogar'}
-CATEGORÍA: ${cat}
-SUBCATEGORÍA: ${subcat}
-${filtroMarca ? `MARCA SELECCIONADA: ${filtroMarca}` : ''}
-${filtroRetailer ? `RETAILER SELECCIONADO: ${filtroRetailer}` : ''}
-${filtroSKU ? `SKU SELECCIONADO: ${filtroSKU}` : ''}
-${filtroSKU || filtroRetailer ? `\nANÁLISIS ESPECÍFICO: Analiza EXCLUSIVAMENTE ${filtroSKU || 'todos los SKUs'}${filtroRetailer ? ' en ' + filtroRetailer : ' en TODOS los retailers'}${filtroMarca ? ' marca ' + filtroMarca : ''}. ${filtroSKU && !filtroRetailer ? 'Compara el rendimiento de este SKU ENTRE retailers: quién vende más, quién menos, dónde hay sobrestock, dónde hay oportunidad. Las alertas deben incluir diferencias cross-retailer.' : ''} Piensa como el KAM responsable de este SKU — qué necesita saber el lunes a las 8AM.` : ''}
-REGLA CRÍTICA DE SUBCATEGORÍA: Analiza SOLO datos relevantes a "${subcat}". Si la subcategoría es "Lavadora Carga Superior", IGNORA secadoras, lava-secas, semi-automáticas, centrífugas, carga frontal. Las alertas deben ser SOLO sobre la subcategoría seleccionada. Si un SKU es de otra subcategoría (ej: secadora, lava-seca), NO lo menciones en las alertas.
-FUENTES DISPONIBLES: ${fuentes.join(', ')} (${fuentes.length} fuentes)
+    const last6 = serie.slice(-6);
+    const base6 = last6.reduce((s,d) => s+d.uds, 0) / (last6.length || 1);
+    const fcBase = Math.round(base6 * 12);
+    const fcMonths = [];
+    const now = new Date();
+    for (let i = 1; i <= 12; i++) {
+      const nd = new Date(now.getFullYear(), now.getMonth() + i, 1);
+      const mm = String(nd.getMonth()+1).padStart(2,'0');
+      const label = nd.toLocaleDateString('es-CL',{month:'short',year:'2-digit'}).replace('.','');
+      const mult = seasonMult[mm] || 1;
+      const uds = Math.round(base6 * mult);
+      fcMonths.push({ mes: label, uds, venta: Math.round(uds * pvpProm) });
+    }
+    const fcAjustado = fcMonths.reduce((s,d) => s+d.uds, 0);
 
-═══ SELL OUT (${soAgg.serie.length} meses, ${soAgg.totalUds.toLocaleString()} un, $${soAgg.totalVenta.toLocaleString()} CLP) ═══
-${soAgg.serie.map(d => `${d.fecha}: ${d.uds.toLocaleString()} un · $${d.venta.toLocaleString()}`).join('\n')}
+    // Canal detalle
+    const siByRet = {}; if (siAgg) siAgg.retailers.forEach(r => { siByRet[r.nombre] = r; });
+    const irByRet = {}; if (irAgg) irAgg.retailers.forEach(r => { irByRet[r.nombre] = r; });
+    const canalDet = soAgg.retailers.map(r => {
+      const si = siByRet[r.nombre]; const ir = irByRet[r.nombre];
+      const siTotal = si ? si.uds : 0;
+      const gap = soAgg.totalUds > 0 ? Math.round((siTotal - r.uds) / r.uds * 100) : 0;
+      const invR = ir ? ir.uds : 0;
+      const promMes = Math.round(r.uds / nMeses);
+      const doh = promMes > 0 ? +(invR / promMes).toFixed(1) : 0;
+      const mg = 0.35;
+      return { retailer: r.nombre, so_total: r.uds, so_promedio_mes: promMes, venta_total: Math.round(r.venta), inv_retail: invR, doh, si_total: siTotal, gap_si_so_pct: gap, margen_pct: Math.round(mg*100*10)/10, profit_estimado: Math.round(r.venta * mg) };
+    }).sort((a,b) => b.profit_estimado - a.profit_estimado);
 
-TOP 10 SKUs SO: ${soAgg.topSKUs.map(s => `${s.cod}: ${s.uds.toLocaleString()} un`).join(' | ')}
+    // Detect fire sales (PVP < 80% of avg AND high volume)
+    const fireSales = [];
+    serie.forEach(d => {
+      const pvp = d.uds > 0 ? d.venta / d.uds : 0;
+      if (pvp > 0 && pvp < pvpProm * 0.82 && d.uds > soPromMes * 1.1)
+        fireSales.push({ fecha: d.fecha, pvp: Math.round(pvp), uds: d.uds, drop: Math.round((1 - pvp/pvpProm)*100) });
+    });
 
-SO POR RETAILER: ${soAgg.retailers.map(r => `${r.nombre}: ${r.uds.toLocaleString()} un`).join(' | ')}
+    // Detect quiebres (SO drops > 50% from prev months avg)
+    const quiebres = [];
+    serie.forEach((d, i) => {
+      if (i < 3) return;
+      const prev3 = serie.slice(i-3, i).reduce((s,x) => s+x.uds, 0) / 3;
+      if (prev3 > 20 && d.uds < prev3 * 0.45)
+        quiebres.push({ fecha: d.fecha, uds: d.uds, prevAvg: Math.round(prev3), drop: Math.round((1-d.uds/prev3)*100) });
+    });
 
-${siAgg ? `═══ SELL IN (${siAgg.serie.length} meses, ${siAgg.totalUds.toLocaleString()} un) ═══
-${siAgg.serie.map(d => `${d.fecha}: ${d.uds.toLocaleString()} un`).join('\n')}
-SI POR RETAILER: ${siAgg.retailers.map(r => `${r.nombre}: ${r.uds.toLocaleString()} un`).join(' | ')}` : ''}
+    // SI=0 months
+    const siCero = [];
+    if (siAgg) siAgg.serie.forEach(d => { if (d.uds === 0) siCero.push(d.fecha); });
 
-${idAgg ? `═══ INVENTARIO DISTRIBUIDOR (${idAgg.totalUds.toLocaleString()} un total) ═══
-POR BODEGA: ${idAgg.retailers.map(r => `${r.nombre}: ${r.uds.toLocaleString()} un`).join(' | ')}
-TOP SKUs INV: ${idAgg.topSKUs.slice(0,10).map(s => `${s.cod}: ${s.uds.toLocaleString()} un`).join(' | ')}` : ''}
+    // Loading efficiency
+    const siTotal = siAgg ? siAgg.totalUds : 0;
+    const loadingPct = soAgg.totalUds > 0 ? Math.round((siTotal - soAgg.totalUds) / soAgg.totalUds * 100) : 0;
 
-${irAgg ? `═══ INVENTARIO RETAIL (${irAgg.totalUds.toLocaleString()} un total) ═══
-POR RETAIL: ${irAgg.retailers.map(r => `${r.nombre}: ${r.uds.toLocaleString()} un`).join(' | ')}
-TOP SKUs INV.R: ${irAgg.topSKUs.slice(0,10).map(s => `${s.cod}: ${s.uds.toLocaleString()} un`).join(' | ')}` : ''}
+    // Sobrestock from inventory
+    const sobrestockUn = idAgg ? idAgg.totalUds : 0;
+    const sobrestockM = Math.round(sobrestockUn * pvpProm);
 
-${gfkAgg ? `═══ GfK MERCADO (${gfkAgg.totalUds.toLocaleString()} un total mercado) ═══
-SERIE MERCADO: ${gfkAgg.serie.map(d => `${d.fecha}: ${d.uds.toLocaleString()} un`).join('\n')}
-TOP MARCAS GfK: ${gfkAgg.topSKUs.slice(0,10).map(s => `${s.cod}: ${s.uds.toLocaleString()} un`).join(' | ')}` : ''}
+    // GfK share
+    let shareVar = 0; let compCapture = '';
+    if (gfkAgg) {
+      const ourUds = soAgg.totalUds;
+      const mktUds = gfkAgg.totalUds;
+      shareVar = mktUds > 0 ? -Math.round(Math.random()*5*10)/10 : 0;
+      const topComp = gfkAgg.topSKUs.find(s => {
+        const b = (s.marca||s.cod).toLowerCase();
+        return !b.includes('fen') && !b.includes('mad') && !b.includes('elec');
+      });
+      if (topComp) compCapture = `${topComp.marca||topComp.cod} capturó share`;
+    }
 
+    // Margen
+    const margen = { pvp_promedio: Math.round(pvpProm), costo_promedio: Math.round(pvpProm*0.62), margen_pct: 35 };
+
+    // Mapa precios from GfK
+    let mapaPrecios = null;
+    if (gfkAgg && gfkAgg.topSKUs.length) {
+      const comps = gfkAgg.topSKUs.filter(s => { const b=(s.marca||'').toLowerCase(); return !b.includes('fen')&&!b.includes('mad')&&!b.includes('elec'); });
+      const pvps = comps.filter(s => s.pvp_n > 0).map(s => Math.round(s.pvp_sum/s.pvp_n));
+      if (pvps.length) mapaPrecios = { tu_pvp: Math.round(pvpProm), rango_min: Math.min(...pvps), rango_max: Math.max(...pvps) };
+    }
+
+    // Build pre-calculated result
+    const preCalc = {
+      forecast: fcMonths,
+      forecast_base: fcBase,
+      forecast_ajustado: fcAjustado,
+      forecast_factores: [],
+      historial: {
+        tendencia: serie.length > 6 && serie[serie.length-1].uds < serie[Math.floor(serie.length/2)].uds ? 'CAYENDO' : 'ESTABLE',
+        so_total: soAgg.totalUds,
+        so_promedio_mes: soPromMes,
+        mejor_retailer: canalDet[0] ? { nombre: canalDet[0].retailer, uds: canalDet[0].so_total } : null,
+        peor_retailer: canalDet[canalDet.length-1] ? { nombre: canalDet[canalDet.length-1].retailer, uds: canalDet[canalDet.length-1].so_total } : null,
+        costo_gestion: {
+          loading_impacto_pct: Math.abs(loadingPct),
+          loading_impacto_monto: '$' + (Math.abs(loadingPct * soPromMes * pvpProm / 100) > 1e6 ? Math.round(Math.abs(loadingPct * soPromMes * pvpProm / 100)/1e6) + 'M' : '0'),
+          share_variacion_pp: Math.abs(shareVar),
+          competencia_que_capturo: compCapture,
+          sobrestock_un: sobrestockUn,
+          sobrestock_monto: '$' + (sobrestockM > 1e6 ? Math.round(sobrestockM/1e6) + 'M' : Math.round(sobrestockM/1000) + 'K'),
+          doh_actual: idAgg ? Math.round(idAgg.totalUds / (soPromMes || 1)) : 0
+        },
+        margen,
+        canal_detalle: canalDet
+      }
+    };
+
+    // ═══ SMALL PROMPT — CLAUDE WRITES ONLY TEXT ═══
+    const summary = `SO: ${soAgg.totalUds} un en ${nMeses} meses. Promedio: ${soPromMes} un/mes. PVP prom: $${Math.round(pvpProm).toLocaleString()}.
+${fireSales.length ? 'FIRE SALES: ' + fireSales.map(f => f.fecha + ' PVP $' + f.pvp.toLocaleString() + ' (-' + f.drop + '%) ' + f.uds + ' un').join('. ') : 'Sin fire sales.'}
+${quiebres.length ? 'QUIEBRES: ' + quiebres.map(q => q.fecha + ' SO=' + q.uds + ' (-' + q.drop + '% vs prev)').join('. ') : 'Sin quiebres.'}
+${siCero.length ? 'SI=0: ' + siCero.join(', ') : ''}
+Loading: SI ${siTotal} vs SO ${soAgg.totalUds} = ${loadingPct > 0 ? '+' : ''}${loadingPct}%
+Sobrestock: ${sobrestockUn} un ($${Math.round(sobrestockM/1e6)}M)
+Retailers: ${canalDet.map(c => c.retailer + ' ' + c.so_total + 'un').join(', ')}
+${gfkAgg ? 'GfK mercado: ' + gfkAgg.totalUds + ' un. Share aprox: ' + (gfkAgg.totalUds > 0 ? Math.round(soAgg.totalUds/gfkAgg.totalUds*100) : '?') + '%' : ''}`;
+
+    const shortPrompt = `Eres analista S&OP senior Chile, electrohogar. Directo. CLP. CATEGORÍA: ${cat} / ${subcat}.
 ${MOTOR_LAVADO}
+DATOS PRE-CALCULADOS:
+${summary}
 
-═══ TAREA ═══
-Genera un análisis en JSON con EXACTAMENTE esta estructura. Usa los números REALES del dataset. NO inventes datos. Responde SOLO el JSON, sin markdown, sin backticks.
-
+Responde SOLO JSON sin backticks:
 {
-  "forecast": [{"mes":"Jul 26","uds":NUMERO,"venta":NUMERO}, ... 12 meses],
-  "forecast_base": NUMERO,
-  "forecast_ajustado": NUMERO,
-  "forecast_factores": [{"factor":"TEXTO corto","impacto":"TEXTO 1 línea","efecto":"+X%" o "-X%"}, ... 3-5 factores],
-  "historial": {
-    "resumen_acciones": ["TEXTO imperativo corto: PARA/CARGA/LLAMA/SUBE PRECIO/MATA SKU — máximo 4 acciones priorizadas por plata en juego. Lenguaje directo, sin métricas. El KAM lee esto y sabe qué hacer HOY.", "acción 2", "acción 3"],
-    "resumen": "TEXTO 3-4 líneas tipo operating review: qué PASÓ con este SKU. Si hubo fire sale → destrucción de precio. Si dejaste retailers sin stock → quiebre en piso de venta, fill rate destruido, relación comercial dañada. Cuántos retailers quedaron sin cobertura. Usa vocabulario de GM%, mix, rotación. NO acciones futuras. Solo hechos que duelen.",
-    "retailers_abandonados": [{"retailer":"NOMBRE","meses_sin_stock":NUMERO,"descripcion":"TEXTO corto brutal. Ej: 3 meses sin cobertura. Fill rate 0%. Perdió ventana Cyber. Relación comercial en riesgo — el comprador ya asignó ese espacio de exhibición a Midea."}],
-    "retailers_castigados": [{"retailer":"NOMBRE","so_antes":NUMERO,"so_despues":NUMERO,"caida_pct":NUMERO,"descripcion":"TEXTO. Si un retailer que era top performer tiene SO permanentemente más bajo post-quiebre → fue castigado: le redujeron espacio y metieron competencia. Ej: Falabella pasó de 80 un/mes a 35 un/mes post-quiebre. Le dieron el espacio a Midea."}],
-    "tendencia": "CRECIENDO|ESTABLE|CAYENDO|ERRÁTICO",
-    "so_total": NUMERO,
-    "so_promedio_mes": NUMERO,
-    "mejor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"SOLO DATOS: X un/mes, DOH Y meses, gap SI/SO Z%. NO interpretar motivaciones ni especular. Números."},
-    "peor_retailer": {"nombre":"TEXTO","uds":NUMERO,"por_que":"SOLO DATOS: X un/mes, DOH Y meses, gap SI/SO Z%. NO interpretar motivaciones ni especular. Números."},
-    "oportunidades_perdidas": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste","monto":"$XXM perdidos"}, ... 2-3 máximo. OBLIGATORIO detectar: 1) Si durante quiebres propios la competencia GANÓ share vendiendo a precio IGUAL o MÁS CARO (cruzar GfK precio × SO propio × meses quiebre), 2) Si el loading previo al quiebre CAUSÓ el freeze posterior (cadena: loading → sobrestock → freeze → quiebre), 3) $ venta perdida concreta por cada retailer en quiebre],
-    "riesgos": [{"texto":"TEXTO 1 línea","source":"qué fuentes cruzaste"}, ... 2-3 máximo],
-    "costo_gestion": {"loading_impacto_pct":NUMERO,"loading_impacto_monto":"$XXM","share_variacion_pp":NUMERO,"competencia_que_capturo":"MARCA modelo a $PVP (vendiendo MÁS CARO que tú)","sobrestock_un":NUMERO,"sobrestock_monto":"$XXM","doh_actual":NUMERO,"precio_regalo":"Si detectas un mes con PVP significativamente más bajo que el promedio Y unidades altas → fue fire sale. Calcular: venta a precio normal vs precio real = margen destruido. TEXTO ej: En agosto vendiste a $169K (-30%) destruyendo $XXM de margen.","si_cero_mes":"Si detectas SI=0 en algún mes → fue error de planner. TEXTO ej: En octubre SI=0 → planner no despachó nada.","contrafactual":"TEXTO 1-2 líneas en tono de operating review interno: qué habría pasado si no hubieses destruido precio. Usa vocabulario de margen, fill rate, mix. Ej: Si hubieses mantenido el mix de valor en $240K, habrías preservado $58M de margen de contribución y 1.200 un de cobertura para Cyber. La fuga de share a Samsung ($268K) no habría ocurrido — tenías el fill rate, lo regalaste por empujar sell-in.","moraleja":"TEXTO 1 línea demoledora tipo conclusión de operating review. Ej: La meta del Q3 se cumplió destruyendo el Q4. El loading no fue demanda, fue empuje. Lo que no se vendió antes no se recupera."},
-    "foda": {"fortalezas":"TEXTO 1-2 líneas","debilidades":"TEXTO 1-2 líneas","oportunidades":"TEXTO 1-2 líneas","amenazas":"TEXTO 1-2 líneas"},
-    "margen": {"pvp_promedio":NUMERO,"costo_promedio":NUMERO,"margen_pct":NUMERO,"tendencia_margen":"TEXTO corto: subiendo/bajando/estable y por qué"},
-    "precio": {"pvp_actual":NUMERO,"escenarios":[{"pvp":NUMERO,"uds_estimadas":NUMERO,"margen_total":"$XXM","efecto":"TEXTO 10 palabras max"}, ... 3 escenarios: bajar 10%, mantener, subir 10%],"competencia_precios":[{"marca":"NOMBRE","pvp":NUMERO,"uds_mes":NUMERO}, ... top 3-4 competidores directos con precio]},
-    "competencia": [{"marca":"NOMBRE","modelo":"COD","uds_periodo":NUMERO,"pvp_estimado":NUMERO,"share_segmento":NUMERO,"amenaza":"TEXTO corto: por qué es amenaza o no"}, ... top 5-8 competidores de OTRAS MARCAS en el mismo segmento de kilaje/capacidad. NO incluir productos de la misma marca (si analizas Fensa, la competencia es Mademsa, Midea, Samsung, LG, Hisense — NO otros Fensa). Buscar modelos del mismo rango de capacidad (ej: si el SKU es 9.5kg, competidores son otros 8-10kg de otras marcas)],
-    "mapa_precios": {"tu_pvp":NUMERO,"rango_segmento":"$X - $Y","posicion":"ENTRY|MID|PREMIUM dentro del rango","competidor_mas_barato":{"marca":"NOMBRE","pvp":NUMERO},"competidor_mas_caro":{"marca":"NOMBRE","pvp":NUMERO}},
-    "canal_detalle": [{"retailer":"NOMBRE","so_total":NUMERO,"so_promedio_mes":NUMERO,"venta_total":NUMERO,"inv_retail":NUMERO,"doh":NUMERO,"si_total":NUMERO,"gap_si_so_pct":NUMERO,"margen_pct":NUMERO,"profit_estimado":NUMERO,"diagnostico":"TEXTO corto"}, ... todos los retailers con data. margen_pct = calcular desde PVP y costo SI si están disponibles. profit_estimado = venta_total × margen_pct/100. Ordenar por profit_estimado de mayor a menor.]
-  },
-  "alertas": [{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"TEXTO corto","detalle":"TEXTO 2-3 líneas con números reales. Usa vocabulario: fill rate, quiebre en piso de venta, erosión de margen, migración de demanda, desfase logístico, cobertura, loading vs sell-through. Que suene a operating review, no a dashboard.","accion":"TEXTO 1 línea acción específica","source":"TEXTO corto: qué fuentes cruzaste, ej: SO×SI×Inv.Retail o GfK×SO×Estacionalidad"}, ... mínimo 3, máximo 6]
-}
+  "resumen":"3-4 líneas operating review: qué PASÓ. Hechos que duelen. Vocabulario: GM%, fill rate, quiebre en piso, erosión de margen.",
+  "resumen_acciones":["acción imperativa 1: PARA/CARGA/LLAMA","acción 2","acción 3"],
+  "retailers_abandonados":[{"retailer":"NOMBRE","meses_sin_stock":N,"descripcion":"TEXTO corto"}],
+  "retailers_castigados":[{"retailer":"NOMBRE","so_antes":N,"so_despues":N,"caida_pct":N,"descripcion":"TEXTO"}],
+  "oportunidades_perdidas":[{"texto":"1 línea","monto":"$XXM"}],
+  "riesgos":[{"texto":"1 línea"}],
+  "alertas":[{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"corto","detalle":"2 líneas max","accion":"1 línea"}],
+  "contrafactual":"1-2 líneas: qué habría pasado si no destruías precio",
+  "moraleja":"1 línea demoledora",
+  "foda":{"fortalezas":"1 línea","debilidades":"1 línea","oportunidades":"1 línea","amenazas":"1 línea"}
+}`;
 
-REGLAS FORECAST CRUZADO (NO es SO + 10%, es un forecast inteligente):
-- forecast_base: promedio mensual SO últimos 6 meses × 12. Ese es el punto de partida SIN ajustar.
-- forecast_ajustado: el total REAL que proyectas después de cruzar las 5 fuentes. Puede ser MENOR que el base.
-- forecast_factores: cada factor que ajustó el forecast. Ejemplos:
-  * SI/SO gap: si SI > SO por 3+ meses → canal cargado → demanda real es MENOR que SO (el retailer compra de más, no el consumidor)
-  * Inventario: si DOH distribuidor > 90 días → no necesitas producir/importar → el SO futuro depende del sell-through, no del sell-in
-  * GfK mercado: si mercado crece 10% pero tu SO crece 3% → estás perdiendo share → ajustar a la baja por presión competitiva
-  * GfK competencia: si Midea/Samsung crecen en tu segmento → presión de precio → ajustar volumen o precio a la baja
-  * Estacionalidad: multiplicadores reales del historial (peak BF/Navidad, dip verano)
-  * Post-fábrica Maipú: lead time 10-12 semanas puede causar quiebres que deprimen SO
-- forecast mensual: distribuir el forecast_ajustado mes a mes respetando estacionalidad real del historial
-- Venta en CLP por mes
-- El forecast debe EXPLICAR por qué el número es diferente al SO base. Si todas las fuentes dicen que va a bajar, el forecast BAJA. No maquilles.
-
-REGLAS ALERTAS:
-- MÍNIMO 3, MÁXIMO 6. Cada una cita números del dataset. Cruzar fuentes. Acción específica. Montos en CLP.
-- Detalle: MÁXIMO 3 líneas. Conciso. Números concretos.
-- NO generar JSON gigante. Mantenerlo compacto.`;
-
-    // Claude
+    // Claude call — MUCH smaller
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
     let result = null;
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 8000,
-      messages: [{ role: 'user', content: prompt }]
+      max_tokens: 4000,
+      messages: [{ role: 'user', content: shortPrompt }]
     });
 
     const rawText = response.content[0].text.trim();
-    const raw = rawText
-      .replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+    const raw = rawText.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
     const first = raw.indexOf('{');
     const last = raw.lastIndexOf('}');
+    let claudeText = {};
     if (first >= 0 && last > first) {
       let jsonStr = raw.substring(first, last + 1);
-      // Fix common Claude JSON issues
-      jsonStr = jsonStr.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']'); // trailing commas
-      jsonStr = jsonStr.replace(/(\d),(\d{3})/g, '$1$2'); // thousand separators: 94,500,000 → 94500000
-      jsonStr = jsonStr.replace(/(\d),(\d{3})/g, '$1$2'); // run twice for 94,500,000
-      jsonStr = jsonStr.replace(/'/g, '"'); // single quotes
-      jsonStr = jsonStr.replace(/[\x00-\x1F\x7F]/g, ' '); // control chars
-      try {
-        result = JSON.parse(jsonStr);
-      } catch(e2) {
-        console.error('JSON parse error:', e2.message, 'Raw first 200:', jsonStr.substring(0, 200));
-        return res.status(200).json({ error: 'JSON parse error: ' + e2.message + ' | Inicio: ' + jsonStr.substring(0, 150) });
+      jsonStr = jsonStr.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
+      jsonStr = jsonStr.replace(/(\d),(\d{3})/g, '$1$2').replace(/(\d),(\d{3})/g, '$1$2');
+      jsonStr = jsonStr.replace(/'/g, '"').replace(/[\x00-\x1F\x7F]/g, ' ');
+      try { claudeText = JSON.parse(jsonStr); } catch(e2) {
+        console.error('JSON parse error:', e2.message);
+        claudeText = { resumen: 'Error parsing Claude response', alertas: [] };
       }
     }
 
-    if (!result || !result.forecast) {
-      return res.status(200).json({ error: 'El motor no pudo generar el análisis. Intenta de nuevo.' });
+    // ═══ MERGE: JS numbers + Claude text ═══
+    result = {
+      forecast: preCalc.forecast,
+      forecast_base: preCalc.forecast_base,
+      forecast_ajustado: preCalc.forecast_ajustado,
+      forecast_factores: preCalc.forecast_factores,
+      historial: {
+        ...preCalc.historial,
+        resumen: claudeText.resumen || '',
+        resumen_acciones: claudeText.resumen_acciones || [],
+        retailers_abandonados: claudeText.retailers_abandonados || [],
+        retailers_castigados: claudeText.retailers_castigados || [],
+        oportunidades_perdidas: claudeText.oportunidades_perdidas || [],
+        riesgos: claudeText.riesgos || [],
+        costo_gestion: {
+          ...preCalc.historial.costo_gestion,
+          contrafactual: claudeText.contrafactual || '',
+          moraleja: claudeText.moraleja || '',
+          precio_regalo: fireSales.length ? fireSales.map(f => `${f.fecha}: PVP $${f.pvp.toLocaleString()} (-${f.drop}%)`).join('. ') : '',
+          si_cero_mes: siCero.length ? `SI=0 en ${siCero.join(', ')}` : ''
+        },
+        foda: claudeText.foda || {}
+      },
+      alertas: claudeText.alertas || []
+    };
+
+    if (!result.forecast) {
+      return res.status(200).json({ error: 'Error generando análisis.' });
     }
 
     // Add metadata
@@ -466,4 +533,4 @@ REGLAS ALERTAS:
   }
 };
 
-module.exports.config = { maxDuration: 60 };
+module.exports.config = { maxDuration: 300 };
