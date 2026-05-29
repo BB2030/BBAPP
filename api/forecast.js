@@ -533,4 +533,4 @@ Responde SOLO JSON sin backticks:
   }
 };
 
-module.exports.config = { maxDuration: 300 };
+module.exports.config = { maxDuration: 60 };
