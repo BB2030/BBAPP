@@ -289,35 +289,63 @@ var pvpP=0,nP=0;se.forEach(function(d){if(d.uds>0){pvpP+=d.venta/d.uds;nP++}});p
 var soProm=Math.round(se.reduce(function(s,d){return s+d.uds},0)/(se.length||1));
 var si3=D.serie_si||[];var siM3={};si3.forEach(function(d){siM3[d.fecha]=d.uds});
 var UMBRAL=20000000; // $20M
-// ── DETECTAR CAGAZOS ──
+// ── DETECTAR CAGAZOS (desde data REAL, con techo) ──
 var cagazos=[];
+var ventaTotal=se.reduce(function(s,d){return s+d.venta},0);
+var TECHO=ventaTotal*0.5; // ningún cagazo puede superar 50% de la venta total
 // Quiebres agrupados
 var qMeses=se.filter(function(d){return d.uds<soProm*0.45});
-if(qMeses.length){var costoQ=Math.round(qMeses.length*soProm*pvpP);var capt="";if(D.serie_gfk_marcas){var brs=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return bl.indexOf("fen")<0&&bl.indexOf("mad")<0&&bl.indexOf("elec")<0});if(brs[0])capt="Capturado: "+brs.slice(0,2).join(" · ")}cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt,fuente:"SO × Inv.Retail × GfK"})}
+if(qMeses.length){var costoQ=Math.min(Math.round(qMeses.length*soProm*pvpP),TECHO);var capt="";if(D.serie_gfk_marcas){var brs=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return bl.indexOf("fen")<0&&bl.indexOf("mad")<0&&bl.indexOf("elec")<0});if(brs[0])capt="Capturado: "+brs.slice(0,2).join(" · ")}cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt,fuente:"SO × Inv.Retail × GfK"})}
 // Fire sales agrupados
 var fsMeses=se.filter(function(d){var p=d.uds>0?d.venta/d.uds:0;return p>0&&p<pvpP*0.82&&d.uds>soProm*0.5});
-if(fsMeses.length){var costoFS=Math.round(fsMeses.reduce(function(s,d){return s+(pvpP-d.venta/d.uds)*d.uds},0));if(costoFS>UMBRAL)cagazos.push({titulo:"Destrucción de precio",monto:costoFS,detalle:fsMeses.length+" meses PVP bajo promedio · sin respuesta de competencia",fuente:"SO precio × GfK competencia"})}
-// Castigo retailers
-if(hi.retailers_castigados&&hi.retailers_castigados.length){hi.retailers_castigados.forEach(function(rc){var costoC=Math.round((rc.so_antes-rc.so_despues)*12*pvpP);if(costoC>UMBRAL)cagazos.push({titulo:"Pérdida de exhibición — "+rc.retailer,monto:costoC,detalle:"espacio reducido · "+(rc.descripcion||"permanente"),fuente:"SO retailer × GfK share"})})}
+if(fsMeses.length){var costoFS=Math.min(Math.round(fsMeses.reduce(function(s,d){return s+(pvpP-d.venta/d.uds)*d.uds},0)),TECHO);if(costoFS>UMBRAL)cagazos.push({titulo:"Destrucción de precio",monto:costoFS,detalle:fsMeses.length+" meses PVP bajo promedio · sin respuesta de competencia",fuente:"SO precio × GfK competencia"})}
+// Castigo retailers: calcular desde serie_por_retailer REAL
+var castigados=[];
+if(D.serie_por_retailer){var spr=D.serie_por_retailer;var meses=se.map(function(d){return d.fecha});var mid=Math.floor(meses.length/2);
+Object.keys(spr).forEach(function(r){
+var antes=[],despues=[];meses.forEach(function(m,mi){var u=spr[r][m]?spr[r][m].uds:0;if(mi<mid)antes.push(u);else despues.push(u)});
+var avgA=antes.length?antes.reduce(function(s,v){return s+v},0)/antes.length:0;
+var avgD=despues.length?despues.reduce(function(s,v){return s+v},0)/despues.length:0;
+// Castigo real: cayó >40% en segunda mitad Y antes era buen retailer
+if(avgA>soProm*0.1&&avgD<avgA*0.6){var mesesRest=despues.length;var costoC=Math.min(Math.round((avgA-avgD)*mesesRest*pvpP),TECHO);if(costoC>UMBRAL){castigados.push({retailer:r,antes:Math.round(avgA),despues:Math.round(avgD),costo:costoC})}}
+});
+castigados.sort(function(a,b){return b.costo-a.costo});
+// Solo el peor castigo como cagazo (no 3 repetidos)
+if(castigados[0]){var c=castigados[0];cagazos.push({titulo:"Pérdida de exhibición — "+c.retailer,monto:c.costo,detalle:c.antes+" → "+c.despues+" un/mes · espacio cedido a competencia",fuente:"SO retailer × GfK share"})}
+}
 // Loading
 var siT=si3.reduce(function(s,d){return s+d.uds},0);var soT=se.reduce(function(s,d){return s+d.uds},0);
-if(siT>soT*1.15){var exceso=siT-soT;var costoL=Math.round(exceso*pvpP*0.1);if(costoL>UMBRAL)cagazos.push({titulo:"Loading excesivo",monto:costoL,detalle:exceso.toLocaleString("es-CL")+" un sobre demanda real · costo financiero",fuente:"SI × SO × Inv.Distribuidor"})}
+if(siT>soT*1.15){var exceso=siT-soT;var costoL=Math.min(Math.round(exceso*pvpP*0.1),TECHO);if(costoL>UMBRAL)cagazos.push({titulo:"Loading excesivo",monto:costoL,detalle:exceso.toLocaleString("es-CL")+" un sobre demanda real · costo financiero",fuente:"SI × SO × Inv.Distribuidor"})}
 cagazos.sort(function(a,b){return b.monto-a.monto});
 // ── DETECTAR ACCIONES ──
 var acciones=[];
 // Oportunidad: competidor en quiebre (último mes)
-if(D.serie_gfk_marcas){Object.keys(D.serie_gfk_marcas).forEach(function(b){var bl=b.toLowerCase();if(bl.indexOf("fen")>=0||bl.indexOf("mad")>=0||bl.indexOf("elec")>=0)return;var s=D.serie_gfk_marcas[b];if(s.length>=3){var ult=s[s.length-1].uds;var prev=(s[s.length-2].uds+s[s.length-3].uds)/2;if(prev>0&&ult<prev*0.6){var caida=Math.round((1-ult/prev)*100);var pot=Math.round(soProm*2*pvpP);acciones.push({titulo:"Recuperar cobertura — "+b+" en quiebre",monto:pot,detalle:b+" cayó "+caida+"% · ventana estimada 60 días",fuente:"GfK último mes × tu Inv.Distribuidor"})}}})}
-// Oportunidad: recuperar castigo
-if(hi.retailers_castigados&&hi.retailers_castigados.length){hi.retailers_castigados.forEach(function(rc){var pot=Math.round((rc.so_antes-rc.so_despues)*12*pvpP);acciones.push({titulo:"Renegociar planograma — "+rc.retailer,monto:pot,detalle:"recuperar espacio cedido",fuente:"SO retailer × GfK share"})})}
+if(D.serie_gfk_marcas){Object.keys(D.serie_gfk_marcas).forEach(function(b){var bl=b.toLowerCase();if(bl.indexOf("fen")>=0||bl.indexOf("mad")>=0||bl.indexOf("elec")>=0)return;var s=D.serie_gfk_marcas[b];if(s.length>=3){var ult=s[s.length-1].uds;var prev=(s[s.length-2].uds+s[s.length-3].uds)/2;if(prev>0&&ult<prev*0.6){var caida=Math.round((1-ult/prev)*100);var pot=Math.min(Math.round(soProm*2*pvpP),TECHO);acciones.push({titulo:"Recuperar cobertura — "+b+" en quiebre",monto:pot,detalle:b+" cayó "+caida+"% · ventana estimada 60 días",fuente:"GfK último mes × tu Inv.Distribuidor"})}}})}
+// Oportunidad: recuperar el peor castigo
+if(castigados&&castigados[0]){var cc=castigados[0];acciones.push({titulo:"Renegociar planograma — "+cc.retailer,monto:cc.costo,detalle:"recuperar "+(cc.antes-cc.despues)+" un/mes de espacio cedido",fuente:"SO retailer × GfK share"})}
 acciones.sort(function(a,b){return b.monto-a.monto});
 function fmtM(v){return v>1e6?"$"+Math.round(v/1e6)+"M":"$"+Math.round(v/1000)+"K"}
 // ── RENDER ──
+// Banner: contra quién comparamos (data real GfK)
+if(D.serie_gfk_marcas){
+var ourBrands=["fen","mad","elec"];
+var comps=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return ourBrands.every(function(o){return bl.indexOf(o)<0})});
+if(comps.length){
+// PVP promedio de cada competidor
+var compInfo=comps.map(function(b){var s=D.serie_gfk_marcas[b];var pv=0,n=0;s.forEach(function(d){if(d.pvp>0){pv+=d.pvp;n++}});return{nombre:b,pvp:n>0?Math.round(pv/n):0}}).sort(function(a,b){return a.pvp-b.pvp});
+var subcat=D.subcategoria||"Lavadoras 8-10kg carga superior";
+h+="<div style='padding:10px 12px;background:rgba(15,113,115,.04);border:1px solid var(--border);margin-bottom:14px;border-radius:0'>";
+h+="<div style='font-size:8px;letter-spacing:.5px;color:var(--text3);margin-bottom:4px'>COMPARANDO CONTRA — mismo segmento de capacidad</div>";
+h+="<div style='display:flex;flex-wrap:wrap;gap:6px;align-items:center'>";
+compInfo.forEach(function(c){h+="<span style='font-size:11px;font-weight:700;color:var(--dk)'>"+c.nombre+"</span><span style='font-size:9px;color:var(--text2)'>"+fmtM(c.pvp)+"</span><span style='color:var(--text3);font-size:9px'>·</span>"});
+h+="</div>";
+h+="<div style='font-size:9px;color:var(--text2);margin-top:4px;font-style:italic'>Tu producto vs estas marcas en el mismo rango de kilaje. Datos de GfK del archivo cargado.</div>";
+h+="</div>";
+}}
 // Conclusión
 if(hi.costo_gestion&&hi.costo_gestion.moraleja){h+="<div style='padding:12px 14px;background:var(--dk);color:white;margin-bottom:14px;border-radius:0'><div style='font-size:8px;letter-spacing:1px;opacity:.6;margin-bottom:4px'>CONCLUSIÓN</div><div style='font-size:13px;font-weight:400;line-height:1.4'>"+hi.costo_gestion.moraleja+"</div></div>"}
 // Impacto acumulado
 if(cagazos.length){h+="<div style='font-size:10px;font-weight:700;color:#c0392b;letter-spacing:.5px;margin-bottom:6px'>IMPACTO ACUMULADO — últimos meses</div>";cagazos.slice(0,4).forEach(function(c){h+="<div style='display:flex;gap:0;margin-bottom:5px'><div style='flex:1;padding:10px 12px;background:rgba(192,57,43,.04);border-left:3px solid #c0392b'><div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-size:12px;font-weight:700;color:var(--dk)'>"+c.titulo+"</div><div style='font-size:16px;font-weight:700;color:#c0392b'>-"+fmtM(c.monto)+"</div></div><div style='font-size:10px;color:var(--text2);margin-top:2px'>"+c.detalle+"</div></div><div style='width:130px;padding:10px;background:rgba(0,0,0,.02);border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center'><div style='font-size:7px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>CRUCE DE DATOS</div><div style='font-size:9px;color:var(--text2);font-weight:500;line-height:1.3'>"+c.fuente+"</div></div></div>"})}
-// Acción
-if(acciones.length){h+="<div style='font-size:10px;font-weight:700;color:var(--aqua);letter-spacing:.5px;margin:12px 0 6px'>ACCIÓN — recuperar ahora</div>";acciones.slice(0,3).forEach(function(a){h+="<div style='display:flex;gap:0;margin-bottom:5px'><div style='flex:1;padding:10px 12px;background:rgba(15,113,115,.04);border-left:3px solid var(--aqua)'><div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-size:12px;font-weight:700;color:var(--dk)'>"+a.titulo+"</div><div style='font-size:16px;font-weight:700;color:var(--aqua)'>+"+fmtM(a.monto)+"</div></div><div style='font-size:10px;color:var(--text2);margin-top:2px'>"+a.detalle+"</div></div><div style='width:130px;padding:10px;background:rgba(0,0,0,.02);border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center'><div style='font-size:7px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>CRUCE DE DATOS</div><div style='font-size:9px;color:var(--text2);font-weight:500;line-height:1.3'>"+a.fuente+"</div></div></div>"})}
 h+="<div style='border-top:1px solid var(--border);margin:14px 0 4px'></div>";
 })();
 // ─── GRÁFICO SO vs SI (unidades) ───
