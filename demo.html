@@ -654,7 +654,7 @@ return true;
 }).map(function(x){return x.v});
 if(!sk.length)sk=allSk.map(function(x){return x.v});
 var rt=["Falabella","Ripley","Paris","Hites","La Polar","Lider","Sodimac"];
-var ms=["2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06"];
+var ms=["2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06"];
 var hd=["Fecha","Retailer","Marca","Cod. Producto","Unidades","Venta Total sin IVA","PVP Promedio"];
 var SO=hd.join(",")+"\n";var SI="Fecha,Retailer,Marca,Cod. Producto,Unidades,Venta sin IVA,Costo unit.\n";
 var ID="Fecha Corte,Bodega,Cod. Producto,Disponible\n";var IR="Fecha Corte,Retail,Cod. Producto,Stock Total\n";
@@ -662,35 +662,28 @@ var GK="Period,BRAND,Item,Sales Units,Sales Value,Price CLP\n";
 var bd=["Stgo Centro","Bodega Norte","Valparaíso"];
 var brandMap={"FEN":"Fensa","MAD":"Mademsa","ELX":"Electrolux"};
 var retPerf={"Falabella":1.1,"Ripley":1.0,"Paris":0.85,"Hites":0.7,"La Polar":0.75,"Lider":0.9,"Sodimac":0.95};
-// 30 meses de CAOS REAL — basado en patrones GfK Chile
-// Chile: ene-feb verano bajo, mar-abr rebote, may-jun fríobueno, jul-ago peak, sep-oct caída, nov-dic cyber
+// 18 meses ene 2025 - jun 2026
 var estSO30=[
-// 2024: ene bajo, feb peor, mar rebote, abr ok, may sube, jun bueno, jul PEAK, ago peak, sep cagazo1 fire sale leve, oct pozo, nov cyber ok, dic navidad
-0.75,0.65,0.90,0.95,1.05,1.00, 1.20,1.25,0.80,0.60,1.15,1.20,
-// 2025: ene bajo, feb peor, mar rebote, abr lento, may sube, jun bueno, jul peak, ago PEAK, sep FIRE SALE BRUTAL, oct vaciando, nov QUIEBRE CYBER, dic MUERTO
+// 2025: ene bajo, feb peor, mar rebote, abr lento, may sube, jun bueno, jul peak, ago PEAK, sep FIRE SALE, oct vaciando, nov QUIEBRE CYBER, dic MUERTO
 0.70,0.60,0.85,0.80,0.95,1.00, 1.15,1.30,1.50,1.20,0.30,0.20,
-// 2026: ene muerto, feb recovery mínima, mar intenta, abr MAIPÚ cierra, may post-maipú, jun lento
+// 2026: ene muerto, feb recovery, mar intenta, abr MAIPÚ, may post, jun lento
 0.40,0.45,0.55,0.35,0.50,0.55
 ];
-// PVP: normal $235-245K, fire sale leve 2024 sep $215K, fire sale brutal 2025 sep $169K oct $159K
+// PVP: normal $235-242K, fire sale sep $169K oct $159K
 var pvp30=[
-240000,242000,238000,240000,235000,238000, 240000,238000,215000,210000,240000,238000,
 242000,240000,238000,235000,238000,240000, 240000,242000,169000,159000,228000,225000,
 220000,222000,225000,210000,220000,225000
 ];
-// SI: DESFASADO — SI de este mes impacta SO del próximo. Loading ANTES, freeze ANTES
+// SI desfasado
 var siM30=[
-// 2024: loading may-jul para peak, freeze ago-sep por sobrestock, reload oct para cyber
-1.0,0.9,1.1,1.2,1.4,1.5, 1.6,0.8,0.5,1.3,1.4,1.1,
-// 2025: loading may-ago para peak, MASIVO sep para fire sale, FREEZE oct-dic (no queda nada)
+// 2025: loading may-ago, MASIVO sep, FREEZE oct-dic
 0.9,0.8,1.0,1.1,1.3,1.5, 1.6,1.8,2.2,0.4,0,0,
 // 2026: goteo ene-mar, MAIPÚ abr=0, intenta may-jun
 0.4,0.5,0.6,0,0.5,0.6
 ];
 var quiebres={
-// 2024: quiebre leve Hites sep-oct (primer warning)
-"Hites":{"2024-09":true,"2024-10":true,"2025-10":true,"2025-11":true,"2025-12":true,"2026-01":true,"2026-04":true},
-"Paris":{"2024-10":true,"2025-10":true,"2025-11":true,"2025-12":true,"2026-01":true,"2026-04":true},
+"Hites":{"2025-10":true,"2025-11":true,"2025-12":true,"2026-01":true,"2026-04":true},
+"Paris":{"2025-10":true,"2025-11":true,"2025-12":true,"2026-01":true,"2026-04":true},
 "Lider":{"2025-11":true,"2025-12":true,"2026-04":true},
 "Ripley":{"2025-11":true,"2025-12":true},
 "La Polar":{"2025-12":true,"2026-01":true,"2026-04":true},
@@ -708,7 +701,7 @@ var u=Math.round(base*est*rp*(0.8+Math.random()*0.4));
 if(quiebres[r]&&quiebres[r][m])u=Math.round(Math.random()*4);
 // Castigo: Falabella redujo espacio post-quiebre, metió Midea. SO cae permanente.
 if(castigo[r]&&m>=castigo[r].desde)u=Math.round(u*castigo[r].factor);
-if(mi>=22&&mi<=23&&!quiebres[r])u=Math.round(u*0.5);
+if(mi>=10&&mi<=11&&!quiebres[r])u=Math.round(u*0.5);
 var pvp=Math.round(pvp30[mi]*(0.96+Math.random()*0.08));
 if(u<5)pvp=pvp30[mi]||220000;
 var marca=brandMap[s.split("-")[0]]||s.split("-")[0];
@@ -716,32 +709,28 @@ SO+=m+","+r+","+marca+","+s+","+u+","+Math.round(u*pvp*0.81)+","+pvp+"\n";
 var sm=siM30[mi]||0;
 var siU=sm>0?Math.round(base*sm*rp*(0.6+Math.random()*0.8)):0;
 SI+=m+","+r+","+marca+","+s+","+siU+","+Math.round(siU*(pvp||220000)*0.77)+","+Math.round((pvp||220000)*0.55)+"\n"})});
-// Inventario: sigue la historia de 30 meses
+// Inventario: 19 meses ene 2025 - jul 2026
 sk.forEach(function(s){bd.forEach(function(b){
 var invD;
-if(mi<6)invD=Math.round(80+Math.random()*150);
-else if(mi<8)invD=Math.round(150+Math.random()*200);
-else if(mi<12)invD=Math.round(50+Math.random()*100);
-else if(mi<18)invD=Math.round(60+Math.random()*120);
-else if(mi<20)invD=Math.round(120+Math.random()*200);
-else if(mi<22)invD=Math.round(20+Math.random()*40);
-else if(mi<24)invD=Math.round(Math.random()*15);
+if(mi<6)invD=Math.round(60+Math.random()*120);
+else if(mi<8)invD=Math.round(120+Math.random()*200);
+else if(mi<10)invD=Math.round(20+Math.random()*40);
+else if(mi<12)invD=Math.round(Math.random()*15);
 else invD=Math.round(30+Math.random()*60);
 ID+=m+","+b+","+s+","+invD+"\n"});
 rt.forEach(function(r){
 var invR;
-if(mi<18)invR=Math.round(30+Math.random()*70);
-else if(mi<20)invR=Math.round(60+Math.random()*100);
-else if(mi<24)invR=Math.round(Math.random()*10);
+if(mi<8)invR=Math.round(30+Math.random()*70);
+else if(mi<10)invR=Math.round(60+Math.random()*100);
+else if(mi<12)invR=Math.round(Math.random()*10);
 else invR=Math.round(15+Math.random()*40);
-if(r==="Hites"&&mi>=20)invR=Math.round(120+Math.random()*250);
+if(r==="Hites"&&mi>=10)invR=Math.round(120+Math.random()*250);
 if(quiebres[r]&&quiebres[r][m])invR=Math.round(Math.random()*3);
 IR+=m+","+r+","+s+","+invR+"\n"})});
-// GfK 30 meses: Chile es CAOS — competencia también tiene estacionalidad pero crece
+// GfK 19 meses — competencia también tiene estacionalidad pero crece
 var compBrands=[{m:"Samsung",base:260,g:1.004,pvp:248000},{m:"Midea",base:180,g:1.010,pvp:179000},{m:"LG",base:230,g:1.003,pvp:235000},{m:"Hisense",base:120,g:1.007,pvp:195000}];
 // Fensa GfK: sigue SO pero con ruido, fire sales inflan volumen, quiebres destruyen
 var fGfk30=[
-150,130,170,180,195,190,210,225,155,120,210,220,
 140,125,165,160,185,190,210,235,280,240,55,40,
 75,85,100,65,95,110
 ];
@@ -752,10 +741,11 @@ var fpvp=Math.round(pvp30[mi]*(0.96+Math.random()*0.08));
 GK+=m.replace("-"," ")+","+marca+","+s+","+gkU+","+Math.round(gkU*fpvp)+","+fpvp+"\n"});
 compBrands.forEach(function(cb){
 var cu=Math.round(cb.base*Math.pow(cb.g,mi)*(0.93+Math.random()*0.14));
-if(mi>=22&&mi<=23)cu=Math.round(cu*1.5);
-if(mi>=10&&mi<=11)cu=Math.round(cu*1.2);
+if(mi>=10&&mi<=11)cu=Math.round(cu*1.5);
+// Jun 2026: Midea quiebra por supply chain Brasil — OPORTUNIDAD
+if(mi===17&&cb.m==="Midea")cu=Math.round(cu*0.35);
 // Competitor prices: seasonal variation, Cyber promos, UF adjustments — NOT flat
-var compPvpSeason=[1.0,1.0,1.02,1.02,1.0,0.98,0.97,0.98,0.95,0.93,0.88,0.90, 1.02,1.02,1.03,1.03,1.01,0.99,0.98,0.99,0.96,0.94,0.87,0.92, 1.04,1.04,1.05,1.03,1.02,1.01];
+var compPvpSeason=[1.02,1.02,1.03,1.03,1.01,0.99,0.98,0.99,0.96,0.94,0.87,0.92, 1.04,1.04,1.05,1.03,1.02,1.01];
 var cpvp=Math.round(cb.pvp*compPvpSeason[mi]*(0.96+Math.random()*0.08));
 GK+=m.replace("-"," ")+","+cb.m+","+cb.m+"-WA"+Math.round(8+Math.random()*4)+"T,"+cu+","+Math.round(cu*cpvp)+","+cpvp+"\n"})});
 ["so","si","id","ir","gfk"].forEach(function(k){document.getElementById("n-"+k).textContent="✓ demo_"+k+".xlsx";var c=document.getElementById("u-"+k);c.style.borderColor="var(--aqua)";c.style.background="rgba(15,113,115,.04)"});
