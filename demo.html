@@ -297,14 +297,24 @@ function px(i){return padL+i/(n-1)*pw}function py(v){return 20+ph-(v/amx)*ph}
 var svg="<svg viewBox='0 0 "+W+" "+(H+5)+"' style='width:100%;margin:6px 0' xmlns='http://www.w3.org/2000/svg'>";
 // Grid
 for(var gi=0;gi<5;gi++){var gy=20+ph/4*gi;var gv=Math.round(amx-amx/4*gi);svg+="<line x1='"+padL+"' y1='"+gy+"' x2='"+(W-padR)+"' y2='"+gy+"' stroke='rgba(0,0,0,.04)'/>";svg+="<text x='"+(padL-4)+"' y='"+(gy+3)+"' font-size='7' fill='#999' text-anchor='end'>"+gv+"</text>"}
-// Gap fill
-if(si2.length){var fp="";se.forEach(function(d,i){fp+=px(i)+","+py(d.uds)+" "});for(var fi=n-1;fi>=0;fi--){var sv=siMap[se[fi].fecha]||se[fi].uds;fp+=px(fi)+","+py(sv)+" "}svg+="<polygon points='"+fp.trim()+"' fill='rgba(184,92,0,0.06)'/>"}
+// Gap fill: blue=accumulating (SI>SO), red=consuming (SO>SI)
+if(si2.length){se.forEach(function(d,i){if(i>=n-1)return;var soV=d.uds;var siV=siMap[d.fecha]||soV;var soV2=se[i+1].uds;var siV2=siMap[se[i+1].fecha]||soV2;var clr=siV>soV?"rgba(26,13,71,0.06)":"rgba(192,57,43,0.08)";svg+="<polygon points='"+px(i)+","+py(soV)+" "+px(i+1)+","+py(soV2)+" "+px(i+1)+","+py(siV2)+" "+px(i)+","+py(siV)+"' fill='"+clr+"'/>"})}
 // SI line
-if(si2.length){var sp=se.map(function(d,i){var v=siMap[d.fecha];return v?px(i)+","+py(v):null}).filter(Boolean);if(sp.length)svg+="<polyline points='"+sp.join(" ")+"' fill='none' stroke='#b85c00' stroke-width='1.8' stroke-dasharray='5,3' opacity='0.6' stroke-linejoin='round'/>"}
+if(si2.length){var sp=se.map(function(d,i){var v=siMap[d.fecha];return v!==undefined?px(i)+","+py(v):null}).filter(Boolean);if(sp.length)svg+="<polyline points='"+sp.join(" ")+"' fill='none' stroke='#b85c00' stroke-width='1.8' stroke-dasharray='5,3' opacity='0.6' stroke-linejoin='round'/>"}
 // SO line
 svg+="<polyline points='"+se.map(function(d,i){return px(i)+","+py(d.uds)}).join(" ")+"' fill='none' stroke='#1a0d47' stroke-width='2.5' stroke-linejoin='round'/>";
 // Dots + values
-var prevU=0;se.forEach(function(d,i){var drop=prevU>0&&d.uds<prevU*0.6;var isQ=drop;svg+="<circle cx='"+px(i)+"' cy='"+py(d.uds)+"' r='"+(isQ?"5":"3")+"' fill='"+(isQ?"#fff":"#1a0d47")+"'"+(isQ?" stroke='#c0392b' stroke-width='2'":"")+"/>";svg+="<text x='"+px(i)+"' y='"+(py(d.uds)+(d.uds<prevU?12:-8))+"' font-size='8' fill='"+(isQ?"#c0392b":"#1a0d47")+"' text-anchor='middle' font-weight='"+(isQ?"700":"400")+"'>"+d.uds+"</text>";prevU=d.uds});
+var prevU=0;var soPromMes=Math.round(soTotal/n);var pvpProm=0;se.forEach(function(d){if(d.uds>0)pvpProm+=d.venta/d.uds});pvpProm=se.length?pvpProm/se.filter(function(d){return d.uds>0}).length:0;
+se.forEach(function(d,i){var drop=prevU>0&&d.uds<prevU*0.6;var isQ=drop;svg+="<circle cx='"+px(i)+"' cy='"+py(d.uds)+"' r='"+(isQ?"5":"3")+"' fill='"+(isQ?"#fff":"#1a0d47")+"'"+(isQ?" stroke='#c0392b' stroke-width='2'":"")+"/>";svg+="<text x='"+px(i)+"' y='"+(py(d.uds)+(d.uds<prevU?12:-8))+"' font-size='8' fill='"+(isQ?"#c0392b":"#1a0d47")+"' text-anchor='middle' font-weight='"+(isQ?"700":"400")+"'>"+d.uds+"</text>";prevU=d.uds});
+// Event pins: auto-detect fire sale, SI=0, quiebre
+se.forEach(function(d,i){
+var pvp=d.uds>0?d.venta/d.uds:0;
+var isFireSale=pvp>0&&pvpProm>0&&pvp<pvpProm*0.82&&d.uds>soPromMes*0.8;
+var isSI0=siMap[d.fecha]===0||siMap[d.fecha]===undefined&&si2.length>0;
+var pinY=8;
+if(isFireSale){svg+="<rect x='"+(px(i)-16)+"' y='"+pinY+"' width='32' height='11' fill='rgba(184,92,0,0.12)' rx='2'/>";svg+="<text x='"+px(i)+"' y='"+(pinY+8)+"' font-size='6' fill='#b85c00' text-anchor='middle' font-weight='500'>fire sale</text>"}
+if(isSI0&&d.uds<soPromMes*0.5){svg+="<rect x='"+(px(i)-10)+"' y='"+(pinY+12)+"' width='20' height='10' fill='rgba(192,57,43,0.12)' rx='2'/>";svg+="<text x='"+px(i)+"' y='"+(pinY+19)+"' font-size='6' fill='#c0392b' text-anchor='middle'>SI=0</text>"}
+});
 // X labels
 se.forEach(function(d,i){var isQ=i>0&&d.uds<se[i-1].uds*0.6;svg+="<text x='"+px(i)+"' y='"+(H-18)+"' font-size='8' fill='"+(isQ?"#c0392b":"#666")+"' text-anchor='middle'"+(isQ?" font-weight='500'":"")+">"+d.fecha.slice(5)+"</text>"});
 // Legend
@@ -383,21 +393,43 @@ h+="<div style='display:grid;grid-template-columns:70px repeat("+meses.length+",
 h+="<div></div>";meses.forEach(function(m){h+="<div style='text-align:center;color:var(--text3)'>"+m.slice(5)+"</div>"});
 rets.forEach(function(r){
 h+="<div style='font-size:8px;color:var(--dk);padding:1px 2px'>"+r+"</div>";
-meses.forEach(function(m){
+// Detect consecutive quiebres for this retailer
+var qRun=[];meses.forEach(function(m,mi){
+var d=spr[r]&&spr[r][m];var u=d?Math.round(d.uds):0;
+qRun.push(u<=3);
+});
+meses.forEach(function(m,mi){
 var d=spr[r]&&spr[r][m];var u=d?Math.round(d.uds):0;
 var clr=u<=3?"#c0392b":u<20?"#b85c00":"#0f7173";
 var op=u<=3?0.7:u<20?0.3:Math.min(0.15+u/200,0.7);
-h+="<div style='background:"+clr+";opacity:"+op+";border-radius:2px;height:14px' title='"+r+" "+m+": "+u+" un'></div>"})});
+// Border for consecutive quiebres (2+ months)
+var isQ=qRun[mi];var prevQ=mi>0&&qRun[mi-1];var nextQ=mi<meses.length-1&&qRun[mi+1];
+var bdr="";
+if(isQ&&(prevQ||nextQ)){
+bdr="border-top:2px solid #c0392b;border-bottom:2px solid #c0392b;";
+if(!prevQ)bdr+="border-left:2px solid #c0392b;";
+if(!nextQ)bdr+="border-right:2px solid #c0392b;";
+bdr+="border-radius:0;";
+}
+var pvpR=d&&d.uds>0?Math.round(d.venta/d.uds):0;
+var tip=r+" "+m+": "+u+" un"+(pvpR>0?" · PVP $"+(pvpR/1000).toFixed(0)+"K":"")+(u<=3?" · QUIEBRE":"");
+h+="<div style='background:"+clr+";opacity:"+op+";height:14px;"+bdr+"' title='"+tip+"'></div>"})});
 h+="</div>";
-h+="<div style='display:flex;gap:8px;margin-top:3px;font-size:7px;color:var(--text3)'><span style='display:inline-block;width:10px;height:10px;background:#0f7173;opacity:0.5;border-radius:2px;vertical-align:middle'></span> stock ok <span style='display:inline-block;width:10px;height:10px;background:#b85c00;opacity:0.4;border-radius:2px;vertical-align:middle;margin-left:8px'></span> bajo <span style='display:inline-block;width:10px;height:10px;background:#c0392b;opacity:0.7;border-radius:2px;vertical-align:middle;margin-left:8px'></span> quiebre</div>";
+h+="<div style='display:flex;gap:8px;margin-top:3px;font-size:7px;color:var(--text3)'><span style='display:inline-block;width:10px;height:10px;background:#0f7173;opacity:0.5;border-radius:2px;vertical-align:middle'></span> stock ok <span style='display:inline-block;width:10px;height:10px;background:#b85c00;opacity:0.4;border-radius:2px;vertical-align:middle;margin-left:8px'></span> bajo <span style='display:inline-block;width:10px;height:10px;background:#c0392b;opacity:0.7;border-radius:2px;vertical-align:middle;margin-left:8px'></span> quiebre <span style='display:inline-block;width:14px;height:10px;border:2px solid #c0392b;border-radius:0;vertical-align:middle;margin-left:8px'></span> quiebre prolongado</div>";
 }
 // ─── SOLO 3 CARDS + EXCEL ───
 if(hi&&hi.costo_gestion){
 var cg=hi.costo_gestion;
+// Calculate ventas no capturadas: quiebre months × baseline SO
+var baselineSO=0;var nNormal=0;var nQuiebre=0;
+se.forEach(function(d){if(d.uds>soPromMes*0.5){baselineSO+=d.uds;nNormal++}else{nQuiebre++}});
+var avgBaseline=nNormal>0?Math.round(baselineSO/nNormal):soPromMes;
+var ventasNoCap=nQuiebre*avgBaseline;
+var ventasNoCapM=ventasNoCap*pvpProm;
 h+="<div style='display:flex;gap:6px;margin:12px 0'>";
-h+="<div style='flex:1;padding:10px;background:rgba(192,57,43,.03);border-left:3px solid #c0392b'><div style='font-size:8px;color:#c0392b;font-weight:700;letter-spacing:.5px'>VARIACIÓN SHARE</div><div style='font-size:22px;font-weight:700;color:#c0392b;margin:4px 0'>-"+(cg.share_variacion_pp||0)+"pp</div></div>";
-h+="<div style='flex:1;padding:10px;background:rgba(184,92,0,.03);border-left:3px solid #b85c00'><div style='font-size:8px;color:#b85c00;font-weight:700;letter-spacing:.5px'>IMPACTO LOADING</div><div style='font-size:22px;font-weight:700;color:#b85c00;margin:4px 0'>"+(cg.loading_impacto_pct||0)+"%</div></div>";
-h+="<div style='flex:1;padding:10px;background:rgba(0,0,0,.02);border-left:3px solid #666'><div style='font-size:8px;color:#666;font-weight:700;letter-spacing:.5px'>SOBRESTOCK</div><div style='font-size:22px;font-weight:700;color:var(--dk);margin:4px 0'>"+(cg.sobrestock_monto||"$0")+"</div></div>";
+h+="<div style='flex:1;padding:10px;background:rgba(192,57,43,.03);border-left:3px solid #c0392b;border-radius:0'><div style='font-size:8px;color:#c0392b;font-weight:700;letter-spacing:.5px'>VARIACIÓN SHARE</div><div style='font-size:22px;font-weight:700;color:#c0392b;margin:4px 0'>-"+(cg.share_variacion_pp||0)+"pp</div></div>";
+h+="<div style='flex:1;padding:10px;background:rgba(184,92,0,.03);border-left:3px solid #b85c00;border-radius:0'><div style='font-size:8px;color:#b85c00;font-weight:700;letter-spacing:.5px'>IMPACTO LOADING</div><div style='font-size:22px;font-weight:700;color:#b85c00;margin:4px 0'>"+(cg.loading_impacto_pct||0)+"%</div></div>";
+h+="<div style='flex:1;padding:10px;background:rgba(192,57,43,.03);border-left:3px solid #c0392b;border-radius:0'><div style='font-size:8px;color:#c0392b;font-weight:700;letter-spacing:.5px'>VENTAS NO CAPTURADAS</div><div style='font-size:22px;font-weight:700;color:#c0392b;margin:4px 0'>"+ventasNoCap.toLocaleString("es-CL")+" un</div><div style='font-size:9px;color:var(--text3)'>"+nQuiebre+"m quiebre × "+avgBaseline+" un baseline</div></div>";
 h+="</div>";
 }
 h+="</div>";return h;
@@ -528,6 +560,64 @@ var colsg=[{wch:12}];retailers.forEach(function(){colsg.push({wch:42})});colsg.p
 var wsg=XLSX.utils.aoa_to_sheet(sg);wsg["!cols"]=colsg;
 XLSX.utils.book_append_sheet(wb,wsg,"Radiografia");
 }
+// SHEET: TOP ERRORES — ranking de las peores decisiones por costo
+var errores=[];
+var pvpProm=0;var nPvp=0;se.forEach(function(d){if(d.uds>0){pvpProm+=d.venta/d.uds;nPvp++}});pvpProm=nPvp>0?pvpProm/nPvp:220000;
+var soPromMes=Math.round(se.reduce(function(s,d){return s+d.uds},0)/se.length);
+// Detect fire sales
+se.forEach(function(d){
+var pvp=d.uds>0?d.venta/d.uds:0;
+if(pvp>0&&pvp<pvpProm*0.82&&d.uds>soPromMes*0.5){
+var margenPerdido=Math.round((pvpProm-pvp)*d.uds);
+errores.push({fecha:d.fecha,tipo:"FIRE SALE",desc:"PVP $"+Math.round(pvp/1000)+"K (-"+Math.round((1-pvp/pvpProm)*100)+"% vs promedio). "+d.uds+" un vendidas a precio regalado.",costo:margenPerdido,contrafactual:"Si hubieses vendido a $"+Math.round(pvpProm/1000)+"K habrías preservado $"+Math.round(margenPerdido/1e6)+"M de margen"})
+}});
+// Detect quiebres
+se.forEach(function(d,i){
+if(i<3)return;
+var prev3=Math.round((se[i-1].uds+se[i-2].uds+se[i-3].uds)/3);
+if(prev3>20&&d.uds<prev3*0.45){
+var perdido=Math.round((prev3-d.uds)*pvpProm);
+errores.push({fecha:d.fecha,tipo:"QUIEBRE",desc:"SO cayó a "+d.uds+" un (era "+prev3+" promedio). Venta perdida: $"+Math.round(perdido/1e6)+"M.",costo:perdido,contrafactual:"Si hubieses mantenido cobertura habrías vendido "+prev3+" un × $"+Math.round(pvpProm/1000)+"K"})
+}});
+// Detect SI=0
+var si2=D.serie_si||[];var siMap2={};si2.forEach(function(d){siMap2[d.fecha]=d.uds});
+se.forEach(function(d){
+if(siMap2[d.fecha]===0&&d.uds<soPromMes*0.5){
+errores.push({fecha:d.fecha,tipo:"SI=0 DESPACHO",desc:"Cero despacho este mes. Canales sin reposición.",costo:Math.round(soPromMes*pvpProm),contrafactual:"Despachar "+soPromMes+" un habría generado $"+Math.round(soPromMes*pvpProm/1e6)+"M"})
+}});
+// Detect overloading (SI > 1.5× SO)
+se.forEach(function(d){
+var siV=siMap2[d.fecha]||0;
+if(siV>d.uds*1.5&&siV>soPromMes*1.3){
+var exceso=siV-d.uds;
+errores.push({fecha:d.fecha,tipo:"LOADING EXCESIVO",desc:"SI "+siV+" un vs SO "+d.uds+" un. Exceso: "+exceso+" un flotando.",costo:Math.round(exceso*pvpProm*0.1),contrafactual:"Despachar "+d.uds+" un habría evitado "+exceso+" un de sobrestock"})
+}});
+// Detect retailer-level quiebres
+if(D.serie_por_retailer){
+var spr2=D.serie_por_retailer;
+Object.keys(spr2).forEach(function(r){
+var mesesQ=[];
+Object.keys(spr2[r]).forEach(function(m){
+if(spr2[r][m].uds<=3)mesesQ.push(m);
+});
+if(mesesQ.length>=2){
+var costoR=Math.round(mesesQ.length*soPromMes/7*pvpProm);
+errores.push({fecha:mesesQ[0]+" a "+mesesQ[mesesQ.length-1],tipo:"RETAILER SIN STOCK",desc:r+": "+mesesQ.length+" meses sin cobertura. Fill rate 0%.",costo:costoR,contrafactual:r+" con stock habría generado ~$"+Math.round(costoR/1e6)+"M"})
+}});
+}
+// Sort by cost descending, take top 10
+errores.sort(function(a,b){return b.costo-a.costo});
+var top10=errores.slice(0,10);
+var se2=[["TOP ERRORES — "+(D.sku||"")],["Las peores decisiones del período, rankeadas por costo"],[""],["#","Fecha","Tipo","Qué pasó","Costo estimado","Qué debió pasar"]];
+top10.forEach(function(e,i){
+se2.push([i+1,e.fecha,e.tipo,e.desc,"$"+(e.costo>1e6?Math.round(e.costo/1e6)+"M":Math.round(e.costo/1000)+"K"),e.contrafactual]);
+});
+se2.push([""]);
+se2.push(["COSTO TOTAL TOP 10","","","","$"+Math.round(top10.reduce(function(s,e){return s+e.costo},0)/1e6)+"M",""]);
+se2.push([""]);
+se2.push(["Nota: costos estimados basados en PVP promedio ($"+Math.round(pvpProm/1000)+"K) y SO promedio ("+soPromMes+" un/mes). No incluye costo financiero del sobrestock ni penalizaciones de retail."]);
+var wse=XLSX.utils.aoa_to_sheet(se2);wse["!cols"]=[{wch:4},{wch:22},{wch:18},{wch:60},{wch:16},{wch:60}];
+XLSX.utils.book_append_sheet(wb,wse,"Top Errores");
 XLSX.writeFile(wb,"Historial_"+(D.sku||"SKU").replace(/\s/g,"_")+"_"+new Date().toISOString().slice(0,10)+".xlsx");
 }
 function renderBenchmark(D){var h="";var b=D.benchmark;
