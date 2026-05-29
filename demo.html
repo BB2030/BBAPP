@@ -285,31 +285,36 @@ h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:7
 if(hi){var dateRange=se.length?(se[0].fecha+" a "+se[se.length-1].fecha):"";h+="<div style='font-size:11px;color:var(--text2);font-weight:300;margin-bottom:14px'>"+(hi.so_total||0).toLocaleString("es-CL")+" un · $"+((hi.so_total||0)*(hi.margen&&hi.margen.pvp_promedio||220000)>1e6?(((hi.so_total||0)*(hi.margen&&hi.margen.pvp_promedio||220000))/1e6).toFixed(0)+"M":"")+" · "+(hi.tendencia||"")+" · GM% "+(hi.margen?hi.margen.margen_pct:0)+"%"+(dateRange?" · "+dateRange:"")+"</div>"}
 // ═══ TRIAGE: CONCLUSIÓN + IMPACTO + ACCIÓN ═══
 (function(){
-var pvpP=0,nP=0;se.forEach(function(d){if(d.uds>0){pvpP+=d.venta/d.uds;nP++}});pvpP=nP>0?pvpP/nP:220000;
-var soProm=Math.round(se.reduce(function(s,d){return s+d.uds},0)/(se.length||1));
+var totV=se.reduce(function(s,d){return s+d.venta},0);var totU=se.reduce(function(s,d){return s+d.uds},0);
+var pvpP=totU>0?totV/totU:220000;
+var soProm=Math.round(totU/(se.length||1));
 var si3=D.serie_si||[];var siM3={};si3.forEach(function(d){siM3[d.fecha]=d.uds});
 var UMBRAL=20000000; // $20M
 // ── DETECTAR CAGAZOS (desde data REAL, con techo) ──
 var cagazos=[];
-var ventaTotal=se.reduce(function(s,d){return s+d.venta},0);
+var ventaTotal=totV;
 var TECHO=ventaTotal*0.5; // ningún cagazo puede superar 50% de la venta total
-// Quiebres agrupados
-var qMeses=se.filter(function(d){return d.uds<soProm*0.45});
-if(qMeses.length){var costoQ=Math.min(Math.round(qMeses.length*soProm*pvpP),TECHO);var capt="";if(D.serie_gfk_marcas){var brs=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return bl.indexOf("fen")<0&&bl.indexOf("mad")<0&&bl.indexOf("elec")<0});if(brs[0])capt="Capturado: "+brs.slice(0,2).join(" · ")}var detQ="Meses bajo umbral ("+Math.round(soProm*0.45)+" un): "+qMeses.map(function(d){return d.fecha+" ("+d.uds+" un)"}).join(", ")+".<br>Cálculo: "+qMeses.length+" meses × "+soProm+" un baseline × $"+Math.round(pvpP).toLocaleString()+" PVP = $"+Math.round(qMeses.length*soProm*pvpP).toLocaleString("es-CL")+" de venta no capturada.<br>Fuentes: SO detectó los meses bajo baseline · Inv.Retail confirmó stock cero · GfK identificó quién capturó.";cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt,fuente:"SO × Inv.Retail × GfK",construccion:detQ})}
+// baseline = mediana de meses normales (no quiebre)
+var sortedU=se.map(function(d){return d.uds}).sort(function(a,b){return a-b});
+var baseline=sortedU[Math.floor(sortedU.length*0.6)]||soProm;
+// Quiebres: pérdida REAL = (baseline - uds reales) × PVP por cada mes bajo umbral
+var qMeses=se.filter(function(d){return d.uds<baseline*0.45});
+if(qMeses.length){var costoQreal=qMeses.reduce(function(s,d){return s+(baseline-d.uds)*pvpP},0);var costoQ=Math.min(Math.round(costoQreal),TECHO);var capt="";if(D.serie_gfk_marcas){var brs=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return bl.indexOf("fen")<0&&bl.indexOf("mad")<0&&bl.indexOf("elec")<0});if(brs[0])capt="Capturado: "+brs.slice(0,2).join(" · ")}var detQ="Baseline normal: "+baseline+" un/mes. Meses en quiebre: "+qMeses.map(function(d){return d.fecha+" ("+d.uds+" un, faltaron "+(baseline-d.uds)+")"}).join(", ")+".<br>Cálculo: suma de (baseline − real) × $"+Math.round(pvpP).toLocaleString()+" PVP = $"+Math.round(costoQreal).toLocaleString("es-CL")+".<br>Fuentes: SO detectó los meses bajo baseline · Inv.Retail confirmó stock cero · GfK identificó quién capturó.";cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt,fuente:"SO × Inv.Retail × GfK",construccion:detQ})}
 // Fire sales agrupados
 var fsMeses=se.filter(function(d){var p=d.uds>0?d.venta/d.uds:0;return p>0&&p<pvpP*0.82&&d.uds>soProm*0.5});
 if(fsMeses.length){var costoFS=Math.min(Math.round(fsMeses.reduce(function(s,d){return s+(pvpP-d.venta/d.uds)*d.uds},0)),TECHO);if(costoFS>UMBRAL){var detFS="Meses con PVP bajo 82% del promedio ($"+Math.round(pvpP*0.82).toLocaleString()+"): "+fsMeses.map(function(d){var p=Math.round(d.venta/d.uds);return d.fecha+" ($"+p.toLocaleString()+", "+d.uds+" un)"}).join(", ")+".<br>Cálculo por mes: (PVP normal $"+Math.round(pvpP).toLocaleString()+" − PVP real) × unidades vendidas = margen destruido.<br>Fuentes: SO precio (tu PVP real mes a mes) × GfK (competencia NO bajó precio en los mismos meses).";cagazos.push({titulo:"Destrucción de precio",monto:costoFS,detalle:fsMeses.length+" meses PVP bajo promedio · sin respuesta de competencia",fuente:"SO precio × GfK competencia",construccion:detFS})}}
-// Castigo retailers: calcular desde serie_por_retailer REAL
+// Castigo retailers: caída SOSTENIDA en últimos 3 meses vs primeros 6 (daño permanente, no quiebre temporal)
 var castigados=[];
-if(D.serie_por_retailer){var spr=D.serie_por_retailer;var meses=se.map(function(d){return d.fecha});var mid=Math.floor(meses.length/2);
+if(D.serie_por_retailer){var spr=D.serie_por_retailer;var meses=se.map(function(d){return d.fecha});
 Object.keys(spr).forEach(function(r){
-var antes=[],despues=[];meses.forEach(function(m,mi){var u=spr[r][m]?spr[r][m].uds:0;if(mi<mid)antes.push(u);else despues.push(u)});
-var avgA=antes.length?antes.reduce(function(s,v){return s+v},0)/antes.length:0;
-var avgD=despues.length?despues.reduce(function(s,v){return s+v},0)/despues.length:0;
-if(avgA>soProm*0.1&&avgD<avgA*0.6){var mesesRest=despues.length;var costoC=Math.min(Math.round((avgA-avgD)*mesesRest*pvpP),TECHO);if(costoC>UMBRAL){castigados.push({retailer:r,antes:Math.round(avgA),despues:Math.round(avgD),costo:costoC,mesesRest:mesesRest})}}
+var prim6=[],ult3=[];meses.forEach(function(m,mi){var u=spr[r][m]?spr[r][m].uds:0;if(mi<6)prim6.push(u);if(mi>=meses.length-3)ult3.push(u)});
+var avgA=prim6.length?prim6.reduce(function(s,v){return s+v},0)/prim6.length:0;
+var avgD=ult3.length?ult3.reduce(function(s,v){return s+v},0)/ult3.length:0;
+// Castigo: era buen retailer Y últimos 3 meses < 55% de su nivel sano inicial
+if(avgA>soProm*0.12&&avgD<avgA*0.55&&avgD>0){var mesesProy=12;var costoC=Math.min(Math.round((avgA-avgD)*mesesProy*pvpP),TECHO);if(costoC>UMBRAL){castigados.push({retailer:r,antes:Math.round(avgA),despues:Math.round(avgD),costo:costoC,mesesProy:mesesProy})}}
 });
 castigados.sort(function(a,b){return b.costo-a.costo});
-if(castigados[0]){var c=castigados[0];var detC=c.retailer+" SO promedio primera mitad: "+c.antes+" un/mes. Segunda mitad: "+c.despues+" un/mes (caída "+Math.round((1-c.despues/c.antes)*100)+"%).<br>Cálculo: ("+c.antes+" − "+c.despues+") un × "+c.mesesRest+" meses × $"+Math.round(pvpP).toLocaleString()+" = $"+Math.round((c.antes-c.despues)*c.mesesRest*pvpP).toLocaleString("es-CL")+".<br>Fuentes: SO por retailer (drop sostenido) × GfK share (competencia ocupó el espacio).";cagazos.push({titulo:"Pérdida de exhibición — "+c.retailer,monto:c.costo,detalle:c.antes+" → "+c.despues+" un/mes · espacio cedido a competencia",fuente:"SO retailer × GfK share",construccion:detC})}
+if(castigados[0]){var c=castigados[0];var detC=c.retailer+" SO promedio primeros 6 meses: "+c.antes+" un/mes. Últimos 3 meses: "+c.despues+" un/mes (caída sostenida "+Math.round((1-c.despues/c.antes)*100)+"%).<br>Cálculo: ("+c.antes+" − "+c.despues+") un × "+c.mesesProy+" meses proyectados × $"+Math.round(pvpP).toLocaleString()+" = $"+Math.round((c.antes-c.despues)*c.mesesProy*pvpP).toLocaleString("es-CL")+" anualizado.<br>Fuentes: SO por retailer (caída que NO recupera tras el quiebre) × GfK share (competencia ocupó el espacio).";cagazos.push({titulo:"Pérdida de exhibición — "+c.retailer,monto:c.costo,detalle:c.antes+" → "+c.despues+" un/mes · espacio cedido, no recupera",fuente:"SO retailer × GfK share",construccion:detC})}
 }
 // Loading
 var siT=si3.reduce(function(s,d){return s+d.uds},0);var soT=se.reduce(function(s,d){return s+d.uds},0);
@@ -792,6 +797,11 @@ XLSX.writeFile(wb,"APP_"+emp.replace(/\s/g,"_")+"_"+new Date().toISOString().sli
 }
 function autoF(){
 if(!emp){rub="Electrodomésticos / Electrohogar";emp="Electrolux Group";document.getElementById("gate").style.display="none";document.getElementById("main").style.display="block";document.getElementById("ctx").textContent=rub+" · "+emp;lc()}
+// Demo locked: Lavado y Secado / Lavadora Carga Superior / Fensa / PC9.5SZ
+document.getElementById("fc").value="lavado";us();
+document.getElementById("fb").value="lav-cs";
+document.getElementById("fm").value="fensa";uk();
+document.getElementById("fk").value="FEN-PC9.5SZ";
 var cv=document.getElementById("fc").value;
 var sv=document.getElementById("fb").value;
 var mv=document.getElementById("fm").value;
