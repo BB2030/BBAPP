@@ -283,6 +283,43 @@ function renderHistorial(D){var h="";var hi=D.historial;var se=D.serie_historica
 h+="<div style='padding:16px;background:var(--white);border:1px solid var(--border);margin-bottom:14px'>";
 h+="<div style='font-family:Libre Baskerville,serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:4px'>📜 Historial — "+(D.sku||"")+"</div>";
 if(hi){var dateRange=se.length?(se[0].fecha+" a "+se[se.length-1].fecha):"";h+="<div style='font-size:11px;color:var(--text2);font-weight:300;margin-bottom:14px'>"+(hi.so_total||0).toLocaleString("es-CL")+" un · $"+((hi.so_total||0)*(hi.margen&&hi.margen.pvp_promedio||220000)>1e6?(((hi.so_total||0)*(hi.margen&&hi.margen.pvp_promedio||220000))/1e6).toFixed(0)+"M":"")+" · "+(hi.tendencia||"")+" · GM% "+(hi.margen?hi.margen.margen_pct:0)+"%"+(dateRange?" · "+dateRange:"")+"</div>"}
+// ═══ TRIAGE: CONCLUSIÓN + IMPACTO + ACCIÓN ═══
+(function(){
+var pvpP=0,nP=0;se.forEach(function(d){if(d.uds>0){pvpP+=d.venta/d.uds;nP++}});pvpP=nP>0?pvpP/nP:220000;
+var soProm=Math.round(se.reduce(function(s,d){return s+d.uds},0)/(se.length||1));
+var si3=D.serie_si||[];var siM3={};si3.forEach(function(d){siM3[d.fecha]=d.uds});
+var UMBRAL=20000000; // $20M
+// ── DETECTAR CAGAZOS ──
+var cagazos=[];
+// Quiebres agrupados
+var qMeses=se.filter(function(d){return d.uds<soProm*0.45});
+if(qMeses.length){var costoQ=Math.round(qMeses.length*soProm*pvpP);var capt="";if(D.serie_gfk_marcas){var brs=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return bl.indexOf("fen")<0&&bl.indexOf("mad")<0&&bl.indexOf("elec")<0});if(brs[0])capt="Capturado: "+brs.slice(0,2).join(" · ")}cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt})}
+// Fire sales agrupados
+var fsMeses=se.filter(function(d){var p=d.uds>0?d.venta/d.uds:0;return p>0&&p<pvpP*0.82&&d.uds>soProm*0.5});
+if(fsMeses.length){var costoFS=Math.round(fsMeses.reduce(function(s,d){return s+(pvpP-d.venta/d.uds)*d.uds},0));if(costoFS>UMBRAL)cagazos.push({titulo:"Destrucción de precio",monto:costoFS,detalle:fsMeses.length+" meses PVP bajo promedio · sin respuesta de competencia"})}
+// Castigo retailers
+if(hi.retailers_castigados&&hi.retailers_castigados.length){hi.retailers_castigados.forEach(function(rc){var costoC=Math.round((rc.so_antes-rc.so_despues)*12*pvpP);if(costoC>UMBRAL)cagazos.push({titulo:"Pérdida de exhibición — "+rc.retailer,monto:costoC,detalle:"espacio reducido · "+(rc.descripcion||"permanente")})})}
+// Loading
+var siT=si3.reduce(function(s,d){return s+d.uds},0);var soT=se.reduce(function(s,d){return s+d.uds},0);
+if(siT>soT*1.15){var exceso=siT-soT;var costoL=Math.round(exceso*pvpP*0.1);if(costoL>UMBRAL)cagazos.push({titulo:"Loading excesivo",monto:costoL,detalle:exceso.toLocaleString("es-CL")+" un sobre demanda real · costo financiero"})}
+cagazos.sort(function(a,b){return b.monto-a.monto});
+// ── DETECTAR ACCIONES ──
+var acciones=[];
+// Oportunidad: competidor en quiebre (último mes)
+if(D.serie_gfk_marcas){Object.keys(D.serie_gfk_marcas).forEach(function(b){var bl=b.toLowerCase();if(bl.indexOf("fen")>=0||bl.indexOf("mad")>=0||bl.indexOf("elec")>=0)return;var s=D.serie_gfk_marcas[b];if(s.length>=3){var ult=s[s.length-1].uds;var prev=(s[s.length-2].uds+s[s.length-3].uds)/2;if(prev>0&&ult<prev*0.6){var caida=Math.round((1-ult/prev)*100);var pot=Math.round(soProm*2*pvpP);acciones.push({titulo:"Recuperar cobertura — "+b+" en quiebre",monto:pot,detalle:b+" cayó "+caida+"% · ventana estimada 60 días"})}}})}
+// Oportunidad: recuperar castigo
+if(hi.retailers_castigados&&hi.retailers_castigados.length){hi.retailers_castigados.forEach(function(rc){var pot=Math.round((rc.so_antes-rc.so_despues)*12*pvpP);acciones.push({titulo:"Renegociar planograma — "+rc.retailer,monto:pot,detalle:"recuperar espacio cedido"})})}
+acciones.sort(function(a,b){return b.monto-a.monto});
+function fmtM(v){return v>1e6?"$"+Math.round(v/1e6)+"M":"$"+Math.round(v/1000)+"K"}
+// ── RENDER ──
+// Conclusión
+if(hi.costo_gestion&&hi.costo_gestion.moraleja){h+="<div style='padding:12px 14px;background:var(--dk);color:white;margin-bottom:14px;border-radius:0'><div style='font-size:8px;letter-spacing:1px;opacity:.6;margin-bottom:4px'>CONCLUSIÓN</div><div style='font-size:13px;font-weight:400;line-height:1.4'>"+hi.costo_gestion.moraleja+"</div></div>"}
+// Impacto acumulado
+if(cagazos.length){h+="<div style='font-size:10px;font-weight:700;color:#c0392b;letter-spacing:.5px;margin-bottom:6px'>IMPACTO ACUMULADO — últimos meses</div>";cagazos.slice(0,4).forEach(function(c){h+="<div style='padding:10px 12px;background:rgba(192,57,43,.04);border-left:3px solid #c0392b;margin-bottom:5px'><div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-size:12px;font-weight:700;color:var(--dk)'>"+c.titulo+"</div><div style='font-size:16px;font-weight:700;color:#c0392b'>-"+fmtM(c.monto)+"</div></div><div style='font-size:10px;color:var(--text2);margin-top:2px'>"+c.detalle+"</div></div>"})}
+// Acción
+if(acciones.length){h+="<div style='font-size:10px;font-weight:700;color:var(--aqua);letter-spacing:.5px;margin:12px 0 6px'>ACCIÓN — recuperar ahora</div>";acciones.slice(0,3).forEach(function(a){h+="<div style='padding:10px 12px;background:rgba(15,113,115,.04);border-left:3px solid var(--aqua);margin-bottom:5px'><div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-size:12px;font-weight:700;color:var(--dk)'>"+a.titulo+"</div><div style='font-size:16px;font-weight:700;color:var(--aqua)'>+"+fmtM(a.monto)+"</div></div><div style='font-size:10px;color:var(--text2);margin-top:2px'>"+a.detalle+"</div></div>"})}
+h+="<div style='border-top:1px solid var(--border);margin:14px 0 4px'></div>";
+})();
 // ─── GRÁFICO SO vs SI (unidades) ───
 if(se.length){
 var si2=D.serie_si||[];
