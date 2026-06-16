@@ -362,24 +362,20 @@ Sobrestock: ${sobrestockUn} un ($${Math.round(sobrestockM/1e6)}M)
 Retailers: ${canalDet.map(c => c.retailer + ' ' + c.so_total + 'un').join(', ')}
 ${gfkAgg ? 'GfK mercado: ' + gfkAgg.totalUds + ' un. Share aprox: ' + (gfkAgg.totalUds > 0 ? Math.round(soAgg.totalUds/gfkAgg.totalUds*100) : '?') + '%' : ''}`;
 
-    const shortPrompt = `Eres analista S&OP senior Chile, electrohogar. Directo. CLP. CATEGORÍA: ${cat} / ${subcat}.
-${MOTOR_LAVADO}
-DATOS PRE-CALCULADOS:
-${summary}
+    // Modo según nivel de filtro
+    const modo = filtroSKU ? 'sku' : (subcat && subcat !== 'Todas') ? 'subcat' : (cat && cat !== 'Todas') ? 'categoria' : 'empresa';
+    const topSKUsResumen = soAgg.topSKUs.slice(0,8).map(s => `${s.cod} ${s.uds}un`).join(' | ');
+    const jsonBase = `{"resumen":"","resumen_acciones":[],"retailers_abandonados":[],"retailers_castigados":[],"oportunidades_perdidas":[],"riesgos":[],"alertas":[],"contrafactual":"","moraleja":"","foda":{"fortalezas":"","debilidades":"","oportunidades":"","amenazas":""}}`;
 
-Responde SOLO JSON sin backticks:
-{
-  "resumen":"3-4 líneas operating review: qué PASÓ. Hechos que duelen. Vocabulario: GM%, fill rate, quiebre en piso, erosión de margen.",
-  "resumen_acciones":["acción imperativa 1: PARA/CARGA/LLAMA","acción 2","acción 3"],
-  "retailers_abandonados":[{"retailer":"NOMBRE","meses_sin_stock":N,"descripcion":"TEXTO corto"}],
-  "retailers_castigados":[{"retailer":"NOMBRE","so_antes":N,"so_despues":N,"caida_pct":N,"descripcion":"TEXTO"}],
-  "oportunidades_perdidas":[{"texto":"1 línea","monto":"$XXM"}],
-  "riesgos":[{"texto":"1 línea"}],
-  "alertas":[{"tipo":"CRITICA|ALTA|OPORTUNIDAD","monto":"$XXM","titulo":"corto","detalle":"2 líneas max","accion":"1 línea"}],
-  "contrafactual":"1-2 líneas: qué habría pasado si no destruías precio",
-  "moraleja":"1 línea demoledora",
-  "foda":{"fortalezas":"1 línea","debilidades":"1 línea","oportunidades":"1 línea","amenazas":"1 línea"}
-}`;
+    const promptSKU = `Analista S&OP senior Chile electrohogar. CLP. SKU: ${filtroSKU} / ${subcat}.\n${MOTOR_LAVADO}\nDATOS: ${summary}\nJSON sin backticks, mismo schema: ${jsonBase.replace('"resumen":""','"resumen":"3-4 líneas SKU: qué pasó, GM%, fill rate, quiebre en piso"')}`;
+
+    const promptSubcat = `KAM Manager senior Chile electrohogar. CLP. SUBCATEGORÍA: ${subcat} / ${cat}.\n${MOTOR_LAVADO}\nDATOS (${soAgg.totalUds.toLocaleString()} un, ${nMeses} meses):\nTop SKUs: ${topSKUsResumen}\n${summary}\nAnálisis de SUBCATEGORÍA, no de un SKU. JSON sin backticks:\n{"resumen":"4 líneas estado subcategoría ${subcat}: tendencia volumen, mix SKUs, presión precio, cobertura canal","resumen_acciones":["acción KAM 1","acción 2","acción 3"],"retailers_abandonados":[],"retailers_castigados":[],"oportunidades_perdidas":[{"texto":"","monto":""}],"riesgos":[{"texto":""}],"alertas":[{"tipo":"CRITICA","monto":"","titulo":"","detalle":"","accion":""}],"contrafactual":"mejor gestión de mix","moraleja":"1 línea para el KAM","foda":{"fortalezas":"","debilidades":"","oportunidades":"","amenazas":""}}`;
+
+    const promptCategoria = `Category Manager senior Chile electrohogar. CLP. CATEGORÍA: ${cat}.\n${MOTOR_LAVADO}\nDATOS (${soAgg.totalUds.toLocaleString()} un, ${nMeses} meses):\nTop SKUs: ${topSKUsResumen}\nRetailers: ${canalDet.slice(0,5).map(c=>c.retailer+' '+c.so_total+'un').join(', ')}\nLoading: ${loadingPct}%\nJSON sin backticks. Visión CATEGORÍA COMPLETA, sin mencionar SKUs individuales:\n{"resumen":"4-5 líneas categoría ${cat}: share por marca, tendencia, canal dominante, presión competitiva","resumen_acciones":["decisión categoría 1","decisión 2","decisión 3","decisión 4"],"retailers_abandonados":[],"retailers_castigados":[],"oportunidades_perdidas":[{"texto":"","monto":""}],"riesgos":[{"texto":""}],"alertas":[{"tipo":"CRITICA","monto":"","titulo":"","detalle":"","accion":""}],"contrafactual":"mejor gestión categoría","moraleja":"1 línea gerencial","foda":{"fortalezas":"","debilidades":"","oportunidades":"","amenazas":""}}`;
+
+    const promptEmpresa = `Director Comercial Chile electrohogar. CLP. EMPRESA: ${empresa}.\n${MOTOR_LAVADO}\nDATOS ($${Math.round(soAgg.totalVenta/1e9)}B venta, ${soAgg.totalUds.toLocaleString()} un, ${nMeses} meses):\nLoading: ${loadingPct}% | Sobrestock: $${Math.round(sobrestockM/1e6)}M\nRetailers: ${canalDet.slice(0,5).map(c=>c.retailer+' '+c.so_total+'un').join(', ')}\nJSON sin backticks. Visión P&L GERENCIAL, sin mencionar SKUs:\n{"resumen":"4-5 líneas P&L comercial: revenue, GM%, loading impacto, posición competitiva, riesgo post-Maipú","resumen_acciones":["decisión gerencial 1","decisión 2","decisión 3","decisión 4"],"retailers_abandonados":[],"retailers_castigados":[],"oportunidades_perdidas":[{"texto":"","monto":""}],"riesgos":[{"texto":""}],"alertas":[{"tipo":"CRITICA","monto":"","titulo":"","detalle":"","accion":""}],"contrafactual":"impacto en P&L","moraleja":"1 línea boardroom","foda":{"fortalezas":"","debilidades":"","oportunidades":"","amenazas":""}}`;
+
+    const shortPrompt = modo === 'sku' ? promptSKU : modo === 'subcat' ? promptSubcat : modo === 'categoria' ? promptCategoria : promptEmpresa;
 
     // Claude call — MUCH smaller
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
