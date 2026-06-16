@@ -390,14 +390,53 @@ function up(inp,key){
   var card=document.getElementById("u-"+key);card.style.borderColor="var(--aqua)";card.style.background="rgba(15,113,115,.04)";
   document.getElementById("gobtn").disabled=false;
 }
-function az(){document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";document.getElementById("pt").textContent="Leyendo archivos...";
-var ks=Object.keys(F),p=ks.length,CSV={};
-ks.forEach(function(k){var rd=new FileReader();rd.onload=function(e){try{var d=new Uint8Array(e.target.result),wb=XLSX.read(d,{type:"array"}),ws=wb.Sheets[wb.SheetNames[0]];var allRows=XLSX.utils.sheet_to_json(ws,{defval:""});var catSel=document.getElementById("fc")?document.getElementById("fc").value:"todas";var skuSel=document.getElementById("fk")?document.getElementById("fk").value:"todos";var marSel=document.getElementById("fm")?document.getElementById("fm").value:"todas";var catMap={"lavado":"Lavado y Secado","refri":"Refrigeraci\u00f3n","coccion":"Cocinas y Hornos","lavaplatos":"Lavavajillas","aspirado":"Aspirado y Cuidado","climatizacion":"Climatizaci\u00f3n","calefaccion":"Calefacci\u00f3n","otros":"Otros Electrodom\u00e9sticos"};var catTarget=catMap[catSel]||catSel;if(k==="so"||k==="si"){allRows=allRows.filter(function(r){var cat=r["Categor\u00eda"]||r["Categoria"]||"";var sku=r["Cod. Producto"]||r["Cod."]||r["SKU"]||"";var mar=(r["Marca"]||r["BRAND"]||"").toLowerCase();var catOk=(catSel==="todas")||(cat===catTarget);var skuOk=(skuSel==="todos")||(sku===skuSel);var marOk=(marSel==="todas")||(mar===marSel.toLowerCase());return catOk&&skuOk&&marOk;});}if(k==="id"||k==="ir"){allRows=allRows.filter(function(r){var sku=r["Cod. Producto"]||r["Cod."]||r["SKU"]||"";return(skuSel==="todos")||(sku===skuSel);});}// Si quedan demasiadas filas, forzar filtro por primera categoría disponible
-if(allRows.length>50000&&(k==="so"||k==="si")){
-  var firstCat=allRows[0]&&(allRows[0]["Categor\u00eda"]||allRows[0]["Categoria"]||"");
-  if(firstCat)allRows=allRows.filter(function(r){return (r["Categor\u00eda"]||r["Categoria"]||"")=== firstCat;});
+function gF(r,keys){
+  for(var i=0;i<keys.length;i++){
+    // Exact match first
+    var v=r[keys[i]];if(v!==undefined&&v!=="")return String(v);
+    // Substring match (encoding-safe for accented headers)
+    var rks=Object.keys(r);
+    for(var j=0;j<rks.length;j++){
+      if(rks[j].indexOf(keys[i])>=0||keys[i].indexOf(rks[j])>=0){var v2=r[rks[j]];if(v2!==undefined&&v2!=="")return String(v2);}
+    }
+  }
+  return "";
 }
-if(allRows.length>0){var headers=Object.keys(allRows[0]);var csv=headers.join(",")+"\n"+allRows.map(function(r){return headers.map(function(h){return String(r[h]||"").replace(/,/g,"")}).join(",")}).join("\n");CSV[k]=csv;}else{CSV[k]=null;}}catch(er){CSV[k]=null}p--;if(!p)callAPI(CSV);};rd.readAsArrayBuffer(F[k])});
+function toN(v){if(!v&&v!==0)return 0;return parseFloat(String(v).replace(/[^0-9.\-]/g,""))||0;}
+function aggRows(rows,skuSel,catSel){
+  var catTarget={"lavado":"Lavado y Secado","refri":"Refrigeraci\u00f3n","coccion":"Cocinas y Hornos","lavaplatos":"Lavavajillas","aspirado":"Aspirado y Cuidado","climatizacion":"Climatizaci\u00f3n","calefaccion":"Calefacci\u00f3n","otros":"Otros Electrodom\u00e9sticos"}[catSel]||"";
+  var out=[];
+  rows.forEach(function(r){
+    var cod=gF(r,["Cod. Producto","Cod.","SKU","Item","Codigo"]);
+    var cat=gF(r,["Categor\u00eda","Categoria","Categoría"]);
+    var fecha=gF(r,["Fecha","Mes","Periodo","Period","Fecha Corte"]);
+    var retail=gF(r,["Retailer","Retail","Cliente","Canal","Bodega"]);
+    var uds=toN(gF(r,["Unidades","Un.","Qty","Cantidad","Disponible","Stock Total","Stock Tienda","Sales Units"]));
+    var venta=toN(gF(r,["Venta Total sin IVA","Venta sin IVA","Venta","Monto","Sales Value"]));
+    var pvp=toN(gF(r,["PVP Promedio","PVP","Precio","Price CLP"]));
+    var marca=gF(r,["Marca","BRAND","Brand"]);
+    var costo=toN(gF(r,["Costo Internado Unit.","Costo unit.","Costo","Cost"]));
+    if(!fecha||uds===0)return;
+    if(skuSel!=="todos"&&cod!==skuSel)return;
+    if(catTarget&&cat&&cat!==catTarget)return;
+    out.push([fecha,retail,marca,cod,uds,venta,pvp,costo].join(","));
+  });
+  var hdr="Fecha,Retailer,Marca,Cod. Producto,Unidades,Venta Total sin IVA,PVP Promedio,Costo Internado Unit.";
+  var csv=hdr+"\n"+out.join("\n");
+  // Hard cap 3MB — if exceeded, keep last 20000 rows (most recent data)
+  if(csv.length>3*1024*1024){out=out.slice(-20000);csv=hdr+"\n"+out.join("\n");}
+  return csv;
+}
+function az(){document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";document.getElementById("pt").textContent="Procesando archivos...";
+var ks=Object.keys(F),p=ks.length,CSV={};
+var skuSel=(document.getElementById("fk")||{}).value||"todos";
+var catSel=(document.getElementById("fc")||{}).value||"todas";
+ks.forEach(function(k){var rd=new FileReader();rd.onload=function(e){try{
+  var d=new Uint8Array(e.target.result),wb=XLSX.read(d,{type:"array"}),ws=wb.Sheets[wb.SheetNames[0]];
+  var rows=XLSX.utils.sheet_to_json(ws,{defval:""});
+  CSV[k]=rows.length>0?aggRows(rows,skuSel,catSel):null;
+}catch(er){console.error("Read error",k,er);CSV[k]=null;}
+p--;if(!p)callAPI(CSV);};rd.readAsArrayBuffer(F[k])});
 }
 function callAPI(CSV){
 document.getElementById("pt").textContent="Analizando con IA...";
