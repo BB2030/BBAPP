@@ -177,24 +177,14 @@ body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);font-s
   </div>
 </div>
 
-<div id="u-gfk" class="uf" style="grid-column:1/-1" onclick="document.getElementById('f-gfk').click()">
-  <input type="file" id="f-gfk" accept=".xlsx,.xls,.csv" style="display:none" onchange="up(this,'gfk')">
-  <div style="padding:20px 20px;text-align:center">
-    <div style="font-size:17px;font-weight:700;color:var(--dk);display:flex;align-items:center;justify-content:center;gap:8px">📈 Data de Mercado (GfK) <span style="font-size:9px;font-weight:700;padding:2px 8px;background:var(--border);color:var(--text2);letter-spacing:1px">OPCIONAL</span></div>
-    <div style="font-size:13px;color:var(--text2);margin-top:6px">Haz click o arrastra tu Excel</div>
-    <p id="n-gfk" style="font-size:11px;color:var(--aqua);font-weight:700;margin-top:4px"></p>
+<!-- GfK multi-categoría por reporte real -->
+<div style="grid-column:1/-1;border:1px solid var(--border);padding:14px;background:var(--bg)">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div style="font-size:14px;font-weight:700;color:var(--dk);display:flex;align-items:center;gap:8px">📈 Data de Mercado (GfK) <span style="font-size:9px;font-weight:700;padding:2px 8px;background:var(--border);color:var(--text2);letter-spacing:1px">OPCIONAL</span></div>
+    <div style="font-size:9px;color:var(--text3)">Cada caja = un reporte GfK · sube tal como llega</div>
   </div>
-  <div style="text-align:center;padding-bottom:10px" onclick="event.stopPropagation()">
-    <span onclick="tf('fmt-gfk')" style="font-size:11px;color:var(--aqua);font-weight:700;cursor:pointer;text-decoration:underline">👁 ver formato</span>
-  </div>
-  <div id="fmt-gfk" style="display:none;border-top:1px solid var(--border);padding:12px 14px" onclick="event.stopPropagation()">
-    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">FORMATO REAL GfK — pega el Excel tal como te llega</div>
-    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:8px">
-      <tr><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Period</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">BRAND</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Item</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">AUTOMATIC</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">LOADING</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">DRYING FUNCTION</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">LOADING KG</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Sales Units</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Sales Value &lt;LC&gt;</th><th style="color:var(--blue);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);text-align:left">Price CLP</th></tr>
-      <tr><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">Jul 19</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">BOSCH</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">WAN24260ES</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">FULLAUTOM.</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">FRONTLOADING</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">NO</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">7</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">52</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">16.452.495</td><td style="padding:4px 6px;color:var(--text2);border-bottom:1px solid var(--border)">316.394</td></tr>
-    </table>
-    <div style="font-size:10px;color:var(--aqua);font-weight:600">📌 Pega el Excel GfK tal como te llega — sin renombrar columnas.</div>
-  </div>
+  <div id="gfk-tree"></div>
+  <div style="margin-top:8px;font-size:9px;color:var(--text3)">📌 Sin renombrar columnas · Period | BRAND | Item | atributos categoría | Sales Units | Sales Value &lt;LC&gt; | Price CLP</div>
 </div>
 
 </div>
@@ -222,7 +212,120 @@ var CC={"Electrolux Group":{marcas:["Electrolux","Fensa","Mademsa"],cats:[{v:"la
 var F={},emp="",rub="",cfg=null,sks=[];
 function tf(id){var el=document.getElementById(id);el.style.display=el.style.display==='none'?'block':'none'}
 function setupDrop(boxId,fileId){var b=document.getElementById(boxId);if(!b)return;b.ondragover=function(e){e.preventDefault();b.style.borderColor="var(--dk)"};b.ondragleave=function(){b.style.borderColor="var(--border)"};b.ondrop=function(e){e.preventDefault();b.style.borderColor="var(--border)";var f=document.getElementById(fileId);var dt=new DataTransfer();dt.items.add(e.dataTransfer.files[0]);f.files=dt.files;f.dispatchEvent(new Event("change"))}}
-document.addEventListener("DOMContentLoaded",function(){["si","so","id","ir","gfk"].forEach(function(k){setupDrop("u-"+k,"f-"+k)})});
+// ── GfK ÁRBOL POR REPORTE REAL ──
+// Estructura exacta de cómo GfK entrega los reportes: una categoría padre, subcategorías = archivos separados
+var GFK_TREE=[
+  {cat:"lavado", lbl:"Laundry", ico:"🫧", subs:[
+    {k:"wm",   lbl:"Washing Machines",  ico:"🔵", hint:"AUTOMATIC · LOADING · DRYING FUNCTION · LOADING KG"},
+    {k:"td",   lbl:"Tumble Dryers",     ico:"💨", hint:"LOADING KG · DRYING FUNCTION · HEAT SOURCE"},
+    {k:"wd",   lbl:"Washer-Dryers",     ico:"🔄", hint:"LOADING KG · WASH KG · DRY KG · LOADING"},
+    {k:"semi", lbl:"Semi-Automatic",    ico:"🔘", hint:"LOADING KG · LOADING"},
+  ]},
+  {cat:"refri", lbl:"Refrigeration", ico:"🧊", subs:[
+    {k:"rf",   lbl:"Refrigerators",     ico:"❄️", hint:"TYPE · CAPACITY LT · DOORS · DEFROST"},
+    {k:"fz",   lbl:"Freezers",          ico:"🧊", hint:"TYPE · CAPACITY LT · POSITION"},
+    {k:"mb",   lbl:"Mini Bars",         ico:"🍶", hint:"CAPACITY LT · TYPE"},
+  ]},
+  {cat:"coccion", lbl:"Cooking", ico:"🔥", subs:[
+    {k:"ck",   lbl:"Cookers",           ico:"🍳", hint:"FUEL · BURNERS · WIDTH CM · TYPE"},
+    {k:"bo",   lbl:"Built-in Ovens",    ico:"🔲", hint:"FUEL · CAPACITY L · WIDTH CM · SELF-CLEAN"},
+    {k:"hb",   lbl:"Hobs",             ico:"⬛", hint:"FUEL · ZONES · WIDTH CM"},
+    {k:"mw",   lbl:"Microwaves",        ico:"📡", hint:"TYPE · CAPACITY L · WIDTH CM"},
+    {k:"hd",   lbl:"Hoods",             ico:"💨", hint:"TYPE · WIDTH CM · MOTOR TYPE"},
+  ]},
+  {cat:"lavaplatos", lbl:"Dishwashers", ico:"🍽️", subs:[
+    {k:"dw",   lbl:"Dishwashers",       ico:"🍽️", hint:"CAPACITY COVERS · WIDTH CM · PROGRAMS"},
+  ]},
+  {cat:"aspirado", lbl:"Floor Care", ico:"🌀", subs:[
+    {k:"vc",   lbl:"Vacuum Cleaners",   ico:"🌀", hint:"TYPE · POWER W · BAGLESS · CORD"},
+    {k:"rv",   lbl:"Robot Vacuums",     ico:"🤖", hint:"TYPE · SUCTION PA · MAPPING TECH"},
+    {k:"sv",   lbl:"Stick Vacuums",     ico:"🔋", hint:"VOLTAGE V · BAGLESS · RUNTIME MIN"},
+  ]},
+  {cat:"climatizacion", lbl:"Air Conditioners", ico:"❄️", subs:[
+    {k:"ac",   lbl:"Room AC - Split",   ico:"🌡️", hint:"BTU · INVERTER · WIFI"},
+    {k:"pac",  lbl:"Portable AC",       ico:"📦", hint:"BTU · TYPE"},
+  ]},
+  {cat:"calefaccion", lbl:"Heating", ico:"🔆", subs:[
+    {k:"eh",   lbl:"Electric Heaters",  ico:"🔆", hint:"TYPE · POWER KW"},
+    {k:"wh",   lbl:"Water Heaters",     ico:"🚿", hint:"CAPACITY L · FUEL · TYPE"},
+  ]},
+];
+var GFK_DATA={};
+function buildGfkTree(){
+  var g=document.getElementById("gfk-tree");if(!g)return;
+  g.innerHTML="";
+  var fc=document.getElementById("fc");
+  var activeCat=fc?fc.value:"todas";
+  GFK_TREE.forEach(function(parent){
+    var isParentActive=(activeCat===parent.cat||activeCat==="todas");
+    var hasSubs=parent.subs.some(function(s){return!!GFK_DATA[s.k]});
+    // Parent header
+    var ph=document.createElement("div");
+    ph.style.cssText="display:flex;align-items:center;gap:6px;padding:5px 8px;margin-top:8px;background:"+(isParentActive?"var(--dk)":"var(--border)")+";";
+    ph.innerHTML="<span style='font-size:12px'>"+parent.ico+"</span>"+
+      "<span style='font-size:10px;font-weight:700;color:"+(isParentActive?"var(--gold)":"var(--text2)")+"'>"+parent.lbl.toUpperCase()+"</span>"+
+      (isParentActive?"<span style='font-size:7px;font-weight:700;color:var(--gold);margin-left:4px;border:1px solid var(--gold);padding:0 4px'>RECOMENDADO</span>":"")+
+      (hasSubs?"<span style='font-size:8px;color:"+(isParentActive?"rgba(245,223,77,.7)":"var(--aqua)")+"';margin-left:auto>✓ archivos cargados</span>":"");
+    g.appendChild(ph);
+    // Sub-boxes grid
+    var sg=document.createElement("div");
+    sg.style.cssText="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:4px;padding:4px 0 8px;border-left:2px solid "+(isParentActive?"var(--dk)":"var(--border)")+";margin-left:10px;padding-left:8px;";
+    parent.subs.forEach(function(sub){
+      var hasFile=!!GFK_DATA[sub.k];
+      var div=document.createElement("div");
+      div.id="gfk-box-"+sub.k;
+      div.style.cssText="border:"+(hasFile?"2px solid var(--aqua)":isParentActive?"1.5px solid var(--dk)":"1px solid var(--border)")+
+        ";background:"+(hasFile?"rgba(15,113,115,.06)":isParentActive?"rgba(26,13,71,.02)":"var(--white)")+
+        ";padding:7px 8px;cursor:pointer;transition:all .12s;position:relative";
+      div.ondragover=function(e){e.preventDefault();div.style.borderColor="var(--aqua)"};
+      div.ondragleave=function(){div.style.borderColor=hasFile?"var(--aqua)":isParentActive?"var(--dk)":"var(--border)"};
+      div.ondrop=function(e){e.preventDefault();var f=e.dataTransfer.files[0];if(f)upGfk(f,sub.k)};
+      div.onclick=function(){document.getElementById("gfk-f-"+sub.k).click()};
+      div.innerHTML="<input type='file' id='gfk-f-"+sub.k+"' accept='.xlsx,.xls,.csv' style='display:none'>"+
+        "<div style='display:flex;align-items:center;gap:5px'>"+
+        "<span style='font-size:13px'>"+sub.ico+"</span>"+
+        "<div><div style='font-size:9px;font-weight:700;color:"+(hasFile?"var(--aqua)":isParentActive?"var(--dk)":"var(--text2)")+"'>"+sub.lbl+"</div>"+
+        (hasFile?"<div style='font-size:8px;color:var(--aqua);font-weight:700'>✓ cargado</div>":
+          "<div style='font-size:7px;color:var(--text3);line-height:1.2'>"+sub.hint+"</div>")+
+        "</div></div>";
+      var inp=div.querySelector("input");
+      inp.onchange=function(){if(inp.files[0])upGfk(inp.files[0],sub.k)};
+      sg.appendChild(div);
+    });
+    g.appendChild(sg);
+  });
+}
+function upGfk(file,key){
+  var rd=new FileReader();
+  rd.onload=function(e){
+    try{
+      var d=new Uint8Array(e.target.result);
+      var wb=XLSX.read(d,{type:"array"});
+      var ws=wb.Sheets[wb.SheetNames[0]];
+      GFK_DATA[key]=XLSX.utils.sheet_to_csv(ws);
+      buildGfkTree();
+      document.getElementById("gobtn").disabled=false;
+    }catch(err){console.error("GfK read error",err)}
+  };
+  rd.readAsArrayBuffer(file);
+}
+function mergeGfk(){
+  var keys=Object.keys(GFK_DATA);
+  if(!keys.length)return null;
+  var merged="";
+  keys.forEach(function(k,i){
+    var csv=GFK_DATA[k];
+    if(i===0){merged=csv;}
+    else{var lines=csv.split("\n");merged+="\n"+lines.slice(1).join("\n");}
+  });
+  return merged||null;
+}
+document.addEventListener("DOMContentLoaded",function(){
+  ["si","so","id","ir"].forEach(function(k){setupDrop("u-"+k,"f-"+k)});
+  buildGfkTree();
+  var fc=document.getElementById("fc");
+  if(fc)fc.addEventListener("change",function(){buildGfkTree()});
+});
 function ue(){var r=document.getElementById("gr").value,s=document.getElementById("ge");s.innerHTML="<option value=''>Selecciona...</option>";(RR[r]||[]).forEach(function(e){s.innerHTML+="<option>"+e+"</option>"});cg()}
 function cg(){document.getElementById("gbn").disabled=!(document.getElementById("gr").value&&document.getElementById("ge").value)}
 function go(){rub=document.getElementById("gr").selectedOptions[0].text;emp=document.getElementById("ge").value;document.getElementById("gate").style.display="none";document.getElementById("main").style.display="block";document.getElementById("ctx").textContent=rub+" · "+emp;lc()}
@@ -241,7 +344,7 @@ var sub=document.getElementById("fb");var subName=sub&&sub.selectedOptions[0]&&s
 var marc=document.getElementById("fm");var marcaName=marc&&marc.selectedOptions[0]&&marc.selectedOptions[0].value!=="todas"?marc.selectedOptions[0].text:"Todas";
 var ret=document.getElementById("fr");var retName="Todos";
 var sku=document.getElementById("fk");var skuName=sku&&sku.selectedOptions[0]&&sku.selectedOptions[0].value!=="todos"?sku.selectedOptions[0].value:"Todos";
-fetch("/api/forecast",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({so:CSV.so||null,si:CSV.si||null,id:CSV.id||null,ir:CSV.ir||null,gfk:CSV.gfk||null,empresa:emp,rubro:rub,categoria:catName,subcategoria:subName,marca:marcaName,retailer:"Todos",sku:skuName})})
+fetch("/api/forecast",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({so:CSV.so||null,si:CSV.si||null,id:CSV.id||null,ir:CSV.ir||null,gfk:mergeGfk()||null,empresa:emp,rubro:rub,categoria:catName,subcategoria:subName,marca:marcaName,retailer:"Todos",sku:skuName})})
 .then(function(r){return r.json()})
 .then(function(data){
 if(data.error){document.getElementById("pt").textContent="⚠️ "+(typeof data.error==="string"?data.error:JSON.stringify(data.error));return}
@@ -299,7 +402,14 @@ var sortedU=se.map(function(d){return d.uds}).sort(function(a,b){return a-b});
 var baseline=sortedU[Math.floor(sortedU.length*0.6)]||soProm;
 // Quiebres: pérdida REAL = (baseline - uds reales) × PVP por cada mes bajo umbral
 var qMeses=se.filter(function(d){return d.uds<baseline*0.45});
-if(qMeses.length){var costoQreal=qMeses.reduce(function(s,d){return s+(baseline-d.uds)*pvpP},0);var costoQ=Math.min(Math.round(costoQreal),TECHO);var capt="";if(D.serie_gfk_marcas){var brs=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return bl.indexOf("fen")<0&&bl.indexOf("mad")<0&&bl.indexOf("elec")<0});if(brs[0])capt="Capturado: "+brs.slice(0,2).join(" · ")}var detQ="Baseline normal: "+baseline+" un/mes. Meses en quiebre: "+qMeses.map(function(d){return d.fecha+" ("+d.uds+" un, faltaron "+(baseline-d.uds)+")"}).join(", ")+".<br>Cálculo: suma de (baseline − real) × $"+Math.round(pvpP).toLocaleString()+" PVP = $"+Math.round(costoQreal).toLocaleString("es-CL")+".<br>Fuentes: SO detectó los meses bajo baseline · Inv.Retail confirmó stock cero · GfK identificó quién capturó.";cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt,fuente:"SO × Inv.Retail × GfK",construccion:detQ})}
+if(qMeses.length){var costoQreal=qMeses.reduce(function(s,d){return s+(baseline-d.uds)*pvpP},0);var costoQ=Math.min(Math.round(costoQreal),TECHO);
+// Evidencia real: qué competidor SUBIÓ en los meses de quiebre (coincidencia temporal)
+var capt="";var captDet="";
+if(D.serie_gfk_marcas){var qFechas=qMeses.map(function(d){return d.fecha});var crecimiento={};
+Object.keys(D.serie_gfk_marcas).forEach(function(b){var bl=b.toLowerCase();if(bl.indexOf("fen")>=0||bl.indexOf("mad")>=0||bl.indexOf("elec")>=0)return;var s=D.serie_gfk_marcas[b];var prom=s.reduce(function(t,d){return t+d.uds},0)/(s.length||1);var enQuiebre=s.filter(function(d){return qFechas.indexOf(d.fecha)>=0});var promQ=enQuiebre.length?enQuiebre.reduce(function(t,d){return t+d.uds},0)/enQuiebre.length:0;if(promQ>prom)crecimiento[b]=Math.round((promQ/prom-1)*100)});
+var ganadores=Object.keys(crecimiento).sort(function(a,b){return crecimiento[b]-crecimiento[a]});
+if(ganadores.length){capt="Capturado: "+ganadores.slice(0,2).map(function(b){return b+" +"+crecimiento[b]+"%"}).join(" · ");captDet="<br>Coincidencia temporal: en los meses que quebraste, "+ganadores.slice(0,2).map(function(b){return b+" vendió +"+crecimiento[b]+"% sobre su promedio"}).join(" y ")+" — capturaron tu demanda sin bajar precio.";}}
+var detQ="Baseline normal: "+baseline+" un/mes. Meses en quiebre: "+qMeses.map(function(d){return d.fecha+" ("+d.uds+" un, faltaron "+(baseline-d.uds)+")"}).join(", ")+".<br>Cálculo: suma de (baseline − real) × $"+Math.round(pvpP).toLocaleString()+" PVP = $"+Math.round(costoQreal).toLocaleString("es-CL")+"."+captDet+"<br>Fuentes: SO detectó los meses bajo baseline · Inv.Retail confirmó stock cero · GfK midió el crecimiento de la competencia en esos mismos meses.";cagazos.push({titulo:"Quiebre en piso de venta",monto:costoQ,detalle:qMeses.length+" meses sin cobertura · "+capt,fuente:"SO × Inv.Retail × GfK",construccion:detQ})}
 // Fire sales agrupados
 var fsMeses=se.filter(function(d){var p=d.uds>0?d.venta/d.uds:0;return p>0&&p<pvpP*0.82&&d.uds>soProm*0.5});
 if(fsMeses.length){var costoFS=Math.min(Math.round(fsMeses.reduce(function(s,d){return s+(pvpP-d.venta/d.uds)*d.uds},0)),TECHO);if(costoFS>UMBRAL){var detFS="Meses con PVP bajo 82% del promedio ($"+Math.round(pvpP*0.82).toLocaleString()+"): "+fsMeses.map(function(d){var p=Math.round(d.venta/d.uds);return d.fecha+" ($"+p.toLocaleString()+", "+d.uds+" un)"}).join(", ")+".<br>Cálculo por mes: (PVP normal $"+Math.round(pvpP).toLocaleString()+" − PVP real) × unidades vendidas = margen destruido.<br>Fuentes: SO precio (tu PVP real mes a mes) × GfK (competencia NO bajó precio en los mismos meses).";cagazos.push({titulo:"Destrucción de precio",monto:costoFS,detalle:fsMeses.length+" meses PVP bajo promedio · sin respuesta de competencia",fuente:"SO precio × GfK competencia",construccion:detFS})}}
@@ -332,20 +442,47 @@ var ourBrands=["fen","mad","elec"];
 var comps=Object.keys(D.serie_gfk_marcas).filter(function(b){var bl=b.toLowerCase();return ourBrands.every(function(o){return bl.indexOf(o)<0})});
 if(comps.length){
 // PVP promedio de cada competidor
-var compInfo=comps.map(function(b){var s=D.serie_gfk_marcas[b];var pv=0,n=0;s.forEach(function(d){if(d.pvp>0){pv+=d.pvp;n++}});return{nombre:b,pvp:n>0?Math.round(pv/n):0}}).sort(function(a,b){return a.pvp-b.pvp});
+var compInfo=comps.map(function(b){var s=D.serie_gfk_marcas[b];var pv=0,n=0;s.forEach(function(d){if(d.pvp>0){pv+=d.pvp;n++}});var mod=D.modelos_marca&&D.modelos_marca[b]?D.modelos_marca[b].replace(b+"-","").replace(b,"").trim():"";return{nombre:b,modelo:mod,pvp:n>0?Math.round(pv/n):0}}).sort(function(a,b){return a.pvp-b.pvp});
 var subcat=D.subcategoria||"Lavadoras 8-10kg carga superior";
 h+="<div style='padding:10px 12px;background:rgba(15,113,115,.04);border:1px solid var(--border);margin-bottom:14px;border-radius:0'>";
-h+="<div style='font-size:8px;letter-spacing:.5px;color:var(--text3);margin-bottom:4px'>COMPARANDO CONTRA — mismo segmento de capacidad</div>";
-h+="<div style='display:flex;flex-wrap:wrap;gap:6px;align-items:center'>";
-compInfo.forEach(function(c){h+="<span style='font-size:11px;font-weight:700;color:var(--dk)'>"+c.nombre+"</span><span style='font-size:9px;color:var(--text2)'>"+fmtM(c.pvp)+"</span><span style='color:var(--text3);font-size:9px'>·</span>"});
+h+="<div style='font-size:8px;letter-spacing:.5px;color:var(--text3);margin-bottom:6px'>COMPARANDO CONTRA — mismo segmento de capacidad (8-10kg)</div>";
+h+="<div style='display:flex;flex-wrap:wrap;gap:10px;align-items:center'>";
+compInfo.forEach(function(c){h+="<div style='font-size:11px'><span style='font-weight:700;color:var(--dk)'>"+c.nombre+"</span>"+(c.modelo?" <span style='color:var(--text3);font-size:9px'>"+c.modelo+"</span>":"")+" <span style='color:var(--text2)'>"+fmtM(c.pvp)+"</span></div>"});
 h+="</div>";
-h+="<div style='font-size:9px;color:var(--text2);margin-top:4px;font-style:italic'>Tu producto vs estas marcas en el mismo rango de kilaje. Datos de GfK del archivo cargado.</div>";
+h+="<div style='font-size:9px;color:var(--text2);margin-top:5px;font-style:italic'>Tu PC9.5SZ vs el modelo más vendido de cada marca en el mismo rango. Datos GfK del archivo cargado.</div>";
 h+="</div>";
 }}
 // Conclusión
 if(hi.costo_gestion&&hi.costo_gestion.moraleja){h+="<div style='padding:12px 14px;background:var(--dk);color:white;margin-bottom:14px;border-radius:0'><div style='font-size:8px;letter-spacing:1px;opacity:.6;margin-bottom:4px'>CONCLUSIÓN</div><div style='font-size:13px;font-weight:400;line-height:1.4'>"+hi.costo_gestion.moraleja+"</div></div>"}
 // Impacto acumulado
-if(cagazos.length){h+="<div style='font-size:10px;font-weight:700;color:#c0392b;letter-spacing:.5px;margin-bottom:6px'>IMPACTO ACUMULADO — últimos meses</div>";cagazos.slice(0,4).forEach(function(c,ci){var did="det"+ci;h+="<div style='margin-bottom:5px'><div style='display:flex;gap:0'><div style='flex:1;padding:10px 12px;background:rgba(192,57,43,.04);border-left:3px solid #c0392b'><div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-size:12px;font-weight:700;color:var(--dk)'>"+c.titulo+"</div><div style='font-size:16px;font-weight:700;color:#c0392b'>-"+fmtM(c.monto)+"</div></div><div style='font-size:10px;color:var(--text2);margin-top:2px'>"+c.detalle+"</div><div onclick=\"var e=document.getElementById('"+did+"');e.style.display=e.style.display==='none'?'block':'none';this.textContent=e.style.display==='none'?'▾ ver detalles':'▴ ocultar'\" style='font-size:9px;color:var(--aqua);cursor:pointer;margin-top:6px;font-weight:700;user-select:none'>▾ ver detalles</div><div id='"+did+"' style='display:none;margin-top:8px;padding:8px 10px;background:rgba(0,0,0,.03);font-size:10px;color:var(--text2);line-height:1.5'>"+(c.construccion||"")+"</div></div><div style='width:130px;padding:10px;background:rgba(0,0,0,.02);border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center'><div style='font-size:7px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>CRUCE DE DATOS</div><div style='font-size:9px;color:var(--text2);font-weight:500;line-height:1.3'>"+c.fuente+"</div></div></div></div>"})}
+if(cagazos.length){var rango=se.length?se[0].fecha+" a "+se[se.length-1].fecha:"";var totalDmg=cagazos.reduce(function(s,c){return s+c.monto},0);h+="<div style='display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px'><div style='font-size:10px;font-weight:700;color:#c0392b;letter-spacing:.5px'>IMPACTO EN MARGEN DE CONTRIBUCIÓN — período "+rango+"</div><div style='font-size:11px;font-weight:700;color:#c0392b'>Total: -"+fmtM(totalDmg)+"</div></div>";h+="<div style='font-size:9px;color:var(--text3);margin-bottom:8px;font-style:italic'>Estimación basada en el cruce de tus 5 fuentes. Explica ~70-80% del impacto; el resto depende de factores externos (tipo de cambio, layout retail, aduana). Cada cifra abre su construcción en \"ver detalles\".</div>";cagazos.slice(0,4).forEach(function(c,ci){var did="det"+ci;h+="<div style='margin-bottom:5px'><div style='display:flex;gap:0'><div style='flex:1;padding:10px 12px;background:rgba(192,57,43,.04);border-left:3px solid #c0392b'><div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-size:12px;font-weight:700;color:var(--dk)'>"+c.titulo+"</div><div style='font-size:16px;font-weight:700;color:#c0392b'>-"+fmtM(c.monto)+"</div></div><div style='font-size:10px;color:var(--text2);margin-top:2px'>"+c.detalle+"</div><div onclick=\"var e=document.getElementById('"+did+"');e.style.display=e.style.display==='none'?'block':'none';this.textContent=e.style.display==='none'?'▾ ver detalles':'▴ ocultar'\" style='font-size:9px;color:var(--aqua);cursor:pointer;margin-top:6px;font-weight:700;user-select:none'>▾ ver detalles</div><div id='"+did+"' style='display:none;margin-top:8px;padding:8px 10px;background:rgba(0,0,0,.03);font-size:10px;color:var(--text2);line-height:1.5'>"+(c.construccion||"")+"</div></div><div style='width:130px;padding:10px;background:rgba(0,0,0,.02);border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center'><div style='font-size:7px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>CRUCE DE DATOS</div><div style='font-size:9px;color:var(--text2);font-weight:500;line-height:1.3'>"+c.fuente+"</div></div></div></div>"})}
+// ── LA HERIDA: daño acumulado mes a mes ──
+if(cagazos.length&&se.length){
+var dmgMes=se.map(function(d,i){var dm=0;
+// fire sale damage this month
+var p=d.uds>0?d.venta/d.uds:0;if(p>0&&p<pvpP*0.82&&d.uds>soProm*0.5)dm+=(pvpP-p)*d.uds;
+// quiebre damage this month
+if(d.uds<baseline*0.45)dm+=(baseline-d.uds)*pvpP;
+return{fecha:d.fecha,dmg:dm}});
+var acum=0;var serieAcum=dmgMes.map(function(d){acum+=d.dmg;return{fecha:d.fecha,acum:acum}});
+var maxAcum=acum||1;
+var WH=600,HH=110,pL=70,pR=20,pwH=WH-pL-pR,phH=HH-30,nH=serieAcum.length;
+function pxH(i){return pL+i/(nH-1)*pwH}function pyH(v){return 15+phH-(v/maxAcum)*phH}
+var svgH="<svg viewBox='0 0 "+WH+" "+HH+"' style='width:100%;margin:4px 0' xmlns='http://www.w3.org/2000/svg'>";
+// area
+var areaP="";serieAcum.forEach(function(d,i){areaP+=pxH(i)+","+pyH(d.acum)+" "});areaP+=pxH(nH-1)+","+pyH(0)+" "+pxH(0)+","+pyH(0);
+svgH+="<polygon points='"+areaP+"' fill='rgba(192,57,43,0.12)'/>";
+svgH+="<polyline points='"+serieAcum.map(function(d,i){return pxH(i)+","+pyH(d.acum)}).join(" ")+"' fill='none' stroke='#c0392b' stroke-width='2'/>";
+// y labels
+svgH+="<text x='"+(pL-6)+"' y='18' font-size='8' fill='#999' text-anchor='end'>"+fmtM(maxAcum)+"</text>";
+svgH+="<text x='"+(pL-6)+"' y='"+(15+phH)+"' font-size='8' fill='#999' text-anchor='end'>$0</text>";
+// x labels (every 3)
+serieAcum.forEach(function(d,i){if(i%3===0||i===nH-1)svgH+="<text x='"+pxH(i)+"' y='"+(HH-6)+"' font-size='7' fill='#666' text-anchor='middle'>"+d.fecha.slice(2)+"</text>"});
+// final point
+svgH+="<circle cx='"+pxH(nH-1)+"' cy='"+pyH(acum)+"' r='3' fill='#c0392b'/>";
+svgH+="</svg>";
+h+="<div style='margin-top:10px'><div style='font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:2px'>DAÑO ACUMULADO — solo sube, no se recupera</div>"+svgH+"</div>";
+}
 h+="<div style='border-top:1px solid var(--border);margin:14px 0 4px'></div>";
 })();
 // ─── GRÁFICO SO vs SI (unidades) ───
@@ -813,6 +950,8 @@ if(mv!=="todas"&&x.m!==mv.toLowerCase())return false;
 return true;
 }).map(function(x){return x.v});
 if(!sk.length)sk=allSk.map(function(x){return x.v});
+// RNG con semilla fija → la demo genera SIEMPRE los mismos números (consistencia)
+var _seed=20250529;function rnd(){_seed=(_seed*1103515245+12345)&0x7fffffff;return _seed/0x7fffffff}
 var rt=["Falabella","Ripley","Paris","Hites","La Polar","Lider","Sodimac"];
 var ms=["2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06"];
 var hd=["Fecha","Retailer","Marca","Cod. Producto","Unidades","Venta Total sin IVA","PVP Promedio"];
@@ -854,64 +993,64 @@ var quiebres={
 var castigo={"Falabella":{"desde":"2026-01","factor":0.45}};
 // Sodimac es el ÚNICO que no quebró nunca
 ms.forEach(function(m,mi){rt.forEach(function(r){sk.forEach(function(s){
-var base=Math.round(35+Math.random()*45);
+var base=Math.round(35+rnd()*45);
 var est=estSO30[mi]||1;
 var rp=retPerf[r]||0.85;
-var u=Math.round(base*est*rp*(0.8+Math.random()*0.4));
-if(quiebres[r]&&quiebres[r][m])u=Math.round(Math.random()*4);
+var u=Math.round(base*est*rp*(0.8+rnd()*0.4));
+if(quiebres[r]&&quiebres[r][m])u=Math.round(rnd()*4);
 // Castigo: Falabella redujo espacio post-quiebre, metió Midea. SO cae permanente.
 if(castigo[r]&&m>=castigo[r].desde)u=Math.round(u*castigo[r].factor);
 if(mi>=10&&mi<=11&&!quiebres[r])u=Math.round(u*0.5);
-var pvp=Math.round(pvp30[mi]*(0.96+Math.random()*0.08));
+var pvp=Math.round(pvp30[mi]*(0.96+rnd()*0.08));
 if(u<5)pvp=pvp30[mi]||220000;
 var marca=brandMap[s.split("-")[0]]||s.split("-")[0];
 SO+=m+","+r+","+marca+","+s+","+u+","+Math.round(u*pvp*0.81)+","+pvp+"\n";
 var sm=siM30[mi]||0;
-var siU=sm>0?Math.round(base*sm*rp*(0.6+Math.random()*0.8)):0;
+var siU=sm>0?Math.round(base*sm*rp*(0.6+rnd()*0.8)):0;
 SI+=m+","+r+","+marca+","+s+","+siU+","+Math.round(siU*(pvp||220000)*0.77)+","+Math.round((pvp||220000)*0.55)+"\n"})});
 // Inventario: 19 meses ene 2025 - jul 2026
 sk.forEach(function(s){bd.forEach(function(b){
 var invD;
-if(mi<6)invD=Math.round(60+Math.random()*120);
-else if(mi<8)invD=Math.round(120+Math.random()*200);
-else if(mi<10)invD=Math.round(20+Math.random()*40);
-else if(mi<12)invD=Math.round(Math.random()*15);
-else invD=Math.round(30+Math.random()*60);
+if(mi<6)invD=Math.round(60+rnd()*120);
+else if(mi<8)invD=Math.round(120+rnd()*200);
+else if(mi<10)invD=Math.round(20+rnd()*40);
+else if(mi<12)invD=Math.round(rnd()*15);
+else invD=Math.round(30+rnd()*60);
 ID+=m+","+b+","+s+","+invD+"\n"});
 rt.forEach(function(r){
 var invR;
-if(mi<8)invR=Math.round(30+Math.random()*70);
-else if(mi<10)invR=Math.round(60+Math.random()*100);
-else if(mi<12)invR=Math.round(Math.random()*10);
-else invR=Math.round(15+Math.random()*40);
-if(r==="Hites"&&mi>=10)invR=Math.round(120+Math.random()*250);
-if(quiebres[r]&&quiebres[r][m])invR=Math.round(Math.random()*3);
+if(mi<8)invR=Math.round(30+rnd()*70);
+else if(mi<10)invR=Math.round(60+rnd()*100);
+else if(mi<12)invR=Math.round(rnd()*10);
+else invR=Math.round(15+rnd()*40);
+if(r==="Hites"&&mi>=10)invR=Math.round(120+rnd()*250);
+if(quiebres[r]&&quiebres[r][m])invR=Math.round(rnd()*3);
 IR+=m+","+r+","+s+","+invR+"\n"})});
 // GfK 19 meses — competencia también tiene estacionalidad pero crece
-var compBrands=[{m:"Samsung",base:260,g:1.004,pvp:248000},{m:"Midea",base:180,g:1.010,pvp:179000},{m:"LG",base:230,g:1.003,pvp:235000},{m:"Hisense",base:120,g:1.007,pvp:195000}];
+var compBrands=[{m:"Samsung",base:260,g:1.004,pvp:248000,mod:"WA90T5260"},{m:"Midea",base:180,g:1.010,pvp:179000,mod:"MA100W90"},{m:"LG",base:230,g:1.003,pvp:235000,mod:"WT9S"},{m:"Hisense",base:120,g:1.007,pvp:195000,mod:"WTJA901T"}];
 // Fensa GfK: sigue SO pero con ruido, fire sales inflan volumen, quiebres destruyen
 var fGfk30=[
 140,125,165,160,185,190,210,235,280,240,55,40,
 75,85,100,65,95,110
 ];
 sk.forEach(function(s){
-var gkU=Math.round(fGfk30[mi]*(0.03+Math.random()*0.03));
+var gkU=Math.round(fGfk30[mi]*(0.03+rnd()*0.03));
 var marca=brandMap[s.split("-")[0]]||s.split("-")[0];
-var fpvp=Math.round(pvp30[mi]*(0.96+Math.random()*0.08));
+var fpvp=Math.round(pvp30[mi]*(0.96+rnd()*0.08));
 GK+=m.replace("-"," ")+","+marca+","+s+","+gkU+","+Math.round(gkU*fpvp)+","+fpvp+"\n"});
 compBrands.forEach(function(cb){
-var cu=Math.round(cb.base*Math.pow(cb.g,mi)*(0.93+Math.random()*0.14));
+var cu=Math.round(cb.base*Math.pow(cb.g,mi)*(0.93+rnd()*0.14));
 if(mi>=10&&mi<=11)cu=Math.round(cu*1.5);
 // Jun 2026: Midea quiebra por supply chain Brasil — OPORTUNIDAD
 if(mi===17&&cb.m==="Midea")cu=Math.round(cu*0.35);
 // Competitor prices: seasonal variation, Cyber promos, UF adjustments — NOT flat
 var compPvpSeason=[1.02,1.02,1.03,1.03,1.01,0.99,0.98,0.99,0.96,0.94,0.87,0.92, 1.04,1.04,1.05,1.03,1.02,1.01];
-var cpvp=Math.round(cb.pvp*compPvpSeason[mi]*(0.96+Math.random()*0.08));
-GK+=m.replace("-"," ")+","+cb.m+","+cb.m+"-WA"+Math.round(8+Math.random()*4)+"T,"+cu+","+Math.round(cu*cpvp)+","+cpvp+"\n"})});
+var cpvp=Math.round(cb.pvp*compPvpSeason[mi]*(0.96+rnd()*0.08));
+GK+=m.replace("-"," ")+","+cb.m+","+cb.m+"-"+cb.mod+","+cu+","+Math.round(cu*cpvp)+","+cpvp+"\n"})});
 ["so","si","id","ir","gfk"].forEach(function(k){document.getElementById("n-"+k).textContent="✓ demo_"+k+".xlsx";var c=document.getElementById("u-"+k);c.style.borderColor="var(--aqua)";c.style.background="rgba(15,113,115,.04)"});
 document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";
 document.getElementById("pt").textContent="Analizando con IA...";
-callAPI({so:SO,si:SI,id:ID,ir:IR,gfk:GK});
+GFK_DATA['lavado']=GK;callAPI({so:SO,si:SI,id:ID,ir:IR,gfk:GK});
 }
 </script>
 </body>
