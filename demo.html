@@ -216,38 +216,60 @@ function setupDrop(boxId,fileId){var b=document.getElementById(boxId);if(!b)retu
 // Estructura exacta de cómo GfK entrega los reportes: una categoría padre, subcategorías = archivos separados
 var GFK_TREE=[
   {cat:"lavado", lbl:"Laundry", ico:"🫧", subs:[
-    {k:"wm",   lbl:"Washing Machines",  ico:"🔵", hint:"AUTOMATIC · LOADING · DRYING FUNCTION · LOADING KG"},
-    {k:"td",   lbl:"Tumble Dryers",     ico:"💨", hint:"LOADING KG · DRYING FUNCTION · HEAT SOURCE"},
-    {k:"wd",   lbl:"Washer-Dryers",     ico:"🔄", hint:"LOADING KG · WASH KG · DRY KG · LOADING"},
-    {k:"semi", lbl:"Semi-Automatic",    ico:"🔘", hint:"LOADING KG · LOADING"},
+    {k:"wm",   lbl:"Washing Machines",  ico:"🔵", hint:"AUTOMATIC · LOADING · DRYING FUNCTION · LOADING KG",
+     subcats:["lav-cs","lav-cf","lav-semi","centrifuga"]},
+    {k:"td",   lbl:"Tumble Dryers",     ico:"💨", hint:"LOADING KG · DRYING FUNCTION · HEAT SOURCE",
+     subcats:["secadora"]},
+    {k:"wd",   lbl:"Washer-Dryers",     ico:"🔄", hint:"LOADING KG · WASH KG · DRY KG · LOADING",
+     subcats:["lavaseca"]},
+    {k:"semi", lbl:"Semi-Auto / Centrifuge", ico:"🔘", hint:"LOADING KG · LOADING",
+     subcats:["lav-semi","centrifuga"]},
   ]},
   {cat:"refri", lbl:"Refrigeration", ico:"🧊", subs:[
-    {k:"rf",   lbl:"Refrigerators",     ico:"❄️", hint:"TYPE · CAPACITY LT · DOORS · DEFROST"},
-    {k:"fz",   lbl:"Freezers",          ico:"🧊", hint:"TYPE · CAPACITY LT · POSITION"},
-    {k:"mb",   lbl:"Mini Bars",         ico:"🍶", hint:"CAPACITY LT · TYPE"},
+    {k:"rf",   lbl:"Refrigerators",     ico:"❄️", hint:"TYPE · CAPACITY LT · DOORS · DEFROST",
+     subcats:["nf","fd","nf-2p","nf-3p"]},
+    {k:"fz",   lbl:"Freezers",          ico:"🧊", hint:"TYPE · CAPACITY LT · POSITION",
+     subcats:["freezer"]},
+    {k:"mb",   lbl:"Mini Bars",         ico:"🍶", hint:"CAPACITY LT · TYPE",
+     subcats:["minifridge"]},
   ]},
   {cat:"coccion", lbl:"Cooking", ico:"🔥", subs:[
-    {k:"ck",   lbl:"Cookers",           ico:"🍳", hint:"FUEL · BURNERS · WIDTH CM · TYPE"},
-    {k:"bo",   lbl:"Built-in Ovens",    ico:"🔲", hint:"FUEL · CAPACITY L · WIDTH CM · SELF-CLEAN"},
-    {k:"hb",   lbl:"Hobs",             ico:"⬛", hint:"FUEL · ZONES · WIDTH CM"},
-    {k:"mw",   lbl:"Microwaves",        ico:"📡", hint:"TYPE · CAPACITY L · WIDTH CM"},
-    {k:"hd",   lbl:"Hoods",             ico:"💨", hint:"TYPE · WIDTH CM · MOTOR TYPE"},
+    {k:"ck",   lbl:"Cookers",           ico:"🍳", hint:"FUEL · BURNERS · WIDTH CM · TYPE",
+     subcats:["cocina-gas","cocina-elec"]},
+    {k:"bo",   lbl:"Built-in Ovens",    ico:"🔲", hint:"FUEL · CAPACITY L · WIDTH CM · SELF-CLEAN",
+     subcats:["horno-emp"]},
+    {k:"hb",   lbl:"Hobs",             ico:"⬛", hint:"FUEL · ZONES · WIDTH CM",
+     subcats:["encimera"]},
+    {k:"mw",   lbl:"Microwaves",        ico:"📡", hint:"TYPE · CAPACITY L · WIDTH CM",
+     subcats:["micro"]},
+    {k:"hd",   lbl:"Hoods",             ico:"💨", hint:"TYPE · WIDTH CM · MOTOR TYPE",
+     subcats:["campana"]},
   ]},
   {cat:"lavaplatos", lbl:"Dishwashers", ico:"🍽️", subs:[
-    {k:"dw",   lbl:"Dishwashers",       ico:"🍽️", hint:"CAPACITY COVERS · WIDTH CM · PROGRAMS"},
+    {k:"dw",   lbl:"Dishwashers",       ico:"🍽️", hint:"CAPACITY COVERS · WIDTH CM · PROGRAMS",
+     subcats:["60cm","45cm"]},
   ]},
   {cat:"aspirado", lbl:"Floor Care", ico:"🌀", subs:[
-    {k:"vc",   lbl:"Vacuum Cleaners",   ico:"🌀", hint:"TYPE · POWER W · BAGLESS · CORD"},
-    {k:"rv",   lbl:"Robot Vacuums",     ico:"🤖", hint:"TYPE · SUCTION PA · MAPPING TECH"},
-    {k:"sv",   lbl:"Stick Vacuums",     ico:"🔋", hint:"VOLTAGE V · BAGLESS · RUNTIME MIN"},
+    {k:"vc",   lbl:"Vacuum Cleaners",   ico:"🌀", hint:"TYPE · POWER W · BAGLESS · CORD",
+     subcats:["aspira"]},
+    {k:"rv",   lbl:"Robot Vacuums",     ico:"🤖", hint:"TYPE · SUCTION PA · MAPPING TECH",
+     subcats:["robot"]},
+    {k:"sv",   lbl:"Stick Vacuums",     ico:"🔋", hint:"VOLTAGE V · BAGLESS · RUNTIME MIN",
+     subcats:["stick"]},
   ]},
   {cat:"climatizacion", lbl:"Air Conditioners", ico:"❄️", subs:[
-    {k:"ac",   lbl:"Room AC - Split",   ico:"🌡️", hint:"BTU · INVERTER · WIFI"},
-    {k:"pac",  lbl:"Portable AC",       ico:"📦", hint:"BTU · TYPE"},
+    {k:"ac",   lbl:"Room AC - Split",   ico:"🌡️", hint:"BTU · INVERTER · WIFI",
+     subcats:["split"]},
+    {k:"pac",  lbl:"Portable AC",       ico:"📦", hint:"BTU · TYPE",
+     subcats:["portatil"]},
+    {k:"fan",  lbl:"Fans",              ico:"🌬️", hint:"TYPE · DIAMETER CM",
+     subcats:["ventilador"]},
   ]},
   {cat:"calefaccion", lbl:"Heating", ico:"🔆", subs:[
-    {k:"eh",   lbl:"Electric Heaters",  ico:"🔆", hint:"TYPE · POWER KW"},
-    {k:"wh",   lbl:"Water Heaters",     ico:"🚿", hint:"CAPACITY L · FUEL · TYPE"},
+    {k:"eh",   lbl:"Electric Heaters",  ico:"🔆", hint:"TYPE · POWER KW",
+     subcats:["estufa"]},
+    {k:"wh",   lbl:"Water Heaters",     ico:"🚿", hint:"CAPACITY L · FUEL · TYPE",
+     subcats:["convector"]},
   ]},
 ];
 var GFK_DATA={};
@@ -257,6 +279,7 @@ function buildGfkTree(){
   var fc=document.getElementById("fc");
   var activeCat=fc?fc.value:"todas";
   GFK_TREE.forEach(function(parent){
+    var activeSub=document.getElementById("fb")?document.getElementById("fb").value:"todas";
     var isParentActive=(activeCat===parent.cat||activeCat==="todas");
     var hasSubs=parent.subs.some(function(s){return!!GFK_DATA[s.k]});
     // Parent header
@@ -272,10 +295,11 @@ function buildGfkTree(){
     sg.style.cssText="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:4px;padding:4px 0 8px;border-left:2px solid "+(isParentActive?"var(--dk)":"var(--border)")+";margin-left:10px;padding-left:8px;";
     parent.subs.forEach(function(sub){
       var hasFile=!!GFK_DATA[sub.k];
+      var isSubActive=isParentActive&&(activeSub==="todas"||(sub.subcats&&sub.subcats.indexOf(activeSub)>=0));
       var div=document.createElement("div");
       div.id="gfk-box-"+sub.k;
-      div.style.cssText="border:"+(hasFile?"2px solid var(--aqua)":isParentActive?"1.5px solid var(--dk)":"1px solid var(--border)")+
-        ";background:"+(hasFile?"rgba(15,113,115,.06)":isParentActive?"rgba(26,13,71,.02)":"var(--white)")+
+      div.style.cssText="border:"+(hasFile?"2px solid var(--aqua)":isSubActive?"2px solid var(--dk)":isParentActive?"1px dashed #aaa":"1px solid var(--border)")+
+        ";background:"+(hasFile?"rgba(15,113,115,.06)":isSubActive?"rgba(26,13,71,.06)":isParentActive?"rgba(26,13,71,.01)":"var(--white)")+
         ";padding:7px 8px;cursor:pointer;transition:all .12s;position:relative";
       div.ondragover=function(e){e.preventDefault();div.style.borderColor="var(--aqua)"};
       div.ondragleave=function(){div.style.borderColor=hasFile?"var(--aqua)":isParentActive?"var(--dk)":"var(--border)"};
@@ -284,7 +308,7 @@ function buildGfkTree(){
       div.innerHTML="<input type='file' id='gfk-f-"+sub.k+"' accept='.xlsx,.xls,.csv' style='display:none'>"+
         "<div style='display:flex;align-items:center;gap:5px'>"+
         "<span style='font-size:13px'>"+sub.ico+"</span>"+
-        "<div><div style='font-size:9px;font-weight:700;color:"+(hasFile?"var(--aqua)":isParentActive?"var(--dk)":"var(--text2)")+"'>"+sub.lbl+"</div>"+
+        "<div><div style='font-size:9px;font-weight:700;color:"+(hasFile?"var(--aqua)":isSubActive?"var(--dk)":isParentActive?"var(--text2)":"var(--text3)")+"'>"+sub.lbl+"</div>"+
         (hasFile?"<div style='font-size:8px;color:var(--aqua);font-weight:700'>✓ cargado</div>":
           "<div style='font-size:7px;color:var(--text3);line-height:1.2'>"+sub.hint+"</div>")+
         "</div></div>";
@@ -325,6 +349,8 @@ document.addEventListener("DOMContentLoaded",function(){
   buildGfkTree();
   var fc=document.getElementById("fc");
   if(fc)fc.addEventListener("change",function(){buildGfkTree()});
+  var fb=document.getElementById("fb");
+  if(fb)fb.addEventListener("change",function(){buildGfkTree()});
 });
 function ue(){var r=document.getElementById("gr").value,s=document.getElementById("ge");s.innerHTML="<option value=''>Selecciona...</option>";(RR[r]||[]).forEach(function(e){s.innerHTML+="<option>"+e+"</option>"});cg()}
 function cg(){document.getElementById("gbn").disabled=!(document.getElementById("gr").value&&document.getElementById("ge").value)}
