@@ -217,13 +217,11 @@ function setupDrop(boxId,fileId){var b=document.getElementById(boxId);if(!b)retu
 var GFK_TREE=[
   {cat:"lavado", lbl:"Laundry", ico:"🫧", subs:[
     {k:"wm",   lbl:"Washing Machines",  ico:"🔵", hint:"AUTOMATIC · LOADING · DRYING FUNCTION · LOADING KG",
-     subcats:["lav-cs","lav-cf","lav-semi","centrifuga"]},
+     subcats:["lav-cs","lav-cf","lav-semi","centrifuga","lavaseca"],
+     note:"Top Load · Front Load · Washer-Dryers · Semi-Auto · Centrífuga"},
     {k:"td",   lbl:"Tumble Dryers",     ico:"💨", hint:"LOADING KG · DRYING FUNCTION · HEAT SOURCE",
-     subcats:["secadora"]},
-    {k:"wd",   lbl:"Washer-Dryers",     ico:"🔄", hint:"LOADING KG · WASH KG · DRY KG · LOADING",
-     subcats:["lavaseca"]},
-    {k:"semi", lbl:"Semi-Auto / Centrifuge", ico:"🔘", hint:"LOADING KG · LOADING",
-     subcats:["lav-semi","centrifuga"]},
+     subcats:["secadora"],
+     note:"Secadoras — archivo separado"},
   ]},
   {cat:"refri", lbl:"Refrigeration", ico:"🧊", subs:[
     {k:"rf",   lbl:"Refrigerators",     ico:"❄️", hint:"TYPE · CAPACITY LT · DOORS · DEFROST",
@@ -310,7 +308,7 @@ function buildGfkTree(){
         "<span style='font-size:13px'>"+sub.ico+"</span>"+
         "<div><div style='font-size:9px;font-weight:700;color:"+(hasFile?"var(--aqua)":isSubActive?"var(--dk)":isParentActive?"var(--text2)":"var(--text3)")+"'>"+sub.lbl+"</div>"+
         (hasFile?"<div style='font-size:8px;color:var(--aqua);font-weight:700'>✓ cargado</div>":
-          "<div style='font-size:7px;color:var(--text3);line-height:1.2'>"+sub.hint+"</div>")+
+          "<div style='font-size:7px;color:var(--text3);line-height:1.2'>"+(sub.note?"<b>"+sub.note+"</b><br>":"")+sub.hint+"</div>")+
         "</div></div>";
       var inp=div.querySelector("input");
       inp.onchange=function(){if(inp.files[0])upGfk(inp.files[0],sub.k)};
