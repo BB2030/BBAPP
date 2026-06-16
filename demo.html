@@ -424,7 +424,7 @@ function aggRows(rows,skuSel,catSel){
   var hdr="Fecha,Retailer,Marca,Cod. Producto,Unidades,Venta Total sin IVA,PVP Promedio,Costo Internado Unit.";
   var csv=hdr+"\n"+out.join("\n");
   // Hard cap 3MB — if exceeded, keep last 20000 rows (most recent data)
-  if(csv.length>3*1024*1024){out=out.slice(-20000);csv=hdr+"\n"+out.join("\n");}
+  if(csv.length>1.5*1024*1024){out=out.slice(-10000);csv=hdr+"\n"+out.join("\n");}
   return csv;
 }
 function az(){document.getElementById("main").style.display="none";document.getElementById("proc").style.display="block";document.getElementById("pt").textContent="Procesando archivos...";
