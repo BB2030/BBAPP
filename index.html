@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>APP — Inteligencia comercial sin consultor</title>
+<title>APP · Electrolux Chile · Julio 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -31,9 +31,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.wrap { max-width:1060px; margin:0 auto; padding:0 48px; }
-
-/* ─── NAV ─── */
 nav {
   display: flex;
   justify-content: space-between;
@@ -41,10 +38,7 @@ nav {
   padding: 20px 48px;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-  max-width: 100%;
 }
-
-nav > * { max-width: 1060px; }
 
 .nav-inner {
   max-width: 1060px;
@@ -58,9 +52,8 @@ nav > * { max-width: 1060px; }
 .logo {
   display: flex;
   align-items: center;
-  gap: 2px;
   font-family: 'Lato', sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--dk);
   text-decoration: none;
@@ -70,17 +63,13 @@ nav > * { max-width: 1060px; }
   background: var(--dk);
   color: var(--gold);
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
   padding: 4px 7px;
   letter-spacing: 0.5px;
-  margin-right: 1px;
+  margin-right: 8px;
 }
 
-.nav-links {
-  display: flex;
-  gap: 36px;
-  list-style: none;
-}
+.nav-links { display: flex; gap: 36px; list-style: none; }
 
 .nav-links a {
   font-family: 'Lato', sans-serif;
@@ -92,28 +81,49 @@ nav > * { max-width: 1060px; }
   transition: color 0.15s;
 }
 
-.nav-links a.active {
-  color: var(--dk);
-  border-bottom: 2px solid var(--dk);
-}
-
+.nav-links a.active { color: var(--dk); border-bottom: 2px solid var(--dk); }
 .nav-links a:hover { color: var(--dk); }
 
-/* ─── HERO ─── */
 .hero {
   text-align: center;
-  padding: 72px 48px 56px;
-  max-width: 780px;
+  padding: 80px 48px 64px;
+  max-width: 860px;
   margin: 0 auto;
+}
+
+.hero-cta {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--dk);
+  margin-top: 20px;
+}
+
+.hero-greeting {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--violet);
+  margin-bottom: 16px;
+}
+
+.hero-date {
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 24px;
 }
 
 .hero h1 {
   font-family: 'Libre Baskerville', serif;
-  font-size: clamp(22px, 3vw, 32px);
+  font-size: clamp(26px, 4vw, 42px);
   font-weight: 700;
   line-height: 1.2;
   color: var(--dk);
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   letter-spacing: -0.5px;
 }
 
@@ -134,9 +144,7 @@ nav > * { max-width: 1060px; }
   margin: 0 auto;
 }
 
-/* ─── SECTION ─── */
 .section { padding: 48px 0; }
-.section-inner { max-width:1060px; margin:0 auto; padding:0 48px; }
 
 .section-label {
   font-family: 'Lato', sans-serif;
@@ -146,10 +154,9 @@ nav > * { max-width: 1060px; }
   text-transform: uppercase;
   color: var(--text3);
   margin-bottom: 24px;
-  text-align: left;
+  text-align: center;
 }
 
-/* ─── MATRIX ─── */
 .matrix-wrap {
   overflow-x: auto;
   width: 100%;
@@ -158,10 +165,7 @@ nav > * { max-width: 1060px; }
   padding: 0 48px;
 }
 
-.matrix {
-  border-collapse: collapse;
-  width: 100%;
-}
+.matrix { border-collapse: collapse; width: 100%; }
 
 .matrix th, .matrix td {
   border: 1px solid var(--border);
@@ -177,13 +181,9 @@ nav > * { max-width: 1060px; }
   font-family: 'Lato', sans-serif;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.3px;
   white-space: nowrap;
 }
-.matrix thead th:first-child {
-  background: var(--bg);
-  border: 1px solid var(--border);
-}
+.matrix thead th:first-child { background: var(--bg); border: 1px solid var(--border); }
 
 .matrix td.row-head {
   background: var(--dk);
@@ -191,97 +191,51 @@ nav > * { max-width: 1060px; }
   font-family: 'Lato', sans-serif;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.3px;
   white-space: nowrap;
   text-align: left;
 }
 
-.matrix td.empty {
-  background: #E8E5DF;
-  color: #C0BCB5;
-  font-size: 14px;
-}
-
-.matrix td.cell {
-  background: var(--white);
-  font-size: 12px;
-  color: var(--text2);
-  transition: background 0.12s;
-}
+.matrix td.empty { background: #E8E5DF; color: #C0BCB5; font-size: 14px; }
+.matrix td.cell { background: var(--white); font-size: 12px; color: var(--text2); transition: background 0.12s; }
 .matrix td.cell:hover { background: #F5F3EF; }
-
-.matrix td.red   { color: #c0392b; font-weight: 700; background: #fff5f5; }
+.matrix td.red { color: #c0392b; font-weight: 700; background: #fff5f5; }
 .matrix td.cell small { display:block; font-size:11px; font-weight:400; color: var(--text2); margin-top:4px; line-height:1.4; }
-.matrix td.red small  { color: #7a2020; opacity: 0.8; }
-.matrix td.amber small { color: #5a3a00; opacity: 0.8; }
+.matrix td.red small { color: #7a2020; opacity: 0.8; }
 .matrix td.amber { color: #b85c00; font-weight: 700; background: #fffbf0; }
+.matrix td.amber small { color: #5a3a00; opacity: 0.8; }
 .matrix td.neutral { color: var(--text); font-weight: 600; background: #f7f6ff; }
 .matrix td.neutral small { color: var(--text2); opacity: 0.8; }
 
-/* ─── GLOSSARY ─── */
-.glossary {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  border: 1px solid var(--border);
-  margin-top: 16px;
-  max-width: 660px;
-  margin-left: auto;
-  margin-right: auto;
-  background: var(--white);
-}
-@media (max-width:680px){ .glossary { grid-template-columns: 1fr 1fr; } }
-
-.gloss-item {
-  padding: 14px 16px;
-  border-right: 1px solid var(--border);
-}
-.gloss-item:last-child { border-right: none; }
-
-.gloss-term {
-  font-family: 'Lato', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--violet);
-  margin-bottom: 4px;
-  letter-spacing: 0.3px;
-}
-.gloss-def { font-size: 11px; color: var(--text2); line-height: 1.45; font-weight: 300; }
-
-/* ─── MOBILE CARDS (hidden on desktop) ─── */
 .matrix-mobile { display: none; }
-
-.m-card {
-  border-left: 4px solid;
-  background: var(--white);
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
-}
+.m-card { border-left: 4px solid; background: var(--white); padding: 14px 16px; border-bottom: 1px solid var(--border); }
 .m-card:last-child { border-bottom: none; }
-.m-card.blue  { border-color: var(--orange); }
-.m-card.sky   { border-color: var(--red); }
-
-.m-card-sources {
-  font-size: 10px;
-  color: var(--text3);
-  margin-bottom: 4px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.m-card-title {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 15px;
-  color: var(--dk);
-  margin-bottom: 3px;
-}
+.m-card.blue { border-color: var(--orange); }
+.m-card.sky  { border-color: var(--red); }
+.m-card-sources { font-size: 10px; color: var(--text3); margin-bottom: 4px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.m-card-title { font-family: 'Libre Baskerville', serif; font-size: 15px; color: var(--dk); margin-bottom: 3px; }
 .m-card-title.blue { color: var(--orange); }
 .m-card-title.sky  { color: var(--red); }
-.m-card-sub {
-  font-size: 12px;
-  color: var(--text2);
-  font-weight: 300;
-  line-height: 1.45;
+.m-card-sub { font-size: 12px; color: var(--text2); font-weight: 300; line-height: 1.45; }
+
+.does-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
+.does-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.does-icon { font-size: 24px; flex-shrink: 0; }
+.does-text { font-size: 14px; color: var(--text2); line-height: 1.5; font-weight: 300; }
+.does-text strong { color: var(--dk); font-weight: 700; display: block; margin-bottom: 2px; }
+@media (max-width:680px){ .does-grid { grid-template-columns: 1fr; } }
+
 .alt-card {
   border: 1.5px solid var(--violet);
   border-radius: 8px;
@@ -290,393 +244,180 @@ nav > * { max-width: 1060px; }
   max-width: 660px;
   margin: 0 auto;
 }
-
-.alt-card-title {
-  font-family: 'Lato', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--dk);
-  margin-bottom: 16px;
-}
+.alt-card-title { font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700; color: var(--dk); margin-bottom: 16px; }
 .alt-card-title span { color: var(--violet); }
-
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-
-.chip {
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 12px;
-  color: var(--text2);
-  background: var(--white);
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  transition: all 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
+.chip { border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--text2); background: var(--white); font-family: 'Lato', sans-serif; font-weight: 400; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
 .chip:hover { border-color: var(--violet); color: var(--violet); }
+.alt-desc { font-size: 13px; color: var(--text2); line-height: 1.6; font-weight: 300; }
 
-.alt-desc {
-  font-size: 13px;
-  color: var(--text2);
-  line-height: 1.6;
-  font-weight: 300;
-}
+.foot { padding: 20px 56px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text3); text-align: center; font-family: 'Lato', sans-serif; font-weight: 300; }
 
-/* ─── ALERTAS ─── */
-.alerts-grid {
-  border: 1px solid var(--border);
-  background: var(--white);
-  max-width: 660px;
-  margin: 0 auto;
-}
-
-.alert-row {
-  display: grid;
-  grid-template-columns: 4px 1fr auto;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.12s;
-}
-.alert-row:last-child { border-bottom: none; }
-.alert-row:hover { background: #F8F6F2; }
-
-.alert-bar.red   { background: var(--red); }
-.alert-bar.amber { background: var(--orange); }
-.alert-bar.violet { background: var(--violet); }
-
-.alert-body { padding: 16px 20px; }
-
-.alert-label {
-  font-family: 'Lato', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.alert-label.red    { color: var(--red); }
-.alert-label.amber  { color: var(--orange); }
-.alert-label.violet { color: var(--violet); }
-
-.alert-title {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--dk);
-  margin-bottom: 3px;
-}
-.alert-desc { font-size: 12px; color: var(--text2); font-weight: 300; line-height: 1.5; }
-
-.alert-sources {
-  padding: 16px 20px 16px 0;
-  font-size: 10px;
-  color: var(--text3);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-}
-
-/* ─── MONDAY ─── */
-.monday {
-  background: var(--dk);
-  padding: 24px 24px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
-  align-items: center;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-
-.monday-title {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--gold);
-  margin-bottom: 4px;
-}
-.monday-desc { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 300; line-height: 1.5; }
-
-.monday-badge {
-  background: rgba(245,223,77,0.15);
-  border: 1px solid var(--gold);
-  color: var(--gold);
-  font-family: 'Lato', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 8px 14px;
-  letter-spacing: 1.5px;
-  white-space: nowrap;
-}
-
-/* ─── PM ─── */
-.pm-block {
-  border: 1px solid var(--border);
-  background: var(--white);
-  padding: 32px 36px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 24px;
-  align-items: start;
-  max-width: 660px;
-  margin: 0 auto;
-}
-
-.pm-icon {
-  width: 48px;
-  height: 48px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.pm-eyebrow {
-  font-family: 'Lato', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 6px;
-}
-
-.pm-title {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--dk);
-  margin-bottom: 6px;
-}
-.pm-desc { font-size: 13px; color: var(--text2); font-weight: 300; line-height: 1.65; }
-
-/* ─── CTA ─── */
-.cta-section {
-  text-align: center;
-  padding: 64px 0;
-  border-top: 1px solid var(--border);
-}
-
-.cta-section h2 {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--dk);
-  margin-bottom: 8px;
-}
-.cta-section p { font-size: 14px; color: var(--text2); font-weight: 300; margin-bottom: 28px; }
-
-.cta-btn {
-  background: var(--dk);
-  color: white;
-  font-family: 'Lato', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 14px 36px;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  transition: opacity 0.2s;
-  letter-spacing: 0.5px;
-}
-.cta-btn:hover { opacity: 0.8; }
-
-/* ─── FOOTER ─── */
-.foot {
-  padding: 20px 56px;
-  border-top: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text3);
-  text-align: center;
-  font-family: 'Lato', sans-serif;
-  font-weight: 300;
-}
-
-/* ─── RESPONSIVE ─── */
 @media (max-width:680px) {
   nav { padding: 16px 20px; }
   .nav-links { gap: 20px; }
-  .nav-links a { font-size: 13px; }
   .hero { padding: 40px 20px 32px; }
-  .hero h1 { font-size: 24px; letter-spacing: -0.3px; }
+  .hero h1 { font-size: 26px; }
   .section { padding: 32px 20px; }
-
-  /* swap table ↔ cards */
   .matrix-wrap { display: none; }
   .matrix-mobile { display: block; }
+  .does-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.does-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.does-icon { font-size: 24px; flex-shrink: 0; }
+.does-text { font-size: 14px; color: var(--text2); line-height: 1.5; font-weight: 300; }
+.does-text strong { color: var(--dk); font-weight: 700; display: block; margin-bottom: 2px; }
+@media (max-width:680px){ .does-grid { grid-template-columns: 1fr; } }
 
-  .alt-card { padding: 20px; }
-  .chips { gap: 6px; }
-  .chip { font-size: 11px; padding: 5px 10px; }
-  .cta-section { padding: 40px 20px;  }
+.alt-card { padding: 20px; }
   .foot { padding: 16px 20px; }
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav><div class="nav-inner">
   <a class="logo" href="#">
-    APP
+    <span class="logo-box">APP</span>
+    Electrolux Chile
   </a>
   <ul class="nav-links">
     <li><a href="#" class="active">Inicio</a></li>
-    <li><a href="demo.html">Probar</a></li>
-    <li><a href="#">Backtest</a></li>
   </ul>
 </div></nav>
 
-<!-- HERO -->
 <div class="hero">
-  <h1>Tu equipo ya tiene la data.<br>APP la convierte en <span class="highlight">decisiones</span>.</h1>
+  <div class="hero-date">Julio 2026</div>
+  <h1>Hola Martín,<br>creamos una app que cruza la data que ya tienes y la hace <span class="highlight">conversar</span>.</h1>
+  <p>Sell Out · Sell In · Inv. Retail · Inv. Distrib. · GfK — cruzados con AI en tiempo real.</p>
+  <div class="does-grid" style="margin-top:40px;text-align:left">
+    <div class="does-item">
+      <div class="does-icon">📈</div>
+      <div class="does-text"><strong>Proyecta el forecast</strong> y mide tu accuracy en el tiempo</div>
+    </div>
+    <div class="does-item">
+      <div class="does-icon">🚨</div>
+      <div class="does-text"><strong>Detecta riesgos</strong> antes de que cuesten plata</div>
+    </div>
+    <div class="does-item">
+      <div class="does-icon">⚙️</div>
+      <div class="does-text"><strong>Optimiza recursos</strong> — inventario, caja y despachos</div>
+    </div>
+    <div class="does-item">
+      <div class="does-icon">🎯</div>
+      <div class="does-text"><strong>Entrega acciones</strong> concretas para llegar al target</div>
+    </div>
+  </div>
 </div>
 
-<!-- MATRIX -->
 <div class="section" style="padding-top:0;">
-  <div class="section-label" style="text-align:center;">Qué pasa cuando cruzas tu data</div>
+  <div class="section-label">Qué pasa cuando cruzas tu data</div>
   <div class="matrix-wrap">
     <table class="matrix">
       <thead>
         <tr>
           <th></th>
-          <th>🛍️<span class="label"> Sell Out</span></th>
-          <th>📦<span class="label"> Sell In</span></th>
-          <th>🏪<span class="label"> Inv. Retail</span></th>
-          <th>🚛<span class="label"> Inv. Distrib.</span></th>
-          <th>📊<span class="label"> GfK</span></th>
+          <th>🛍️ Sell Out</th>
+          <th>📦 Sell In</th>
+          <th>🏪 Inv. Retail</th>
+          <th>🚛 Inv. Distrib.</th>
+          <th>📊 GfK</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="row-head">🛍️<span class="label"> Sell Out</span></td>
+          <td class="row-head">🛍️ Sell Out</td>
           <td class="empty">—</td>
-          <td class="cell amber">💸 Plata atrapada<br><small>Stock que no rota es plata que no vuelve</small></td>
-          <td class="cell red">🚨 Venta perdida<br><small>Plata que se fue a la competencia. Hoy.</small></td>
-          <td class="cell red">🚨 Sin stock<br><small>Cada día sin stock es una venta que no recuperas</small></td>
-          <td class="cell red">📉 Pierdes mercado<br><small>Subes en ventas pero pierdes participación</small></td>
+          <td class="cell amber">💸 Plata atrapada<small>Stock que no rota es plata que no vuelve</small></td>
+          <td class="cell red">🚨 Venta perdida<small>Plata que se fue a la competencia. Hoy.</small></td>
+          <td class="cell red">🚨 Sin stock<small>Cada día sin stock es una venta que no recuperas</small></td>
+          <td class="cell red">📉 Pierdes mercado<small>Subes en ventas pero pierdes participación</small></td>
         </tr>
         <tr>
-          <td class="row-head">📦<span class="label"> Sell In</span></td>
-          <td class="cell amber">⚠️ Mandaste de más<br><small>Evita devoluciones o capital congelado</small></td>
+          <td class="row-head">📦 Sell In</td>
+          <td class="cell amber">⚠️ Mandaste de más<small>Evita devoluciones o capital congelado</small></td>
           <td class="empty">—</td>
-          <td class="cell amber">⚠️ No reciben todo<br><small>Tu despacho llega incompleto y el retailer te cobra el faltante</small></td>
-          <td class="cell neutral">🔍 Qué viene<br><small>¿Lo que viene alcanza para el próximo ciclo?</small></td>
-          <td class="cell neutral">🎯 Mucho o poco<br><small>¿Estás pidiendo lo que el mercado demanda o le regalas cuota a la competencia?</small></td>
+          <td class="cell amber">⚠️ No reciben todo<small>Tu despacho llega incompleto y el retailer te cobra el faltante</small></td>
+          <td class="cell neutral">🔍 Qué viene<small>¿Lo que viene alcanza para el próximo ciclo?</small></td>
+          <td class="cell neutral">🎯 Mucho o poco<small>¿Estás pidiendo lo que el mercado demanda o le regalas cuota a la competencia?</small></td>
         </tr>
         <tr>
-          <td class="row-head">🏪<span class="label"> Inv. Retail</span></td>
-          <td class="cell amber">💸 Stock parado<br><small>Cuántos días lleva sin moverse. Cuánto te cuesta.</small></td>
-          <td class="cell neutral">🔍 ¿Alcanza?<br><small>¿El retailer llega al próximo despacho o se queda sin nada?</small></td>
+          <td class="row-head">🏪 Inv. Retail</td>
+          <td class="cell amber">💸 Stock parado<small>Cuántos días lleva sin moverse. Cuánto te cuesta.</small></td>
+          <td class="cell neutral">🔍 ¿Alcanza?<small>¿El retailer llega al próximo despacho o se queda sin nada?</small></td>
           <td class="empty">—</td>
-          <td class="cell neutral">🔄 Mover stock<br><small>Tienes en bodega lo que debería estar en góndola</small></td>
-          <td class="cell red">🚨 Vendes sin stock<br><small>El mercado demanda pero la góndola está vacía</small></td>
+          <td class="cell neutral">🔄 Mover stock<small>Tienes en bodega lo que debería estar en góndola</small></td>
+          <td class="cell red">🚨 Vendes sin stock<small>El mercado demanda pero la góndola está vacía</small></td>
         </tr>
         <tr>
-          <td class="row-head">🚛<span class="label"> Inv. Distrib.</span></td>
-          <td class="cell red">🚨 Nada en camino<br><small>En 30 días no tienes con qué despachar</small></td>
-          <td class="cell neutral">🔍 ¿Cuándo?<br><small>¿Cuándo llega el próximo despacho y alcanza o no?</small></td>
-          <td class="cell neutral">📍 ¿Dónde falta?<br><small>Qué retailer está por quedarse sin stock</small></td>
+          <td class="row-head">🚛 Inv. Distrib.</td>
+          <td class="cell red">🚨 Nada en camino<small>En 30 días no tienes con qué despachar</small></td>
+          <td class="cell neutral">🔍 ¿Cuándo?<small>¿Cuándo llega el próximo despacho y alcanza o no?</small></td>
+          <td class="cell neutral">📍 ¿Dónde falta?<small>Qué retailer está por quedarse sin stock</small></td>
           <td class="empty">—</td>
-          <td class="cell neutral">⚖️ Stock vs mercado<br><small>¿Tu inventario alcanza para la demanda que viene?</small></td>
+          <td class="cell neutral">⚖️ Stock vs mercado<small>¿Tu inventario alcanza para la demanda que viene?</small></td>
         </tr>
         <tr>
-          <td class="row-head">📊<span class="label"> GfK</span></td>
-          <td class="cell red">📉 Perdiendo<br><small>Tu mercado crece. Tu share no.</small></td>
-          <td class="cell neutral">🎯 Cuota óptima<br><small>¿Estás pidiendo tu parte del mercado?</small></td>
-          <td class="cell neutral">📍 ¿Dónde no estás?<br><small>Retailers donde el mercado crece pero tú no tienes presencia</small></td>
-          <td class="cell neutral">📦 Inv. mercado<br><small>¿Tu stock en tránsito está donde el mercado lo necesita?</small></td>
+          <td class="row-head">📊 GfK</td>
+          <td class="cell red">📉 Perdiendo<small>Tu mercado crece. Tu share no.</small></td>
+          <td class="cell neutral">🎯 Cuota óptima<small>¿Estás pidiendo tu parte del mercado?</small></td>
+          <td class="cell neutral">📍 ¿Dónde no estás?<small>Retailers donde el mercado crece pero tú no tienes presencia</small></td>
+          <td class="cell neutral">📦 Inv. mercado<small>¿Tu stock en tránsito está donde el mercado lo necesita?</small></td>
           <td class="empty">—</td>
         </tr>
       </tbody>
     </table>
   </div>
-
-</div>
 </div>
 
-<!-- MOBILE MATRIX CARDS -->
 <div class="matrix-mobile section" style="padding-top:0;">
-  <div class="section-label" style="text-align:center;">Qué pasa cuando cruzas tu data</div>
+  <div class="section-label">Qué pasa cuando cruzas tu data</div>
   <div style="border:1px solid var(--border);">
-    <div class="m-card sky">
-      <div class="m-card-sources">SO + Inv. Retail</div>
-      <div class="m-card-title sky">Venta perdida</div>
-      <div class="m-card-sub">Plata que se fue a la competencia. Hoy.</div>
-    </div>
-    <div class="m-card sky">
-      <div class="m-card-sources">SO + Inv. Distrib.</div>
-      <div class="m-card-title sky">Sin stock</div>
-      <div class="m-card-sub">Cada día sin stock es una venta que no recuperas.</div>
-    </div>
-    <div class="m-card sky">
-      <div class="m-card-sources">SO + GfK</div>
-      <div class="m-card-title sky">Pierdes mercado</div>
-      <div class="m-card-sub">Subes en ventas pero pierdes participación.</div>
-    </div>
-    <div class="m-card blue">
-      <div class="m-card-sources">SO + SI</div>
-      <div class="m-card-title blue">Plata atrapada</div>
-      <div class="m-card-sub">Stock que no rota es plata que no vuelve.</div>
-    </div>
-    <div class="m-card blue">
-      <div class="m-card-sources">SI + SO</div>
-      <div class="m-card-title blue">Mandaste de más</div>
-      <div class="m-card-sub">Evita devoluciones o capital congelado.</div>
-    </div>
-    <div class="m-card blue">
-      <div class="m-card-sources">Inv. Retail + SO</div>
-      <div class="m-card-title blue">Stock parado</div>
-      <div class="m-card-sub">Cuántos días lleva sin moverse. Cuánto te cuesta.</div>
-    </div>
-    <div class="m-card blue">
-      <div class="m-card-sources">Inv. Distrib. + SO</div>
-      <div class="m-card-title blue">Nada en camino</div>
-      <div class="m-card-sub">En 30 días no tienes con qué despachar.</div>
-    </div>
-    <div class="m-card blue">
-      <div class="m-card-sources">GfK + SO</div>
-      <div class="m-card-title blue">Perdiendo</div>
-      <div class="m-card-sub">Tu mercado crece. Tu share no.</div>
-    </div>
+    <div class="m-card sky"><div class="m-card-sources">SO + Inv. Retail</div><div class="m-card-title sky">Venta perdida</div><div class="m-card-sub">Plata que se fue a la competencia. Hoy.</div></div>
+    <div class="m-card sky"><div class="m-card-sources">SO + Inv. Distrib.</div><div class="m-card-title sky">Sin stock</div><div class="m-card-sub">Cada día sin stock es una venta que no recuperas.</div></div>
+    <div class="m-card sky"><div class="m-card-sources">SO + GfK</div><div class="m-card-title sky">Pierdes mercado</div><div class="m-card-sub">Subes en ventas pero pierdes participación.</div></div>
+    <div class="m-card blue"><div class="m-card-sources">SO + SI</div><div class="m-card-title blue">Plata atrapada</div><div class="m-card-sub">Stock que no rota es plata que no vuelve.</div></div>
+    <div class="m-card blue"><div class="m-card-sources">Inv. Retail + SO</div><div class="m-card-title blue">Stock parado</div><div class="m-card-sub">Cuántos días lleva sin moverse. Cuánto te cuesta.</div></div>
+    <div class="m-card blue"><div class="m-card-sources">Inv. Distrib. + SO</div><div class="m-card-title blue">Nada en camino</div><div class="m-card-sub">En 30 días no tienes con qué despachar.</div></div>
+    <div class="m-card blue"><div class="m-card-sources">GfK + SO</div><div class="m-card-title blue">Perdiendo</div><div class="m-card-sub">Tu mercado crece. Tu share no.</div></div>
   </div>
 </div>
+
 <div class="section" style="padding-top:0;">
   <div style="max-width:1060px;margin:0 auto;padding:0 48px">
-  <div class="alt-card">
-    <div class="alt-card-title">+ 12 fuentes de <span>Alternative Data</span> que APP procesa</div>
-    <div class="chips">
-      <div class="chip">🔥 Precios web</div>
-      <div class="chip">🌐 Disponibilidad</div>
-      <div class="chip">🔍 Google Trends</div>
-      <div class="chip">🛒 MercadoLibre</div>
-      <div class="chip">🏛️ ChileCompra</div>
-      <div class="chip">🏦 Banco Central</div>
-      <div class="chip">🌤️ Clima</div>
-      <div class="chip">⚓ Puertos</div>
-      <div class="chip">⭐ Reviews + SERNAC</div>
-      <div class="chip">📣 Retail Ads</div>
-      <div class="chip">📅 Calendario</div>
-      <div class="chip">📱 Redes + Web</div>
+    <div class="alt-card">
+      <div class="alt-card-title">+ 12 fuentes de <span>Alternative Data</span> que APP procesa</div>
+      <div class="chips">
+        <div class="chip">🔥 Precios web</div>
+        <div class="chip">🌐 Disponibilidad</div>
+        <div class="chip">🔍 Google Trends</div>
+        <div class="chip">🛒 MercadoLibre</div>
+        <div class="chip">🏛️ ChileCompra</div>
+        <div class="chip">🏦 Banco Central</div>
+        <div class="chip">🌤️ Clima</div>
+        <div class="chip">⚓ Puertos</div>
+        <div class="chip">⭐ Reviews + SERNAC</div>
+        <div class="chip">📣 Retail Ads</div>
+        <div class="chip">📅 Calendario</div>
+        <div class="chip">📱 Redes + Web</div>
+      </div>
+      <div class="alt-desc">Datos alternativos de mercado que APP procesa y correlaciona diariamente.</div>
     </div>
-    <div class="alt-desc">Datos alternativos de mercado que APP procesa y correlaciona diariamente.</div>
-  </div>
   </div>
 </div>
 
-<!-- CTA -->
-<div class="cta-section">
-  <div style="max-width:1060px;margin:0 auto;padding:0 48px">
-  <a href="demo.html" class="cta-btn">Probar con mi data →</a>
-  </div>
-</div>
-
-<div class="foot">APP · 2026</div>
+<div class="foot">APP · Electrolux Chile · Julio 2026</div>
 
 </body>
 </html>
