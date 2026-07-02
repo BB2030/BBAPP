@@ -185,6 +185,7 @@ table.plan{width:100%;border-collapse:collapse;font-size:12px}
   <table class="plan">
     <thead>
       <tr>
+        <th style="width:32px;text-align:center">#</th>
         <th>SKU</th>
         <th>Retailer</th>
         <th>Situación</th>
@@ -192,58 +193,57 @@ table.plan{width:100%;border-collapse:collapse;font-size:12px}
         <th>FODA</th>
         <th>Decisión IA</th>
         <th>Costo de no actuar</th>
-        <th class="r" style="cursor:pointer;user-select:none" onclick="sortByImpacto()">Impacto CLP ↕</th>
       </tr>
     </thead>
     <tbody id="tbody">
 
       <!-- FEN-PC9.5SZ -->
       <tr data-tags="urgente quiebre" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#1</span>FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">FEN-PC9.5SZ</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--aqua);margin-top:3px">124 un · DOH 0</div>Fensa 9.5kg Silver CS</td>
         <td><span class="ret">Falabella</span></td>
         <td><span class="estado quiebre">Sin stock</span></td>
         <td><div class="accion-texto"><b>Despachar desde bodega a Falabella esta semana.</b> 124 un disponibles en Inv. Distribuidor.</div></td>
         <td><span class="foda-o">O</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Oportunidad: Midea con quiebre — stock propio disponible en bodega para reponer ahora</div></td>
         <td><div class="decision-ia">Despachar 124 un desde Inv. Distribuidor a Falabella <b>esta semana</b><div class="decision-conf">Confianza 93%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Inv. Retail = 0 un</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Sell Out = 0 un</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Inv. Dist = 124 un disponibles</span></div></td>
-        <td class="r"><span class="impacto pos">124 un · DOH 0</span></td>
         <td><span class="urg alta">Esta semana</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         GfK jun 2026: Midea bajó de 520 → 184 un en Falabella. Inv. Retail Falabella = 0 al 5 jul 2026. Sell Out semana = 0 un. GfK semana: Midea vendió 38 un en ese canal. Inv. Distribuidor disponible: 124 un — hay stock para reponer ahora.
         <div class="detalle-accion">→ Despachar desde Inv. Distribuidor (124 un disponibles) a Falabella esta semana</div>
         <div class="detalle-fuentes">Fuentes: GfK jun 2026 · Inv. Retail Falabella · Inv. Distribuidor</div>
       </td></tr>
 
       <tr data-tags="urgente firesale" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#2</span>FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">FEN-PC9.5SZ</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--amber);margin-top:3px">DOH 94 días</div>Fensa 9.5kg Silver CS</td>
         <td><span class="ret">Falabella + Ripley</span></td>
         <td><span class="estado firesale">Precio destruido</span></td>
         <td><div class="accion-texto"><b>Negociar precio piso $210K con Falabella y Ripley antes de agosto.</b></div></td>
         <td><span class="foda-d">D</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Debilidad: precio de referencia destruido — competencia mantiene precio mientras tú bajaste</div></td>
         <td><div class="decision-ia">Mantener PVP actual. <b>No bajar más.</b> Iniciar conversación con buyer sobre precio piso<div class="decision-conf">Confianza 88%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">PVP semana = $181K</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Samsung $248K</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">LG $235K</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Gap = $67K/un</span></div></td>
-        <td class="r"><span class="impacto warn">PVP -$67K/un</span></td>
         <td><span class="urg alta">Antes de ago</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         PVP promedió $164K en sep 2025 (-30% vs histórico $235K). Samsung mantuvo $248K y LG $235K en los mismos meses. El consumidor ahora ancla el segmento 9.5kg en $179K (Midea). Recuperar precio requiere argumento de calidad, no promo.
         <div class="detalle-accion">→ Bloquear precio piso $210K en todos los retailers antes de agosto 2026</div>
         <div class="detalle-fuentes">Fuentes: Sell Out precio · GfK competencia sep-oct 2025</div>
       </td></tr>
 
       <tr data-tags="urgente quiebre" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#3</span>FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">FEN-PC9.5SZ</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--red);margin-top:3px">8 un · 6 días</div>Fensa 9.5kg Silver CS</td>
         <td><span class="ret">Todos</span></td>
         <td><span class="estado quiebre">OC crítica</span></td>
         <td><div class="accion-texto"><b>Emitir OC para Nov 2026 antes del 12 agosto.</b> Inv. Distribuidor: 21 días de cobertura al ritmo actual.</div></td>
         <td><span class="foda-a">A</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Amenaza: sin reposición Samsung y Midea capturan Cyber Nov 2026 igual que Nov 2025</div></td>
         <td><div class="decision-ia"><b>Emitir OC esta semana.</b> DOH = 21 días. Sin OC no hay stock en Cyber<div class="decision-conf">Confianza 97%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">DOH = 21 días</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 124 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out = 41 un esta semana</span></div></td>
-        <td class="r"><span class="impacto neg">DOH 21 días</span></td>
         <td><span class="urg alta">12 ago — tope</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         Inv. Distribuidor al 5 jul: 124 un · Sell Out semana: 41 un · DOH = 21 días. Si no repones antes de agosto, llegas sin stock a CyberDay noviembre — igual que el año pasado.
         <div class="detalle-accion">→ Emitir OC antes del 12 agosto · No hay margen de error</div>
         <div class="detalle-fuentes">Fuentes: Inv. Distribuidor · Sell Out semana · Sell In</div>
@@ -251,34 +251,34 @@ table.plan{width:100%;border-collapse:collapse;font-size:12px}
 
       <!-- FEN-PC18SZ -->
       <tr data-tags="urgente oportunidad" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#4</span>FEN-PC18SZ</div><div class="sku-desc">Fensa 18kg Silver CS</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">FEN-PC18SZ</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--amber);margin-top:3px">DOH 78 días</div>Fensa 18kg Silver CS</td>
         <td><span class="ret">Ripley</span></td>
         <td><span class="estado oportunidad">Oportunidad</span></td>
         <td><div class="accion-texto"><b>Reponer Inv. Retail Ripley esta semana.</b> Stock actual: 8 un. Quiebra en 6 días al ritmo actual.</div></td>
         <td><span class="foda-o">O</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Oportunidad: segmento CS 18kg+ creciendo en Ripley — Inv. Dist disponible para reponer</div></td>
         <td><div class="decision-ia">Reponer Inv. Retail Ripley. <b>Stock quiebra en 6 días</b> al ritmo actual<div class="decision-conf">Confianza 91%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 8 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 6 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Quiebra en ~6 días</span></div></td>
-        <td class="r"><span class="impacto warn">8 un · 6 días</span></td>
         <td><span class="urg media">Este mes</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         GfK: segmento CS 18kg+ creció +12% YoY en Ripley. Falabella lidera con Samsung pero FEN-PC18SZ tiene el mejor margen del portafolio Fensa CS. Inv. Retail Ripley está bajo mínimo.
         <div class="detalle-accion">→ Presentar propuesta exhibición premium Ripley antes del 20 jul</div>
         <div class="detalle-fuentes">Fuentes: GfK por retailer · Sell Out Ripley CS 18kg+</div>
       </td></tr>
 
       <tr data-tags="sobrestock" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#5</span>FEN-PC18SZ</div><div class="sku-desc">Fensa 18kg Silver CS</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">FEN-PC18SZ</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--red);margin-top:3px">PVP -$67K/un</div>Fensa 18kg Silver CS</td>
         <td><span class="ret">Lider</span></td>
         <td><span class="estado sobrestock">Sobrestock</span></td>
         <td><div class="accion-texto"><b>Activar promo sell-out en Lider semana 28-30.</b> 312 un sin rotación, DOH 78 días.</div></td>
         <td><span class="foda-d">D</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Debilidad: sobrestock en canal — capital inmovilizado, riesgo de penalización retailer</div></td>
         <td><div class="decision-ia">Activar promo sell-out semana 28-30. <b>No tocar precio Falabella ni Ripley</b><div class="decision-conf">Confianza 84%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 312 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 4 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">DOH = 78 días</span></div></td>
-        <td class="r"><span class="impacto warn">DOH 78 días</span></td>
         <td><span class="urg media">Semana 28-30</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         Inv. Retail Lider muestra 78 DOH en PC18SZ. Sell Out lleva 6 semanas flat. Si no se mueve antes de agosto puede generar penalización o solicitud de devolución.
         <div class="detalle-accion">→ Activar promo sell-out Lider semana 28-30 · No tocar precio en Falabella ni Ripley</div>
         <div class="detalle-fuentes">Fuentes: Inv. Retail Lider · Sell Out histórico · Sell In</div>
@@ -286,17 +286,17 @@ table.plan{width:100%;border-collapse:collapse;font-size:12px}
 
       <!-- MAD-18SZG -->
       <tr data-tags="urgente sobrestock" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#6</span>MAD-18SZG</div><div class="sku-desc">Mademsa 18kg Silver CS</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">MAD-18SZG</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--aqua);margin-top:3px">56 un en bodega</div>Mademsa 18kg Silver CS</td>
         <td><span class="ret">Hites + La Polar</span></td>
         <td><span class="estado sobrestock">Sobrestock</span></td>
         <td><div class="accion-texto"><b>Negociar promo urgente con Hites y La Polar.</b> 847 un sin rotación, DOH 94 días. Riesgo devolución antes de agosto.</div></td>
         <td><span class="foda-a">A</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Amenaza: Midea sustituyendo activamente en Hites y La Polar — si no vendes, pierdes la posición</div></td>
         <td><div class="decision-ia">Negociar promo Hites + La Polar semana 28-32. <b>847 un, 94 DOH</b><div class="decision-conf">Confianza 86%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 847 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 9 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">DOH = 94 días</span></div></td>
-        <td class="r"><span class="impacto warn">DOH 94 días</span></td>
         <td><span class="urg alta">Antes de ago</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         Hites lleva 3 meses sin vender MAD-18SZG. La Polar 2 meses. DOH consolidado = 94 días. Midea compite fuerte en ese segmento ($179K vs $235K Mademsa). Si te devuelven el stock el costo de recolocación es alto.
         <div class="detalle-accion">→ Promo coordinada Hites + La Polar semana 28-32 · Sin tocar precio en Falabella ni Ripley</div>
         <div class="detalle-fuentes">Fuentes: Inv. Retail Hites + La Polar · Sell Out histórico · GfK Midea</div>
@@ -304,17 +304,17 @@ table.plan{width:100%;border-collapse:collapse;font-size:12px}
 
       <!-- MAD-9.5SZG -->
       <tr data-tags="quiebre" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#7</span>MAD-9.5SZG</div><div class="sku-desc">Mademsa 9.5kg Silver CS</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">MAD-9.5SZG</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--aqua);margin-top:3px">34 un en bodega</div>Mademsa 9.5kg Silver CS</td>
         <td><span class="ret">Paris</span></td>
         <td><span class="estado quiebre">Sin stock</span></td>
         <td><div class="accion-texto"><b>Despachar a Paris esta semana.</b> Inv. Retail = 0. 88 un disponibles en Inv. Distribuidor.</div></td>
         <td><span class="foda-f">F</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Fortaleza: Inv. Distribuidor con 88 un disponibles — se puede reponer inmediatamente</div></td>
         <td><div class="decision-ia">Despachar 88 un a Paris <b>esta semana.</b> Inv. Retail = 0, demanda activa<div class="decision-conf">Confianza 95%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 88 un disponibles</span></div></td>
-        <td class="r"><span class="impacto neg">Inv.Ret 0 un</span></td>
         <td><span class="urg alta">Esta semana</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         Inv. Retail Paris = 0 al 5 jul. Sell Out semana = 0 un. GfK: competencia vendió 22 un en Paris esa semana. Inv. Distribuidor disponible: 88 un.
         <div class="detalle-accion">→ Verificar stock bodega MAD-9.5SZG · Reposición Paris esta semana si hay stock disponible</div>
         <div class="detalle-fuentes">Fuentes: Inv. Retail Paris · Sell Out · GfK segmento entry</div>
@@ -322,17 +322,17 @@ table.plan{width:100%;border-collapse:collapse;font-size:12px}
 
       <!-- ELX-EFLWM14O -->
       <tr data-tags="oportunidad" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#8</span>ELX-EFLWM14O</div><div class="sku-desc">Electrolux CF 14kg</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">ELX-EFLWM14O</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--red);margin-top:3px">DOH 21 días</div>Electrolux CF 14kg</td>
         <td><span class="ret">Falabella</span></td>
         <td><span class="estado oportunidad">Oportunidad</span></td>
         <td><div class="accion-texto"><b>Reponer Inv. Retail Falabella CF.</b> Stock = 0. 34 un en Inv. Distribuidor disponibles ahora.</div></td>
         <td><span class="foda-o">O</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Oportunidad: segmento CF creciendo — Inv. Dist con 34 un disponibles para reponer ahora</div></td>
         <td><div class="decision-ia">Reponer 34 un CF a Falabella. <b>Samsung ocupa el espacio mientras no estás</b><div class="decision-conf">Confianza 89%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 34 un disponibles</span></div></td>
-        <td class="r"><span class="impacto pos">34 un · bodega</span></td>
         <td><span class="urg media">Este mes</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         GfK: CF creció +18% YoY. Inv. Retail ELX CF Falabella = 0 hace 4 meses. Sell Out ELX CF cayó a 0 en ese período. Inv. Distribuidor tiene unidades disponibles — el problema es reposición, no demanda.
         <div class="detalle-accion">→ Propuesta visibilidad CF Falabella: ELX-EFLWM12O + EFLWM14O · Antes del 25 jul</div>
         <div class="detalle-fuentes">Fuentes: GfK CF por retailer · Sell Out Electrolux CF histórico</div>
@@ -340,17 +340,17 @@ table.plan{width:100%;border-collapse:collapse;font-size:12px}
 
       <!-- FEN-PERC11 -->
       <tr data-tags="urgente oportunidad" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#9</span>FEN-PERC11</div><div class="sku-desc">Fensa Lava-Seca 11kg Inverter</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">FEN-PERC11</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--aqua);margin-top:3px">Inv.Ret 0 · 88 un dist</div>Fensa Lava-Seca 11kg Inverter</td>
         <td><span class="ret">Falabella</span></td>
         <td><span class="estado oportunidad">Inv. Retail = 0</span></td>
         <td><div class="accion-texto"><b>Incluir PERC11 en próxima OC y reponer Inv. Retail Falabella.</b> Stock = 0. 56 un en bodega disponibles.</div></td>
         <td><span class="foda-o">O</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Oportunidad: mercado Lava-Seca creciendo y Inv. Dist tiene 56 un disponibles — LG ocupa el espacio</div></td>
         <td><div class="decision-ia">Incluir PERC11 en próxima OC. <b>56 un en bodega disponibles ahora</b><div class="decision-conf">Confianza 87%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 56 un disponibles</span></div></td>
-        <td class="r"><span class="impacto pos">56 un · bodega</span></td>
         <td><span class="urg alta">Antes de ago</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         GfK: Lava-Seca creció de 1,840 un/mes (H1 2025) a 2,350 un/mes (H1 2026) en Chile total. Inv. Retail PERC11 = 0 desde feb 2026. Sell Out cayó a 0 en el mismo mes. GfK muestra que el mercado Lava-Seca sigue creciendo. Inv. Distribuidor tiene stock disponible para reposición inmediata.
         <div class="detalle-accion">→ Priorizar PERC11 en próxima OC · Reponer Inv. Retail Falabella agosto 2026</div>
         <div class="detalle-fuentes">Fuentes: GfK Lava-Seca · Inv. Retail Falabella · Sell Out PERC11 histórico</div>
@@ -358,30 +358,52 @@ table.plan{width:100%;border-collapse:collapse;font-size:12px}
 
       <!-- MAD-7DBZG -->
       <tr data-tags="quiebre" onclick="expand(this)">
-        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#10</span>MAD-7DBZG</div><div class="sku-desc">Mademsa Secadora 7kg Blanco</div></td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:var(--text3);width:32px"><span class="row-num"></span></td>
+        <td><div class="sku-cod">MAD-7DBZG</div><div class="sku-desc"><div style="font-size:10px;font-weight:700;color:var(--red);margin-top:3px">Inv 0/0 un</div>Mademsa Secadora 7kg Blanco</td>
         <td><span class="ret">Todos</span></td>
         <td><span class="estado quiebre">Sin stock</span></td>
         <td><div class="accion-texto"><b>Decidir go/no-go reposición esta semana.</b> Inv. Dist = 0, Inv. Retail = 0. Sin OC no hay stock.</div></td>
         <td><span class="foda-a">A</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Amenaza: Samsung y LG activos en secadoras 7kg — sin reposición, pérdida permanente de segmento</div></td>
         <td><div class="decision-ia">Decidir go/no-go <b>esta semana.</b> Inv. Dist = 0. Cada semana sin stock es market share cedido<div class="decision-conf">Confianza 79%</div></div></td>
         <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 0 un</span></div></td>
-        <td class="r"><span class="impacto neg">Inv 0/0 un</span></td>
         <td><span class="urg alta">Decisión esta semana</span></td>
       </tr>
-      <tr class="fila-detalle"><td colspan="7">
+      <tr class="fila-detalle"><td colspan="8">
         Inv. Dist = 0. Inv. Retail = 0. Sell Out = 0. GfK muestra que Samsung y LG vendieron secadoras 7kg esa semana en esos canales.
         <div class="detalle-accion">→ Decidir si reponer o discontinuar · Si discontinúas: evaluar FEN-PC7D como sustituto</div>
         <div class="detalle-fuentes">Fuentes: Inv. Distribuidor · Inv. Retail · Sell Out semana · GfK</div>
       </td></tr>
 
 
-      <!-- TOTAL ROW -->
+      <!-- TOTAL ROW REPLACED -->
       <tr style="background:var(--dk);border-top:3px solid var(--dk)">
         <td colspan="2" style="padding:10px 12px;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.5px">IMPACTO TOTAL — 10 acciones identificadas esta semana</td>
         <td style="padding:10px 12px"></td>
         <td style="padding:10px 12px"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.6)">SIN ACTUAR</div><div style="font-size:13px;font-weight:700;color:#ff6b6b">5 SKUs sin stock · 2 con sobrestock</div></td>
         <td style="padding:10px 12px;text-align:right"></td>
-        <td colspan="2" style="padding:10px 12px;text-align:right"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.6)">ACTUANDO</div><div style="font-size:20px;font-weight:700;color:var(--gold)">+$620M oportunidad</div></td>
+        <td style="padding:10px 12px;text-align:right"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.6)">ACTUANDO</div><div style="font-size:20px;font-weight:700;color:var(--gold)">+$620M oportunidad</div></td>
+      </tr>
+      <!-- TOTAL ROW -->
+      <tr style="background:var(--dk);border-top:3px solid var(--dk)">
+        <td style="padding:10px 12px;text-align:center;font-size:11px;font-weight:700;color:var(--gold)">10</td>
+        <td colspan="2" style="padding:10px 12px;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.5px">TOTAL — semana 29 jun – 5 jul 2026</td>
+        <td style="padding:10px 12px">
+          <div style="font-size:9px;color:rgba(255,255,255,.5);margin-bottom:2px">SIN STOCK</div>
+          <div style="font-size:11px;font-weight:700;color:#ff6b6b">3 SKUs · 0 un en canal</div>
+        </td>
+        <td style="padding:10px 12px">
+          <div style="font-size:9px;color:rgba(255,255,255,.5);margin-bottom:2px">SOBRESTOCK</div>
+          <div style="font-size:11px;font-weight:700;color:var(--amber)">2 SKUs · 1,159 un · DOH 86d avg</div>
+        </td>
+        <td style="padding:10px 12px"></td>
+        <td style="padding:10px 12px">
+          <div style="font-size:9px;color:rgba(255,255,255,.5);margin-bottom:2px">DISPONIBLE EN BODEGA</div>
+          <div style="font-size:11px;font-weight:700;color:var(--gold)">302 un en 4 SKUs sin despachar</div>
+        </td>
+        <td style="padding:10px 12px">
+          <div style="font-size:9px;color:rgba(255,255,255,.5);margin-bottom:2px">ACCIÓN MÁS URGENTE</div>
+          <div style="font-size:11px;font-weight:700;color:var(--gold)">OC antes 12 ago · DOH 21d</div>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -446,6 +468,16 @@ function filtrar(tag, btn) {
       next.classList.toggle('hidden', !show);
     }
   });
+  updateRowNumbers();
+}
+
+
+function updateRowNumbers() {
+  const rows = document.querySelectorAll('#tbody tr:not(.fila-detalle):not([style*="display: none"]):not(.hidden)');
+  rows.forEach((row, i) => {
+    const numEl = row.querySelector('.row-num');
+    if (numEl) numEl.textContent = (i + 1);
+  });
 }
 
 function sortByImpacto() {
@@ -467,9 +499,10 @@ function sortByImpacto() {
     tbody.appendChild(r.row);
     if (r.detail) { r.detail.style.display='none'; tbody.appendChild(r.detail); }
   });
+  updateRowNumbers();
 }
 // Auto-sort on load
-document.addEventListener('DOMContentLoaded', function(){ setTimeout(sortByImpacto, 100); });
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(() => { sortByImpacto(); updateRowNumbers(); }, 150); });
 
 </script>
 </body>
