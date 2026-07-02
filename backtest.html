@@ -11,7 +11,10 @@ body{font-family:'Outfit',sans-serif;background:#FFFDF5;color:#1A1A18;font-size:
 .nav{position:sticky;top:0;z-index:100;background:rgba(255,253,245,.95);backdrop-filter:blur(10px);border-bottom:1px solid #E8E5D8;padding:0 20px}
 .nav-in{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:48px}
 .logo{font-size:17px;font-weight:800}.logo b{background:#1A1A18;color:#F5DF4D;padding:2px 6px;border-radius:4px}
-.tabs{display:flex;gap:2px}.tabs a{padding:6px 14px;font-size:12px;font-weight:600;color:#939597;text-decoration:none}.tabs a.on{color:#1A1A18;font-weight:700;border-bottom:2px solid #1A1A18}
+.tabs{display:flex;gap:2px;align-items:center}
+.tabs a{padding:6px 14px;font-size:12px;font-weight:600;color:#939597;text-decoration:none}
+.tabs a.on{color:#1A1A18;font-weight:700;border-bottom:2px solid #1A1A18}
+.tabs a.login{display:inline-flex;align-items:center;gap:4px;border:1.5px solid #1A1A18;color:#1A1A18;padding:4px 12px;font-weight:700}
 .wrap{max-width:700px;margin:0 auto;padding:20px 16px}
 .steps{display:flex;gap:4px;margin-bottom:20px}
 .stp{flex:1;padding:8px 4px;border-radius:8px;text-align:center;border:1.5px solid #E8E5D8;background:#FFF;font-size:10px;font-weight:700;color:#939597}
@@ -44,7 +47,12 @@ table.cmp{width:100%;font-size:11px;border-collapse:collapse;margin:10px 0}
 </head>
 <body>
 <div class="nav"><div class="nav-in"><div class="logo"><b>BB</b>APP</div>
-<div class="tabs"><a href="index.html">Inicio</a><a href="demo.html">Probar</a><a href="backtest.html" class="on">Backtest</a></div>
+<div class="tabs">
+  <a href="index.html">Inicio</a>
+  <a href="demo.html" class="login"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Acceder</a>
+  <a href="backtest.html" class="on">Backtest</a>
+  <a href="demoelux.html">Demo</a>
+</div>
 </div></div>
 <div class="wrap">
 <div style="text-align:center;margin-bottom:20px">
