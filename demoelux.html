@@ -3,14 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBAPP — Análisis Electrolux Group</title>
+<title>BBAPP — Electrolux Group</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#F2F0EC;--white:#FFF;--dk:#1a0d47;--gold:#F5DF4D;
-  --border:#E0DDD7;--text:#1a0d47;--text2:#5a5370;--text3:#9a94b0;
-  --aqua:#0f7173;--red:#c0392b;--amber:#b85c00;--sky:#0496ff;
-}
+:root{--bg:#F2F0EC;--white:#FFF;--dk:#1a0d47;--gold:#F5DF4D;--border:#E0DDD7;--text:#1a0d47;--text2:#5a5370;--text3:#9a94b0;--aqua:#0f7173;--red:#c0392b;--amber:#b85c00}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased}
 
@@ -18,598 +14,363 @@ nav{position:sticky;top:0;z-index:100;background:rgba(242,240,236,.97);backdrop-
 .nav-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
 .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--dk);text-decoration:none}
 .logo-box{background:var(--dk);color:var(--gold);font-size:13px;font-weight:700;padding:4px 7px;letter-spacing:.5px}
-.nav-links{display:flex;gap:28px;list-style:none}
-.nav-links a{font-size:13px;font-weight:700;color:var(--text3);text-decoration:none;padding-bottom:3px;transition:color .15s}
-.nav-links a.active{color:var(--dk);border-bottom:2px solid var(--dk)}
+.nav-links{display:flex;gap:4px;align-items:center;list-style:none}
+.nav-links a{font-size:13px;font-weight:700;color:var(--text3);text-decoration:none;padding:5px 12px;transition:color .15s}
 .nav-links a:hover{color:var(--dk)}
+.nav-links a.active{color:var(--dk);border-bottom:2px solid var(--dk)}
+.nav-links a.login{border:1.5px solid var(--dk);color:var(--dk);display:inline-flex;align-items:center;gap:5px;padding:4px 12px}
 
-/* LOADING SCREEN */
-#loading{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
-.sp{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--dk);border-radius:50%;animation:spin .7s linear infinite}
+#loading{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.sp{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--dk);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.ld-msg{font-family:'Libre Baskerville',serif;font-size:16px;color:var(--dk)}
-.ld-sub{font-size:11px;color:var(--text3);font-weight:300}
+.ld-msg{font-size:12px;color:var(--text2);font-weight:300}
 
-/* LAYOUT */
-.wrap{max-width:1060px;margin:0 auto;padding:24px 32px 60px}
+#main{display:none;max-width:1060px;margin:0 auto;padding:24px 32px 60px}
 
-/* HEADER */
-.ctx-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--white);border:1px solid var(--border);margin-bottom:20px;font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.5px}
-.ctx-bar span{color:var(--dk)}
-.ctx-bar .badge{background:var(--aqua);color:#fff;font-size:9px;padding:2px 8px;letter-spacing:1px}
+.header{margin-bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.header-left{}
+.header-tag{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.header-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--dk)}
+.header-meta{font-size:11px;color:var(--text3);font-weight:300;margin-top:2px}
+.header-badge{background:var(--dk);color:var(--gold);font-size:9px;font-weight:700;padding:4px 10px;letter-spacing:1px;white-space:nowrap}
 
-/* MODO SELECTOR */
-.mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px}
-.mode-btn{padding:14px 10px;background:var(--white);border:1.5px solid var(--border);cursor:pointer;font-family:'Lato',sans-serif;text-align:center;transition:all .12s}
-.mode-btn:hover{border-color:var(--dk)}
-.mode-btn.active{background:var(--dk);border-color:var(--dk)}
-.mode-btn .mb-ico{font-size:20px;margin-bottom:4px}
-.mode-btn .mb-lbl{font-size:11px;font-weight:700;color:var(--dk)}
-.mode-btn.active .mb-lbl{color:var(--gold)}
-.mode-btn .mb-sub{font-size:9px;color:var(--text3);font-weight:300;margin-top:2px}
-.mode-btn.active .mb-sub{color:rgba(245,223,77,.6)}
-
-/* PANELS */
-.panel{display:none}.panel.show{display:block}
-
-/* KPI ROW */
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
-.kpi{background:var(--white);border:1px solid var(--border);padding:14px 16px;border-left:3px solid var(--border)}
-.kpi.red{border-left-color:var(--red)}
-.kpi.amber{border-left-color:var(--amber)}
-.kpi.green{border-left-color:var(--aqua)}
-.kpi.blue{border-left-color:var(--sky)}
-.kpi-label{font-size:8px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
-.kpi-val{font-size:22px;font-weight:700;color:var(--dk);line-height:1}
-.kpi-val.red{color:var(--red)}
-.kpi-val.amber{color:var(--amber)}
-.kpi-val.green{color:var(--aqua)}
-.kpi-sub{font-size:10px;color:var(--text3);font-weight:300;margin-top:4px}
-
-/* CARDS */
-.card{background:var(--white);border:1px solid var(--border);padding:18px 20px;margin-bottom:12px}
-.card-title{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--dk);margin-bottom:4px}
-.card-sub{font-size:11px;color:var(--text3);font-weight:300;margin-bottom:14px}
-
-/* ALERTAS */
-.alert{padding:12px 14px;border-left:4px solid;margin-bottom:6px;background:var(--white)}
-.alert.critica{border-color:var(--red);background:rgba(192,57,43,.03)}
-.alert.oportunidad{border-color:var(--aqua);background:rgba(15,113,115,.03)}
-.alert.advertencia{border-color:var(--amber);background:rgba(184,92,0,.03)}
-.alert-tag{font-size:7px;font-weight:700;padding:2px 7px;letter-spacing:1.5px;display:inline-block;margin-bottom:4px}
-.alert.critica .alert-tag{background:var(--red);color:#fff}
-.alert.oportunidad .alert-tag{background:var(--aqua);color:#fff}
-.alert.advertencia .alert-tag{background:var(--amber);color:#fff}
-.alert-monto{font-size:13px;font-weight:700;float:right}
-.alert.critica .alert-monto{color:var(--red)}
-.alert.oportunidad .alert-monto{color:var(--aqua)}
-.alert.advertencia .alert-monto{color:var(--amber)}
-.alert-title{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--dk);margin-bottom:3px;clear:both}
-.alert-det{font-size:11px;color:var(--text2);line-height:1.5;font-weight:300}
-.alert-accion{font-size:10px;font-weight:700;color:var(--aqua);margin-top:6px}
-.alert-accion::before{content:"→ "}
-
-/* ACCION BOX */
-.accion-box{background:var(--dk);padding:16px 18px;margin-bottom:12px}
-.accion-box-title{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--gold);margin-bottom:10px}
-.accion-item{font-size:12px;color:#F2F0EC;font-weight:300;padding:5px 0 5px 10px;border-left:2px solid rgba(245,223,77,.3);margin-bottom:5px;line-height:1.4}
-.accion-item:first-of-type{border-left-color:var(--gold);font-weight:700;color:#fff}
+/* FILTROS */
+.filtros{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.filtro-btn{padding:5px 14px;font-size:11px;font-weight:700;border:1.5px solid var(--border);background:var(--white);color:var(--text3);cursor:pointer;font-family:'Lato',sans-serif;transition:all .12s}
+.filtro-btn:hover{border-color:var(--dk);color:var(--dk)}
+.filtro-btn.on{background:var(--dk);border-color:var(--dk);color:var(--gold)}
 
 /* TABLA */
-table.dt{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}
-.dt th{padding:7px 8px;background:var(--dk);color:rgba(255,255,255,.75);text-align:left;font-weight:700;font-size:9px;letter-spacing:.5px}
-.dt th.r{text-align:right}
-.dt td{padding:6px 8px;border-bottom:1px solid var(--border)}
-.dt td.r{text-align:right;font-family:'Courier New',monospace;font-weight:600}
-.dt tr.tot{background:#FEFCE8;font-weight:800}
-.dt tr.tot td{border-top:2px solid var(--dk)}
-.dt .ok{color:var(--aqua);font-weight:700}
-.dt .bad{color:var(--red);font-weight:700}
-.dt .warn{color:var(--amber);font-weight:700}
+.tabla-wrap{overflow-x:auto}
+table.plan{width:100%;border-collapse:collapse;font-size:12px}
+.plan thead th{background:var(--dk);color:rgba(255,255,255,.7);padding:8px 12px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
+.plan thead th.r{text-align:right}
+.plan tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.plan tbody tr:hover{background:rgba(26,13,71,.03)}
+.plan tbody tr.hidden{display:none}
+.plan td{padding:9px 12px;vertical-align:middle}
+.plan td.r{text-align:right}
 
-/* RESUMEN CONCLUSIÓN */
-.moraleja{background:var(--dk);color:#F2F0EC;padding:14px 16px;margin-bottom:16px}
-.moraleja-label{font-size:8px;letter-spacing:1px;opacity:.5;margin-bottom:4px;font-weight:700}
-.moraleja-text{font-size:13px;line-height:1.5;font-weight:300}
+/* SKU cell */
+.sku-cod{font-weight:700;color:var(--dk);font-size:12px}
+.sku-desc{font-size:10px;color:var(--text3);font-weight:300;margin-top:1px}
 
-/* IMPACTO */
-.impacto-row{display:flex;gap:0;margin-bottom:5px}
-.impacto-cell{flex:1;padding:10px 12px;background:rgba(192,57,43,.03);border-left:3px solid var(--red)}
-.impacto-cell.opp{background:rgba(15,113,115,.03);border-left-color:var(--aqua)}
-.impacto-titulo{font-size:12px;font-weight:700;color:var(--dk)}
-.impacto-monto{font-size:17px;font-weight:700;color:var(--red);float:right}
-.impacto-cell.opp .impacto-monto{color:var(--aqua)}
-.impacto-det{font-size:10px;color:var(--text2);margin-top:2px;clear:both}
-.impacto-fuente{font-size:8px;color:var(--text3);margin-top:6px;font-style:italic}
+/* Retailer */
+.ret{font-weight:600;color:var(--dk)}
 
-/* HEATMAP */
-.heatmap{display:grid;gap:2px;margin:8px 0}
-.hm-label{font-size:8px;color:var(--text3);white-space:nowrap;padding-right:4px;display:flex;align-items:center}
-.hm-cell{height:18px;border-radius:2px;position:relative}
-.hm-cell:hover .hm-tip{display:block}
-.hm-tip{display:none;position:absolute;bottom:22px;left:50%;transform:translateX(-50%);background:var(--dk);color:#fff;font-size:8px;padding:3px 6px;white-space:nowrap;z-index:10;pointer-events:none}
+/* Estado badge */
+.estado{display:inline-block;font-size:8px;font-weight:700;padding:2px 7px;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
+.estado.quiebre{background:var(--red);color:#fff}
+.estado.firesale{background:var(--amber);color:#fff}
+.estado.sobrestock{background:#7c3aed;color:#fff}
+.estado.ok{background:#e5e7eb;color:#374151}
+.estado.oportunidad{background:var(--aqua);color:#fff}
 
-/* FORECAST CHART */
-.fc-chart{width:100%;height:160px;position:relative;margin:12px 0}
+/* Acción */
+.accion-texto{font-size:11px;color:var(--text);line-height:1.4;max-width:320px}
+.accion-texto b{color:var(--dk)}
 
-/* EXEC SUMMARY */
-.exec{background:#FEFCE8;border:1.5px solid var(--gold);padding:14px 16px;margin-bottom:12px}
-.exec-label{font-size:8px;font-weight:700;letter-spacing:1px;color:var(--amber);margin-bottom:6px}
-.exec-text{font-size:12px;color:var(--dk);line-height:1.6;font-weight:300}
-.exec-text b{font-weight:700}
+/* Urgencia */
+.urg{font-size:9px;font-weight:700;padding:2px 8px;border-radius:0;letter-spacing:.5px;white-space:nowrap}
+.urg.alta{background:#fee2e2;color:var(--red)}
+.urg.media{background:#fef3c7;color:#92400e}
+.urg.baja{background:#d1fae5;color:#065f46}
 
-/* RESUMEN TAG */
-.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.tag{font-size:9px;font-weight:700;padding:3px 10px;border:1px solid;letter-spacing:.5px}
-.tag.red{border-color:var(--red);color:var(--red)}
-.tag.green{border-color:var(--aqua);color:var(--aqua)}
-.tag.amber{border-color:var(--amber);color:var(--amber)}
+/* Impacto */
+.impacto{font-family:'Courier New',monospace;font-weight:700;font-size:12px;white-space:nowrap}
+.impacto.neg{color:var(--red)}
+.impacto.pos{color:var(--aqua)}
+.impacto.warn{color:var(--amber)}
+
+/* Detalle expandible */
+.fila-detalle{display:none;background:#fafaf8}
+.fila-detalle td{padding:10px 12px 14px 36px;font-size:11px;color:var(--text2);line-height:1.6;font-weight:300;border-bottom:2px solid var(--border)}
+.fila-detalle .detalle-accion{font-size:10px;font-weight:700;color:var(--aqua);margin-top:6px}
+.fila-detalle .detalle-fuentes{font-size:9px;color:var(--text3);margin-top:4px;font-style:italic}
+
+/* resumen */
+.resumen-row{display:flex;gap:8px;margin-bottom:14px}
+.res-kpi{flex:1;background:var(--white);border:1px solid var(--border);border-left:3px solid;padding:10px 14px}
+.res-kpi.red{border-left-color:var(--red)}
+.res-kpi.amber{border-left-color:var(--amber)}
+.res-kpi.green{border-left-color:var(--aqua)}
+.res-kpi .kl{font-size:8px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.res-kpi .kv{font-size:20px;font-weight:700}
+.res-kpi.red .kv{color:var(--red)}
+.res-kpi.amber .kv{color:var(--amber)}
+.res-kpi.green .kv{color:var(--aqua)}
+.res-kpi .ks{font-size:9px;color:var(--text3);margin-top:2px}
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div id="loading">
   <div class="sp"></div>
-  <div class="ld-msg" id="ld-msg">Calculando ratio SI/SO por SKU...</div>
-  <div class="ld-sub">Electrolux Group · Lavado y Secado · FEN-PC9.5SZ</div>
+  <div class="ld-msg" id="ld-msg">Calculando ratio SI/SO por SKU y retailer...</div>
 </div>
 
 <nav><div class="nav-in">
   <a class="logo" href="index.html"><span class="logo-box">BB</span>BBAPP</a>
   <ul class="nav-links">
     <li><a href="index.html">Inicio</a></li>
-    <li><a href="demo.html" class="active">Probar</a></li>
+    <li><a href="demo.html" class="login"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Acceder</a></li>
     <li><a href="backtest.html">Backtest</a></li>
     <li><a href="demoelux.html" class="active">Demo</a></li>
   </ul>
 </div></nav>
 
-<div class="wrap" id="main" style="display:none">
+<div id="main">
 
-  <div class="ctx-bar">
-    <div>ELECTROLUX GROUP · <span>Lavado y Secado</span> · Lavadora CS · <span>FEN-PC9.5SZ</span> · Todos los retailers</div>
-    <div class="badge">5 FUENTES · 18 MESES · 47,832 FILAS</div>
+  <div class="header">
+    <div class="header-left">
+      <div class="header-tag">Plan de acción · generado 6 jul 2026 · Data semana 29 jun – 5 jul 2026</div>
+      <div class="header-title">Electrolux Group — Lavadora Carga Superior</div>
+      <div class="header-meta">Sell Out · Sell In · Inv. Distribuidor · Inv. Retail · GfK · Semana 29 jun – 5 jul 2026 · 8,412 filas · Haz click en cualquier fila para ver el detalle</div>
+    </div>
+    <div class="header-badge">SEMANA 29 JUN – 5 JUL · 5 FUENTES</div>
   </div>
 
-  <!-- MODO -->
-  <div class="mode-grid">
-    <div class="mode-btn" onclick="modo('historial')">
-      <div class="mb-ico">📜</div>
-      <div class="mb-lbl">Historial SKU</div>
-      <div class="mb-sub">La historia completa</div>
+  <div class="resumen-row">
+    <div class="res-kpi red">
+      <div class="kl">Acciones urgentes</div>
+      <div class="kv">6</div>
+      <div class="ks">semana 29 jun – 5 jul</div>
     </div>
-    <div class="mode-btn active" onclick="modo('forecast')" id="btn-forecast">
-      <div class="mb-ico">📊</div>
-      <div class="mb-lbl">Forecast</div>
-      <div class="mb-sub">Próximos 12 meses</div>
+    <div class="res-kpi red">
+      <div class="kl">Impacto en riesgo</div>
+      <div class="kv">-$1,207M</div>
+      <div class="ks">en riesgo esta semana</div>
     </div>
-    <div class="mode-btn" onclick="modo('alertas')" id="btn-alertas">
-      <div class="mb-ico">🔥</div>
-      <div class="mb-lbl">Alertas</div>
-      <div class="mb-sub">Acciones urgentes</div>
+    <div class="res-kpi green">
+      <div class="kl">Oportunidad activa</div>
+      <div class="kv">+$620M</div>
+      <div class="ks">oportunidad detectada</div>
     </div>
-    <div class="mode-btn" onclick="modo('todo')" id="btn-todo">
-      <div class="mb-ico">📋</div>
-      <div class="mb-lbl">Reporte Completo</div>
-      <div class="mb-sub">Todo junto</div>
-    </div>
-  </div>
-
-  <!-- PANEL HISTORIAL -->
-  <div class="panel" id="p-historial">
-    <div class="moraleja">
-      <div class="moraleja-label">CONCLUSIÓN</div>
-      <div class="moraleja-text">El PC9.5SZ vendió bien hasta agosto 2025. En septiembre regalaste el precio (-30%) para limpiar inventario acumulado por loading excesivo. En noviembre Cyber Monday llegaste sin stock al piso. Falabella metió Midea a $179K y no te va a dar el espacio de vuelta gratis.</div>
-    </div>
-
-    <div class="tag-row">
-      <span class="tag red">TENDENCIA: CAYENDO</span>
-      <span class="tag red">2 QUIEBRES DETECTADOS</span>
-      <span class="tag amber">FIRE SALE SEP-OCT 2025</span>
-      <span class="tag green">LAVA-SECA: OPORTUNIDAD</span>
-    </div>
-
-    <div class="kpi-row">
-      <div class="kpi red">
-        <div class="kpi-label">SO Total período</div>
-        <div class="kpi-val">12,847</div>
-        <div class="kpi-sub">un · 18 meses</div>
-      </div>
-      <div class="kpi amber">
-        <div class="kpi-label">PVP Promedio</div>
-        <div class="kpi-val amber">$198K</div>
-        <div class="kpi-sub">vs $235K target</div>
-      </div>
-      <div class="kpi red">
-        <div class="kpi-label">Margen estimado</div>
-        <div class="kpi-val red">31%</div>
-        <div class="kpi-sub">vs 38% objetivo</div>
-      </div>
-      <div class="kpi green">
-        <div class="kpi-label">Mejor retailer</div>
-        <div class="kpi-val green">Sodimac</div>
-        <div class="kpi-sub">2,841 un · nunca quebró</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Impacto acumulado del período</div>
-      <div class="card-sub">Solo los daños calculables desde tus 5 fuentes</div>
-      <div class="impacto-row">
-        <div class="impacto-cell">
-          <div class="impacto-monto">-$487M</div>
-          <div class="impacto-titulo">Quiebre en piso de venta</div>
-          <div class="impacto-det">Nov-Dic 2025 sin stock. Baseline 284 un/mes × 2 meses × $198K = venta no capturada</div>
-          <div class="impacto-fuente">SO × Inv.Retail × GfK — Samsung +18% en esos mismos meses en Falabella</div>
-        </div>
-      </div>
-      <div class="impacto-row">
-        <div class="impacto-cell">
-          <div class="impacto-monto">-$312M</div>
-          <div class="impacto-titulo">Destrucción de precio — fire sale Sep-Oct</div>
-          <div class="impacto-det">PVP $164K vs promedio $198K · 1,840 un a precio regalado · competencia NO bajó</div>
-          <div class="impacto-fuente">SO precio × GfK competencia — Samsung mantuvo $248K en el mismo período</div>
-        </div>
-      </div>
-      <div class="impacto-row">
-        <div class="impacto-cell">
-          <div class="impacto-monto">-$228M</div>
-          <div class="impacto-titulo">Pérdida de exhibición — Falabella</div>
-          <div class="impacto-det">De 420 un/mes → 189 un/mes. Espacio cedido a Midea. No recupera sin negociación activa.</div>
-          <div class="impacto-fuente">SO retailer × GfK share — Midea +34% Falabella desde Dic 2025</div>
-        </div>
-      </div>
-      <div style="margin-top:10px;padding:10px 12px;background:#fff5f5;border:1px solid rgba(192,57,43,.2);display:flex;justify-content:space-between;align-items:center">
-        <div style="font-size:10px;color:var(--text3)">DAÑO TOTAL ESTIMADO · período ene 2025 – jun 2026</div>
-        <div style="font-size:20px;font-weight:700;color:var(--red)">-$1,027M</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Cobertura por retailer — 18 meses</div>
-      <div class="card-sub">Verde = stock ok · Naranja = bajo · Rojo = quiebre · Borde rojo = quiebre prolongado</div>
-      <div id="heatmap-ret"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Sell Out vs Sell In — FEN-PC9.5SZ</div>
-      <div class="card-sub">Unidades por mes · gap azul = acumulando · rojo = agotando</div>
-      <svg id="sosiChart" viewBox="0 0 700 180" style="width:100%" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="res-kpi amber">
+      <div class="kl">SKUs con problema</div>
+      <div class="kv">8</div>
+      <div class="ks">de 14 SKUs esta semana</div>
     </div>
   </div>
 
-  <!-- PANEL FORECAST -->
-  <div class="panel show" id="p-forecast">
-    <div class="exec">
-      <div class="exec-label">RESUMEN EJECUTIVO — ANALISTA SENIOR</div>
-      <div class="exec-text">
-        FEN-PC9.5SZ proyecta <b>3,240 unidades en H2 2026</b>, un 23% por debajo del H2 2024 normalizado. La base se contrae porque el fire sale de septiembre 2025 destruyó el precio de referencia del segmento entry en Falabella y Ripley — ahora el consumidor ancla en $179K (Midea). <b>El riesgo principal no es demanda: es precio piso.</b> Sin recuperar el PVP a $210K+ antes de CyberDay, el margen de contribución del SKU queda negativo después de rebates. La oportunidad real está en Lava-Seca (FEN-PERC11): mercado creció +28% YoY y el segmento no tiene sobrestock estructural.
-      </div>
-    </div>
-
-    <div class="kpi-row">
-      <div class="kpi blue">
-        <div class="kpi-label">Forecast H2 2026</div>
-        <div class="kpi-val">3,240</div>
-        <div class="kpi-sub">unidades · Jul–Dic</div>
-      </div>
-      <div class="kpi amber">
-        <div class="kpi-label">vs H2 2025</div>
-        <div class="kpi-val amber">-23%</div>
-        <div class="kpi-sub">contracción por precio</div>
-      </div>
-      <div class="kpi green">
-        <div class="kpi-label">Accuracy modelo</div>
-        <div class="kpi-val green">91.4%</div>
-        <div class="kpi-sub">backtest ene–jun 2026</div>
-      </div>
-      <div class="kpi red">
-        <div class="kpi-label">Riesgo PVP</div>
-        <div class="kpi-val red">$179K</div>
-        <div class="kpi-sub">piso Midea en Falabella</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Forecast Sell Out — Jul 2026 – Jun 2027</div>
-      <div class="card-sub">Proyección ajustada · histórico SO + estacionalidad + señales mercado GfK</div>
-      <svg id="fcChart" viewBox="0 0 700 200" style="width:100%;margin:8px 0" xmlns="http://www.w3.org/2000/svg"></svg>
-      <table class="dt">
-        <tr><th>Mes</th><th class="r">Forecast Un.</th><th class="r">Venta Est. CLP</th><th class="r">vs año ant.</th><th class="r">Confianza</th></tr>
-        <tr><td>Jul 2026</td><td class="r">298</td><td class="r">$59M</td><td class="r warn">-8%</td><td class="r ok">Alta</td></tr>
-        <tr><td>Ago 2026</td><td class="r">312</td><td class="r">$62M</td><td class="r warn">-12%</td><td class="r ok">Alta</td></tr>
-        <tr><td>Sep 2026</td><td class="r">380</td><td class="r">$76M</td><td class="r bad">+131%</td><td class="r warn">Media*</td></tr>
-        <tr><td>Oct 2026</td><td class="r">290</td><td class="r">$57M</td><td class="r bad">+82%</td><td class="r warn">Media*</td></tr>
-        <tr><td>Nov 2026</td><td class="r">510</td><td class="r">$101M</td><td class="r bad">+1,700%</td><td class="r warn">Media†</td></tr>
-        <tr><td>Dic 2026</td><td class="r">380</td><td class="r">$75M</td><td class="r bad">+1,900%</td><td class="r warn">Media†</td></tr>
-        <tr><td>Ene 2027</td><td class="r">245</td><td class="r">$49M</td><td class="r ok">-8%</td><td class="r ok">Alta</td></tr>
-        <tr><td>Feb 2027</td><td class="r">218</td><td class="r">$43M</td><td class="r ok">-5%</td><td class="r ok">Alta</td></tr>
-        <tr><td>Mar 2027</td><td class="r">252</td><td class="r">$50M</td><td class="r ok">+3%</td><td class="r ok">Alta</td></tr>
-        <tr><td>Abr 2027</td><td class="r">265</td><td class="r">$53M</td><td class="r ok">+7%</td><td class="r ok">Alta</td></tr>
-        <tr><td>May 2027</td><td class="r">305</td><td class="r">$60M</td><td class="r ok">+4%</td><td class="r ok">Alta</td></tr>
-        <tr><td>Jun 2027</td><td class="r">285</td><td class="r">$57M</td><td class="r ok">+2%</td><td class="r ok">Alta</td></tr>
-        <tr class="tot"><td>TOTAL 12M</td><td class="r">3,740</td><td class="r">$742M</td><td class="r warn">-11%</td><td class="r"></td></tr>
-      </table>
-      <div style="font-size:9px;color:var(--text3);margin-top:6px">* Sep-Oct 2025 base distorsionada por fire sale · † Nov-Dic 2025 quiebre total = base 0, comparación no representativa</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Factores de ajuste al forecast base</div>
-      <div class="card-sub">Señales que el modelo SO puro no captura</div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg)">
-          <span style="font-size:11px;font-weight:700;color:var(--red);width:50px;text-align:right;flex-shrink:0">-14%</span>
-          <span style="font-size:11px;font-weight:600">Midea ancló precio en $179K en Falabella y Hites</span>
-          <span style="font-size:9px;color:var(--text3);margin-left:auto">GfK + Precios web</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg)">
-          <span style="font-size:11px;font-weight:700;color:var(--red);width:50px;text-align:right;flex-shrink:0">-8%</span>
-          <span style="font-size:11px;font-weight:600">Lead time Brasil 10-12 semanas post-cierre Maipú</span>
-          <span style="font-size:9px;color:var(--text3);margin-left:auto">Puertos + Aduanas</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg)">
-          <span style="font-size:11px;font-weight:700;color:var(--amber);width:50px;text-align:right;flex-shrink:0">+6%</span>
-          <span style="font-size:11px;font-weight:600">Google Trends lavadoras sube +22% vs jun 2025</span>
-          <span style="font-size:9px;color:var(--text3);margin-left:auto">Google Trends</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg)">
-          <span style="font-size:11px;font-weight:700;color:var(--aqua);width:50px;text-align:right;flex-shrink:0">+11%</span>
-          <span style="font-size:11px;font-weight:600">CyberDay Mayo 2027 — modelo con stock confirmado</span>
-          <span style="font-size:9px;color:var(--text3);margin-left:auto">Calendario retail</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg)">
-          <span style="font-size:11px;font-weight:700;color:var(--red);width:50px;text-align:right;flex-shrink:0">-4%</span>
-          <span style="font-size:11px;font-weight:600">Samsung anunció promo permanente 9kg $210K en Ripley</span>
-          <span style="font-size:9px;color:var(--text3);margin-left:auto">Retail Ads</span>
-        </div>
-      </div>
-    </div>
+  <div class="filtros">
+    <button class="filtro-btn on" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('urgente',this)">🔴 Urgente</button>
+    <button class="filtro-btn" onclick="filtrar('quiebre',this)">Sin stock</button>
+    <button class="filtro-btn" onclick="filtrar('firesale',this)">Fire sale</button>
+    <button class="filtro-btn" onclick="filtrar('sobrestock',this)">Sobrestock</button>
+    <button class="filtro-btn" onclick="filtrar('oportunidad',this)">Oportunidad</button>
   </div>
 
-  <!-- PANEL ALERTAS -->
-  <div class="panel" id="p-alertas">
-    <div class="accion-box">
-      <div class="accion-box-title">QUÉ HACER AHORA</div>
-      <div class="accion-item">Recuperar espacio Falabella antes de CyberDay: negociar con datos — Midea tiene 0 stock en Falabella Maipú desde Jun 2026 (GfK lo confirma).</div>
-      <div class="accion-item">Bloquear precio piso $210K en Falabella y Ripley antes de agosto — el fire sale Sep 2025 destruyó el ancla de precio del segmento.</div>
-      <div class="accion-item">Pedir forecast de compra para Nov 2026 con 14 semanas de anticipación dado lead time Brasil post-Maipú.</div>
-      <div class="accion-item">Activar FEN-PERC11 (Lava-Seca 11kg): mercado creció +28% YoY, Falabella tiene góndola vacía desde mayo 2026.</div>
-    </div>
+  <div class="tabla-wrap">
+  <table class="plan">
+    <thead>
+      <tr>
+        <th>SKU</th>
+        <th>Retailer</th>
+        <th>Situación</th>
+        <th>Qué hacer</th>
+        <th>Por qué — cruce de data</th>
+        <th>Urgencia</th>
+        <th class="r">Impacto CLP</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
 
-    <div class="alert critica">
-      <div class="alert-tag">CRÍTICA</div><span class="alert-monto">-$487M</span>
-      <div class="alert-title">Quiebre Cyber — Falabella sin stock Nov-Dic 2025</div>
-      <div class="alert-det">SO cayó a 18 un en noviembre (baseline 284). Inv. Retail = 0 en Falabella y Ripley. Samsung vendió 1,840 un en esos mismos meses en los mismos retailers. No fue falta de demanda: fue falta de producto tuyo.</div>
-      <div class="alert-accion">Confirmar stock Nov 2026 con 14 semanas de anticipación · Lead time Brasil = 10-12 semanas</div>
-    </div>
+      <!-- FEN-PC9.5SZ -->
+      <tr data-tags="urgente quiebre" onclick="expand(this)">
+        <td><div class="sku-cod">FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td><span class="ret">Falabella</span></td>
+        <td><span class="estado quiebre">Sin stock</span></td>
+        <td><div class="accion-texto"><b>Confirmar OC ahora.</b> Inv. Retail = 0 al cierre semana. Sell Out = 0. GfK muestra demanda activa en canal.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Inv. Retail Falabella = 0 al 5 jul · Sell Out semana = 0 un · GfK: Midea tiene 184 un disponibles en canal<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">SO · Inv.Retail · GfK</div></div></td>
+        <td><span class="urg alta">Esta semana</span></td>
+        <td class="r"><span class="impacto pos">+$340M</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        GfK jun 2026: Midea bajó de 520 → 184 un en Falabella. Inv. Retail Falabella = 0 al 5 jul 2026. Sell Out semana = 0 un. GfK semana: Midea vendió 38 un en ese canal. Inv. Distribuidor disponible: 124 un — hay stock para reponer ahora.
+        <div class="detalle-accion">→ Despachar desde Inv. Distribuidor (124 un disponibles) a Falabella esta semana</div>
+        <div class="detalle-fuentes">Fuentes: GfK jun 2026 · Inv. Retail Falabella · Inv. Distribuidor</div>
+      </td></tr>
 
-    <div class="alert critica">
-      <div class="alert-tag">CRÍTICA</div><span class="alert-monto">-$312M</span>
-      <div class="alert-title">Fire sale Sep-Oct 2025 destruyó precio de referencia</div>
-      <div class="alert-det">PVP promedio cayó a $164K en Sep 2025 (-30% vs promedio histórico $235K). Se vendieron 1,840 un a precio regalado mientras Samsung mantuvo $248K y LG $235K. El consumidor ahora ancla el segmento 9.5kg en $179K (Midea). Vas a tener que ganar eso de vuelta con argumento de calidad, no con promo.</div>
-      <div class="alert-accion">Bloquear precio piso $210K mínimo en todos los retailers antes de agosto 2026</div>
-    </div>
+      <tr data-tags="urgente firesale" onclick="expand(this)">
+        <td><div class="sku-cod">FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td><span class="ret">Falabella + Ripley</span></td>
+        <td><span class="estado firesale">Precio destruido</span></td>
+        <td><div class="accion-texto"><b>Bloquear piso $210K.</b> Sell Out semana muestra PVP promedio $181K — por debajo del objetivo.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Sell Out semana 29 jun–5 jul: PVP promedio $181K · GfK: Samsung $248K, LG $235K, Midea $179K esa misma semana<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">SO precio · GfK competencia</div></div></td>
+        <td><span class="urg alta">Antes de ago</span></td>
+        <td class="r"><span class="impacto neg">-$312M</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        PVP promedió $164K en sep 2025 (-30% vs histórico $235K). Samsung mantuvo $248K y LG $235K en los mismos meses. El consumidor ahora ancla el segmento 9.5kg en $179K (Midea). Recuperar precio requiere argumento de calidad, no promo.
+        <div class="detalle-accion">→ Bloquear precio piso $210K en todos los retailers antes de agosto 2026</div>
+        <div class="detalle-fuentes">Fuentes: Sell Out precio · GfK competencia sep-oct 2025</div>
+      </td></tr>
 
-    <div class="alert critica">
-      <div class="alert-tag">CRÍTICA</div><span class="alert-monto">-$228M/año</span>
-      <div class="alert-title">Falabella entró Midea — espacio cedido no vuelve solo</div>
-      <div class="alert-det">Falabella bajó de 420 un/mes (ene-ago 2025) a 189 un/mes (ene-jun 2026). GfK confirma que Midea creció +34% en Falabella en el mismo período. El buyer de Falabella recibió un quiebre en Cyber, llenó el espacio con Midea y el modelo es exitoso para ellos. Sin propuesta concreta, el espacio no vuelve.</div>
-      <div class="alert-accion">Llevar a la reunión con Falabella: sell-through del PC9.5SZ vs Midea, margen por m2 de góndola, propuesta exclusiva Nov 2026</div>
-    </div>
+      <tr data-tags="urgente quiebre" onclick="expand(this)">
+        <td><div class="sku-cod">FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td><span class="ret">Todos</span></td>
+        <td><span class="estado quiebre">OC crítica</span></td>
+        <td><div class="accion-texto"><b>OC para Nov 2026 debe salir antes del 12 ago.</b> Inv. Distribuidor cubre solo 3 semanas al ritmo actual.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Inv. Distribuidor al 5 jul: 124 un · Sell Out semana: 41 un · DOH = 21 días · Lead time Brasil = 10-12 semanas<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">Inv.Dist · SI · contexto Maipú</div></div></td>
+        <td><span class="urg alta">12 ago — tope</span></td>
+        <td class="r"><span class="impacto neg">-$487M</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Post-cierre fábrica Maipú (abr 2026), todo viene de Brasil. Lead time mínimo 10 semanas. Para tener stock en CyberDay noviembre necesitas la OC antes del 12 de agosto sin margen. El año pasado quebraste en Cyber y Falabella metió Midea como reemplazo permanente.
+        <div class="detalle-accion">→ Emitir OC antes del 12 agosto · No hay margen de error</div>
+        <div class="detalle-fuentes">Fuentes: Sell In histórico · Inv. Distribuidor · contexto cierre Maipú</div>
+      </td></tr>
 
-    <div class="alert advertencia">
-      <div class="alert-tag">ADVERTENCIA</div><span class="alert-monto">$180M riesgo</span>
-      <div class="alert-title">Sobrestock Mademsa 18SZG en Hites y La Polar — 847 un sin rotación</div>
-      <div class="alert-det">DOH = 94 días. Hites lleva 3 meses sin vender. La Polar 2 meses. Con lead time Brasil, si no se mueve antes de agosto va a pedir devolución o penalización. Midea también compite fuerte en ese segmento.</div>
-      <div class="alert-accion">Activar acuerdo de sell-out: promo coordinada Hites + La Polar semana 28-32, sin tocar precio en Falabella ni Ripley</div>
-    </div>
+      <!-- FEN-PC18SZ -->
+      <tr data-tags="urgente oportunidad" onclick="expand(this)">
+        <td><div class="sku-cod">FEN-PC18SZ</div><div class="sku-desc">Fensa 18kg Silver CS</div></td>
+        <td><span class="ret">Ripley</span></td>
+        <td><span class="estado oportunidad">Oportunidad</span></td>
+        <td><div class="accion-texto"><b>Reposición Ripley.</b> Inv. Retail = 8 un al 5 jul. Al ritmo de Sell Out esta semana, quiebra en 6 días.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">GfK: CS 18kg+ creció +12% YoY en Ripley · Sell Out PC18SZ Ripley plano 6 meses · Sell Out Samsung +12% en Ripley vs Fensa plano<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">GfK · SO Ripley</div></div></td>
+        <td><span class="urg media">Este mes</span></td>
+        <td class="r"><span class="impacto pos">+$180M</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        GfK: segmento CS 18kg+ creció +12% YoY en Ripley. Falabella lidera con Samsung pero FEN-PC18SZ tiene el mejor margen del portafolio Fensa CS. Inv. Retail Ripley está bajo mínimo.
+        <div class="detalle-accion">→ Presentar propuesta exhibición premium Ripley antes del 20 jul</div>
+        <div class="detalle-fuentes">Fuentes: GfK por retailer · Sell Out Ripley CS 18kg+</div>
+      </td></tr>
 
-    <div class="alert oportunidad">
-      <div class="alert-tag">OPORTUNIDAD</div><span class="alert-monto">+$340M</span>
-      <div class="alert-title">Midea quiebra en Falabella — ventana de 60 días</div>
-      <div class="alert-det">GfK junio 2026: Midea cayó de 520 un/mes a 184 un en Falabella. Supply chain Brasil también los golpeó. Falabella tiene góndola vacía en 9-10kg. Si llegas con stock confirmado para agosto, puedes recuperar el espacio sin negociación de precio.</div>
-      <div class="alert-accion">Confirmar disponibilidad bodega PC9.5SZ y PC12SZ para agosto 2026 · Contactar buyer Falabella esta semana</div>
-    </div>
+      <tr data-tags="sobrestock" onclick="expand(this)">
+        <td><div class="sku-cod">FEN-PC18SZ</div><div class="sku-desc">Fensa 18kg Silver CS</div></td>
+        <td><span class="ret">Lider</span></td>
+        <td><span class="estado sobrestock">Sobrestock</span></td>
+        <td><div class="accion-texto"><b>Sobrestock Lider.</b> Inv. Retail = 312 un. Sell Out semana = 4 un. DOH = 78 días.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Inv. Retail Lider al 5 jul: 312 un · Sell Out semana: 4 un · Sell In última semana: 0 un · DOH = 78 días<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">Inv.Retail · SO · SI</div></div></td>
+        <td><span class="urg media">Semana 28-30</span></td>
+        <td class="r"><span class="impacto warn">$95M riesgo</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Inv. Retail Lider muestra 78 DOH en PC18SZ. Sell Out lleva 6 semanas flat. Con lead time Brasil actual, si no se mueve antes de agosto puede generar penalización de Lider o solicitud de devolución.
+        <div class="detalle-accion">→ Activar promo sell-out Lider semana 28-30 · No tocar precio en Falabella ni Ripley</div>
+        <div class="detalle-fuentes">Fuentes: Inv. Retail Lider · Sell Out histórico · Sell In</div>
+      </td></tr>
 
-    <div class="alert oportunidad">
-      <div class="alert-tag">OPORTUNIDAD</div><span class="alert-monto">+$280M</span>
-      <div class="alert-title">Lava-Seca FEN-PERC11 — mercado +28% YoY, góndola vacía Falabella</div>
-      <div class="alert-det">GfK: Lava-Seca creció de 1,840 un/mes (H1 2025) a 2,350 un/mes (H1 2026). Falabella tiene 4 posiciones de góndola para Lava-Seca y actualmente 2 están con LG. Electrolux no tiene presencia en esa góndola desde Feb 2026. El PERC11 tiene el margen más alto del portafolio (48% est.).</div>
-      <div class="alert-accion">Priorizar PERC11 y PERC14 en próxima importación · Propuesta góndola Falabella agosto 2026</div>
-    </div>
+      <!-- MAD-18SZG -->
+      <tr data-tags="urgente sobrestock" onclick="expand(this)">
+        <td><div class="sku-cod">MAD-18SZG</div><div class="sku-desc">Mademsa 18kg Silver CS</div></td>
+        <td><span class="ret">Hites + La Polar</span></td>
+        <td><span class="estado sobrestock">Sobrestock</span></td>
+        <td><div class="accion-texto"><b>847 un sin rotación.</b> Inv. Retail = 847 un. Sell Out semana = 9 un. DOH = 94 días.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Inv. Retail Hites al 5 jul: 521 un · Inv. Retail La Polar: 326 un · Sell Out semana total: 9 un · DOH = 94 días<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">Inv.Retail · GfK Midea</div></div></td>
+        <td><span class="urg alta">Antes de ago</span></td>
+        <td class="r"><span class="impacto warn">$180M riesgo</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Hites lleva 3 meses sin vender MAD-18SZG. La Polar 2 meses. DOH consolidado = 94 días. Midea compite fuerte en ese segmento ($179K vs $235K Mademsa). Con lead time Brasil y cierre Maipú, si te devuelven el stock no lo puedes recolocar rápido.
+        <div class="detalle-accion">→ Promo coordinada Hites + La Polar semana 28-32 · Sin tocar precio en Falabella ni Ripley</div>
+        <div class="detalle-fuentes">Fuentes: Inv. Retail Hites + La Polar · Sell Out histórico · GfK Midea</div>
+      </td></tr>
+
+      <!-- MAD-9.5SZG -->
+      <tr data-tags="quiebre" onclick="expand(this)">
+        <td><div class="sku-cod">MAD-9.5SZG</div><div class="sku-desc">Mademsa 9.5kg Silver CS</div></td>
+        <td><span class="ret">Paris</span></td>
+        <td><span class="estado quiebre">Sin stock</span></td>
+        <td><div class="accion-texto"><b>Reposición urgente.</b> Inv. Retail Paris = 0 al 5 jul. Sell Out = 0. GfK: competencia vendió 22 un esa semana.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Inv. Retail Paris al 5 jul: 0 un · Sell Out semana Paris: 0 un · GfK semana: competencia vendió 22 un en ese canal · Inv. Distribuidor disponible: 88 un<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">Inv.Retail · SO · GfK</div></div></td>
+        <td><span class="urg alta">Esta semana</span></td>
+        <td class="r"><span class="impacto neg">-$84M</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Inv. Retail Paris = 0 desde mayo 2026. Sell Out cayó de 68 un/mes a 0. GfK muestra que el segmento entry Mademsa sigue activo en Paris — la competencia está capturando esa demanda. Post-Maipú este SKU viene de Brasil con 10-12 semanas de lead time.
+        <div class="detalle-accion">→ Verificar stock bodega MAD-9.5SZG · Reposición Paris esta semana si hay stock disponible</div>
+        <div class="detalle-fuentes">Fuentes: Inv. Retail Paris · Sell Out · GfK segmento entry</div>
+      </td></tr>
+
+      <!-- ELX-EFLWM14O -->
+      <tr data-tags="oportunidad" onclick="expand(this)">
+        <td><div class="sku-cod">ELX-EFLWM14O</div><div class="sku-desc">Electrolux CF 14kg</div></td>
+        <td><span class="ret">Falabella</span></td>
+        <td><span class="estado oportunidad">Oportunidad</span></td>
+        <td><div class="accion-texto"><b>Reposición CF Falabella.</b> Inv. Retail ELX CF = 0 al 5 jul. GfK: segmento CF activo esa semana.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Inv. Retail ELX CF Falabella al 5 jul: 0 un · Sell Out semana: 0 un · GfK semana: Samsung vendió 48 CF en ese canal · Inv. Distribuidor: 34 un disponibles<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">GfK · SO ELX CF · Inv.Retail</div></div></td>
+        <td><span class="urg media">Este mes</span></td>
+        <td class="r"><span class="impacto pos">+$100M</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        GfK: CF creció +18% YoY. Inv. Retail ELX CF Falabella = 0 hace 4 meses. Sell Out ELX CF cayó a 0 en ese período. Inv. Distribuidor tiene unidades disponibles — el problema es reposición, no demanda.
+        <div class="detalle-accion">→ Propuesta visibilidad CF Falabella: ELX-EFLWM12O + EFLWM14O · Antes del 25 jul</div>
+        <div class="detalle-fuentes">Fuentes: GfK CF por retailer · Sell Out Electrolux CF histórico</div>
+      </td></tr>
+
+      <!-- FEN-PERC11 -->
+      <tr data-tags="urgente oportunidad" onclick="expand(this)">
+        <td><div class="sku-cod">FEN-PERC11</div><div class="sku-desc">Fensa Lava-Seca 11kg Inverter</div></td>
+        <td><span class="ret">Falabella</span></td>
+        <td><span class="estado oportunidad">Inv. Retail = 0</span></td>
+        <td><div class="accion-texto"><b>Reposición Lava-Seca.</b> Inv. Retail PERC11 = 0 al 5 jul. GfK: LG vendió 28 Lava-Seca esa semana en Falabella.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Inv. Retail PERC11 Falabella al 5 jul: 0 un · Sell Out semana: 0 un · GfK semana: LG vendió 28 Lava-Seca en ese canal · Inv. Distribuidor PERC11: 56 un disponibles<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">GfK · Inv.Retail Falabella</div></div></td>
+        <td><span class="urg alta">Antes de ago</span></td>
+        <td class="r"><span class="impacto pos">+$280M</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        GfK: Lava-Seca creció de 1,840 un/mes (H1 2025) a 2,350 un/mes (H1 2026) en Chile total. Inv. Retail PERC11 = 0 desde feb 2026. Sell Out cayó a 0 en el mismo mes. GfK muestra que el mercado Lava-Seca sigue creciendo. Inv. Distribuidor tiene stock disponible para reposición inmediata.
+        <div class="detalle-accion">→ Priorizar PERC11 en próxima OC · Reponer Inv. Retail Falabella agosto 2026</div>
+        <div class="detalle-fuentes">Fuentes: GfK Lava-Seca · Inv. Retail Falabella · Sell Out PERC11 histórico</div>
+      </td></tr>
+
+      <!-- MAD-7DBZG -->
+      <tr data-tags="quiebre" onclick="expand(this)">
+        <td><div class="sku-cod">MAD-7DBZG</div><div class="sku-desc">Mademsa Secadora 7kg Blanco</div></td>
+        <td><span class="ret">Todos</span></td>
+        <td><span class="estado quiebre">Sin stock</span></td>
+        <td><div class="accion-texto"><b>Quiebre total.</b> Inv. Retail = 0. Inv. Distribuidor = 0. Sin reposición posible sin OC a Brasil.</div></td>
+        <td><div style="font-size:10px;color:var(--text2);line-height:1.5;max-width:260px">Inv. Retail al 5 jul: 0 un · Inv. Distribuidor: 0 un · Sell Out semana: 0 un · GfK semana: Samsung vendió 14 secadoras 7kg en esos canales<div style="margin-top:3px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.5px">SO · Inv.Dist · GfK secadoras</div></div></td>
+        <td><span class="urg alta">Decisión esta semana</span></td>
+        <td class="r"><span class="impacto neg">-$44M</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        MAD-7DBZG se fabricaba 100% en Maipú. Post-cierre abril 2026 no hay reemplazo activo. Sell Out cayó a 0. GfK muestra que Samsung y LG capturaron el segmento secadoras 7kg. Decisión: importar desde Brasil (10-12 semanas, margen comprimido) o discontinuar y defender con FEN-PC7D (Fensa).
+        <div class="detalle-accion">→ Decisión go/no-go importación Brasil esta semana · Si no-go: activar FEN-PC7D como sustituto</div>
+        <div class="detalle-fuentes">Fuentes: Sell Out histórico · contexto cierre Maipú · GfK secadoras</div>
+      </td></tr>
+
+    </tbody>
+  </table>
   </div>
 
-  <!-- PANEL TODO -->
-  <div class="panel" id="p-todo"></div>
-
-</div><!-- /wrap -->
+</div>
 
 <script>
-// ─── DATA ───
-const MESES = ['Ene 25','Feb 25','Mar 25','Abr 25','May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26','Jun 26'];
-const SO = [248,212,295,278,342,318,378,410,180,164,18,22,148,162,198,112,175,192];
-const SI = [220,190,310,340,410,490,520,580,710,140,0,0,130,165,195,0,160,185];
-const RETAILERS = ['Falabella','Ripley','Paris','Hites','La Polar','Lider','Sodimac'];
-// Heatmap data: 0=quiebre, 1=bajo, 2=ok
-const HM = {
-  'Falabella': [2,2,2,2,2,2,2,2,1,1,0,0,1,1,1,1,1,1],
-  'Ripley':    [2,2,2,2,2,2,2,2,1,0,0,0,1,1,2,1,2,2],
-  'Paris':     [2,2,2,2,2,2,2,2,2,2,0,0,1,2,2,0,2,2],
-  'Hites':     [2,2,1,2,2,2,2,2,0,0,0,0,0,1,1,0,1,1],
-  'La Polar':  [1,1,2,2,2,2,2,1,0,0,0,0,0,0,1,0,1,1],
-  'Lider':     [2,2,2,2,2,2,2,2,2,1,0,0,2,2,2,2,2,2],
-  'Sodimac':   [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-};
-const FC_MESES = ['Jul 26','Ago 26','Sep 26','Oct 26','Nov 26','Dic 26','Ene 27','Feb 27','Mar 27','Abr 27','May 27','Jun 27'];
-const FC_UDS   = [298,312,380,290,510,380,245,218,252,265,305,285];
-
-// ─── LOADING ───
-const msgs = [
-  'Calculando ratio SI/SO por SKU y retailer...',
-  'Detectando desacoples entre despacho y venta real...',
-  'Localizando quiebres históricos por SKU crítico...',
-  'Cuantificando ventas perdidas por falta de stock...',
-  'Identificando fire sales en historial de precios...',
-  'Cruzando Sell Out con participación de mercado...',
-  'Detectando sustitución hacia marcas competidoras...',
-  'Calculando impacto comercial de decisiones de stock...',
-  'Estimando demanda no capturada por ejecución...',
-  'Conectando inventario, demanda y share en una sola historia...'
-];
-let mi = 0;
-const ldEl = document.getElementById('ld-msg');
-const ldInt = setInterval(() => { mi = (mi+1) % msgs.length; ldEl.textContent = msgs[mi]; }, 1800);
-
+const msgs = ['Leyendo Sell Out semana 29 jun – 5 jul...','Cruzando Sell In con Inv. Distribuidor...','Detectando SKUs sin reposición esta semana...','Calculando cobertura de inventario por canal...','Cruzando con GfK semana 29 jun – 5 jul...','Detectando quiebres y sobrestocks por SKU...','Generando plan de acción...'];
+let i = 0;
+const el = document.getElementById('ld-msg');
+const iv = setInterval(() => { i=(i+1)%msgs.length; el.textContent=msgs[i]; }, 1600);
 setTimeout(() => {
-  clearInterval(ldInt);
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('main').style.display = 'block';
-  buildHeatmap();
-  buildSOSI();
-  buildFC();
-  buildTodo();
-}, 4800);
+  clearInterval(iv);
+  document.getElementById('loading').style.display='none';
+  document.getElementById('main').style.display='block';
+}, 4200);
 
-// ─── MODO ───
-function modo(m) {
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
-  const idx = ['historial','forecast','alertas','todo'].indexOf(m);
-  document.querySelectorAll('.mode-btn')[idx].classList.add('active');
-  document.getElementById('p-'+m).classList.add('show');
+function expand(row) {
+  const next = row.nextElementSibling;
+  if (!next || !next.classList.contains('fila-detalle')) return;
+  next.style.display = next.style.display === 'table-row' ? 'none' : 'table-row';
 }
 
-// ─── HEATMAP ───
-function buildHeatmap() {
-  const container = document.getElementById('heatmap-ret');
-  const colors = ['#c0392b','#b85c00','#0f7173'];
-  const ops = [0.7, 0.35, 0.5];
-  let html = '<div style="display:grid;grid-template-columns:70px repeat(18,1fr);gap:2px;font-size:7px">';
-  html += '<div></div>';
-  MESES.forEach(m => { html += `<div style="text-align:center;color:var(--text3);writing-mode:vertical-lr;transform:rotate(180deg);height:28px;display:flex;align-items:center;justify-content:center">${m.slice(0,6)}</div>`; });
-  RETAILERS.forEach(r => {
-    html += `<div style="font-size:8px;color:var(--dk);display:flex;align-items:center;font-weight:700">${r}</div>`;
-    HM[r].forEach((v, i) => {
-      const c = colors[v]; const o = ops[v];
-      const tip = `${r} ${MESES[i]}: ${v===0?'⚠ QUIEBRE':v===1?'bajo':'ok'}`;
-      html += `<div style="background:${c};opacity:${o};height:18px;border-radius:2px" title="${tip}"></div>`;
-    });
+function filtrar(tag, btn) {
+  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const rows = document.querySelectorAll('#tbody tr:not(.fila-detalle)');
+  rows.forEach(row => {
+    const tags = row.dataset.tags || '';
+    const show = tag === 'todos' || tags.includes(tag);
+    row.classList.toggle('hidden', !show);
+    const next = row.nextElementSibling;
+    if (next && next.classList.contains('fila-detalle')) {
+      next.style.display = 'none';
+      next.classList.toggle('hidden', !show);
+    }
   });
-  html += '</div>';
-  html += '<div style="display:flex;gap:10px;margin-top:6px;font-size:8px;color:var(--text3)">';
-  html += '<span><span style="display:inline-block;width:10px;height:10px;background:#0f7173;opacity:.5;border-radius:2px;vertical-align:middle"></span> Stock ok</span>';
-  html += '<span><span style="display:inline-block;width:10px;height:10px;background:#b85c00;opacity:.4;border-radius:2px;vertical-align:middle"></span> Bajo</span>';
-  html += '<span><span style="display:inline-block;width:10px;height:10px;background:#c0392b;opacity:.7;border-radius:2px;vertical-align:middle"></span> Quiebre</span>';
-  html += '</div>';
-  container.innerHTML = html;
-}
-
-// ─── SO vs SI CHART ───
-function buildSOSI() {
-  const svg = document.getElementById('sosiChart');
-  const W=700,H=180,PL=42,PR=8,PT=20,PB=30;
-  const pw=W-PL-PR, ph=H-PT-PB;
-  const n=SO.length;
-  const allV = [...SO,...SI];
-  const yMax = Math.max(...allV)*1.08;
-  function px(i){return PL+i/(n-1)*pw}
-  function py(v){return PT+ph*(1-v/yMax)}
-  let s='';
-  // Grid
-  for(let g=0;g<=4;g++){
-    const gy=PT+ph/4*g; const gv=Math.round(yMax-yMax/4*g);
-    s+=`<line x1="${PL}" y1="${gy}" x2="${W-PR}" y2="${gy}" stroke="rgba(0,0,0,.05)"/>`;
-    s+=`<text x="${PL-4}" y="${gy+3}" font-size="8" fill="#9a94b0" text-anchor="end">${gv}</text>`;
-  }
-  // Gap fill
-  SO.forEach((v,i)=>{
-    if(i>=n-1)return;
-    const siV=SI[i],siV2=SI[i+1],soV=v,soV2=SO[i+1];
-    const clr=siV>soV?'rgba(26,13,71,0.06)':'rgba(192,57,43,0.08)';
-    s+=`<polygon points="${px(i)},${py(soV)} ${px(i+1)},${py(soV2)} ${px(i+1)},${py(siV2)} ${px(i)},${py(siV)}" fill="${clr}"/>`;
-  });
-  // SI line
-  const siPts=SI.map((v,i)=>v>0?`${px(i)},${py(v)}`:null).filter(Boolean);
-  if(siPts.length) s+=`<polyline points="${siPts.join(' ')}" fill="none" stroke="#b85c00" stroke-width="1.8" stroke-dasharray="5,3" opacity=".6"/>`;
-  // SO line
-  s+=`<polyline points="${SO.map((v,i)=>`${px(i)},${py(v)}`).join(' ')}" fill="none" stroke="#1a0d47" stroke-width="2.5" stroke-linejoin="round"/>`;
-  // Dots + events
-  SO.forEach((v,i)=>{
-    const prev=i>0?SO[i-1]:v;
-    const isQ=v<30;
-    const isFS=v>0&&v<200&&i>=8&&i<=10;
-    s+=`<circle cx="${px(i)}" cy="${py(v)}" r="${isQ?5:3}" fill="${isQ?'#fff':'#1a0d47'}" ${isQ?'stroke="#c0392b" stroke-width="2"':''}/>`;
-    s+=`<text x="${px(i)}" y="${py(v)+(v<prev?11:-7)}" font-size="7" fill="${isQ?'#c0392b':isFS?'#b85c00':'#1a0d47'}" text-anchor="middle" font-weight="${isQ||isFS?'700':'400'}">${v}</text>`;
-    if(isFS) s+=`<rect x="${px(i)-16}" y="4" width="33" height="11" fill="rgba(184,92,0,.12)" rx="2"/><text x="${px(i)}" y="12" font-size="6" fill="#b85c00" text-anchor="middle" font-weight="700">FIRE SALE</text>`;
-    if(isQ) s+=`<rect x="${px(i)-10}" y="4" width="20" height="11" fill="rgba(192,57,43,.12)" rx="2"/><text x="${px(i)}" y="12" font-size="6" fill="#c0392b" text-anchor="middle">QUIEBRE</text>`;
-  });
-  // X labels
-  MESES.forEach((m,i)=>{
-    const isQ=SO[i]<30;
-    s+=`<text x="${px(i)}" y="${H-6}" font-size="7" fill="${isQ?'#c0392b':'#666'}" text-anchor="middle">${m}</text>`;
-  });
-  // Legend
-  s+=`<line x1="${PL}" y1="${H-2}" x2="${PL+16}" y2="${H-2}" stroke="#1a0d47" stroke-width="2.5"/><text x="${PL+20}" y="${H}" font-size="7" fill="#666">SO</text>`;
-  s+=`<line x1="${PL+50}" y1="${H-2}" x2="${PL+66}" y2="${H-2}" stroke="#b85c00" stroke-width="1.8" stroke-dasharray="4,3"/><text x="${PL+70}" y="${H}" font-size="7" fill="#b85c00">SI</text>`;
-  svg.innerHTML = s;
-}
-
-// ─── FORECAST CHART ───
-function buildFC() {
-  const svg = document.getElementById('fcChart');
-  const W=700,H=200,PL=42,PR=8,PT=20,PB=36;
-  const pw=W-PL-PR, ph=H-PT-PB;
-  const hist = SO.slice(-6);
-  const histM = MESES.slice(-6);
-  const allPts = [...hist,...FC_UDS];
-  const yMax = Math.max(...allPts)*1.12;
-  const n = allPts.length;
-  function px(i){return PL+i/(n-1)*pw}
-  function py(v){return PT+ph*(1-v/yMax)}
-  let s='';
-  // Grid
-  for(let g=0;g<=4;g++){
-    const gy=PT+ph/4*g; const gv=Math.round(yMax-yMax/4*g);
-    s+=`<line x1="${PL}" y1="${gy}" x2="${W-PR}" y2="${gy}" stroke="rgba(0,0,0,.04)"/>`;
-    s+=`<text x="${PL-4}" y="${gy+3}" font-size="8" fill="#9a94b0" text-anchor="end">${gv}</text>`;
-  }
-  // Forecast zone
-  const splitI=hist.length-1;
-  s+=`<rect x="${px(splitI)}" y="${PT}" width="${pw-(px(splitI)-PL)}" height="${ph}" fill="rgba(15,113,115,.04)"/>`;
-  s+=`<line x1="${px(splitI)}" y1="${PT}" x2="${px(splitI)}" y2="${PT+ph}" stroke="#F5DF4D" stroke-width="2"/>`;
-  s+=`<text x="${px(splitI)+4}" y="${PT+10}" font-size="8" fill="#b85c00" font-weight="700">HOY</text>`;
-  // Confidence band
-  const fcStart=splitI;
-  let bandTop='',bandBot='';
-  for(let i=fcStart;i<n;i++){
-    const v=allPts[i]; const spread=v*0.12;
-    bandTop+=`${px(i)},${py(v+spread)} `;
-    bandBot=`${px(i)},${py(v-spread)} `+bandBot;
-  }
-  s+=`<polygon points="${bandTop}${bandBot}" fill="rgba(15,113,115,.08)"/>`;
-  // Lines
-  const histLine=hist.map((v,i)=>`${px(i)},${py(v)}`).join(' ');
-  s+=`<polyline points="${histLine}" fill="none" stroke="#1a0d47" stroke-width="2.5" stroke-linejoin="round"/>`;
-  const fcLine=FC_UDS.map((v,i)=>`${px(i+splitI)},${py(v)}`).join(' ');
-  s+=`<polyline points="${px(splitI)},${py(hist[hist.length-1])} ${fcLine}" fill="none" stroke="#0f7173" stroke-width="2" stroke-dasharray="6,3" stroke-linejoin="round"/>`;
-  // Dots
-  hist.forEach((v,i)=>{ s+=`<circle cx="${px(i)}" cy="${py(v)}" r="3" fill="#1a0d47"/>`; });
-  FC_UDS.forEach((v,i)=>{ s+=`<circle cx="${px(i+splitI)}" cy="${py(v)}" r="3" fill="#0f7173"/>`; });
-  // X labels
-  const allM=[...histM,...FC_MESES];
-  allM.forEach((m,i)=>{ if(i%2===0||i===n-1) s+=`<text x="${px(i)}" y="${H-6}" font-size="7" fill="#666" text-anchor="middle">${m}</text>`; });
-  // Legend
-  s+=`<rect x="${PL}" y="${H-4}" width="10" height="4" fill="#1a0d47"/><text x="${PL+14}" y="${H}" font-size="7" fill="#666">SO real</text>`;
-  s+=`<line x1="${PL+70}" y1="${H-2}" x2="${PL+86}" y2="${H-2}" stroke="#0f7173" stroke-width="2" stroke-dasharray="5,3"/><text x="${PL+90}" y="${H}" font-size="7" fill="#0f7173">Forecast</text>`;
-  s+=`<rect x="${PL+150}" y="${H-6}" width="10" height="8" fill="rgba(15,113,115,.12)" rx="1"/><text x="${PL+164}" y="${H}" font-size="7" fill="#0f7173">Banda confianza ±12%</text>`;
-  svg.innerHTML = s;
-}
-
-// ─── TODO panel ───
-function buildTodo() {
-  const p = document.getElementById('p-todo');
-  p.innerHTML = document.getElementById('p-forecast').innerHTML + document.getElementById('p-alertas').innerHTML + document.getElementById('p-historial').innerHTML;
 }
 </script>
 </body>
