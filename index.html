@@ -3,379 +3,474 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BBAPP — Tu data conversa</title>
+<title>BBAPP — Electrolux Group</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:      #F2F0EC;
-  --white:   #FFFFFF;
-  --orange:  #0496ff;
-  --red:     #8acdea;
-  --violet:  #0f7173;
-  --dk:      #1a0d47;
-  --gold:    #F5DF4D;
-  --border:  #E0DDD7;
-  --text:    #1a0d47;
-  --text2:   #5a5370;
-  --text3:   #9a94b0;
-}
+:root{--bg:#F2F0EC;--white:#FFF;--dk:#1a0d47;--gold:#F5DF4D;--border:#E0DDD7;--text:#1a0d47;--text2:#5a5370;--text3:#9a94b0;--aqua:#0f7173;--red:#c0392b;--amber:#b85c00}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased}
 
-* { margin:0; padding:0; box-sizing:border-box; }
+nav{position:sticky;top:0;z-index:100;background:rgba(242,240,236,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 32px}
+.nav-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--dk);text-decoration:none}
+.logo-box{background:var(--dk);color:var(--gold);font-size:13px;font-weight:700;padding:4px 7px;letter-spacing:.5px}
+.nav-links{display:flex;gap:4px;align-items:center;list-style:none}
+.nav-links a{font-size:13px;font-weight:700;color:var(--text3);text-decoration:none;padding:5px 12px;transition:color .15s}
+.nav-links a:hover{color:var(--dk)}
+.nav-links a.active{color:var(--dk);border-bottom:2px solid var(--dk)}
+.nav-links a.login{border:1.5px solid var(--dk);color:var(--dk);display:inline-flex;align-items:center;gap:5px;padding:4px 12px}
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Lato', sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
+#loading{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.sp{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--dk);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ld-msg{font-size:12px;color:var(--text2);font-weight:300}
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 48px;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-}
+#main{display:none;max-width:1060px;margin:0 auto;padding:24px 32px 60px}
 
-.nav-inner {
-  max-width: 1060px;
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+.header{margin-bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.header-left{}
+.header-tag{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.header-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--dk)}
+.header-meta{font-size:11px;color:var(--text3);font-weight:300;margin-top:2px}
+.header-badge{background:var(--dk);color:var(--gold);font-size:9px;font-weight:700;padding:4px 10px;letter-spacing:1px;white-space:nowrap}
 
-.logo {
-  display: flex;
-  align-items: center;
-  font-family: 'Lato', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--dk);
-  text-decoration: none;
-}
+/* FILTROS */
+.filtros{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.filtro-btn{padding:5px 14px;font-size:11px;font-weight:700;border:1.5px solid var(--border);background:var(--white);color:var(--text3);cursor:pointer;font-family:'Lato',sans-serif;transition:all .12s}
+.filtro-btn:hover{border-color:var(--dk);color:var(--dk)}
+.filtro-btn.on{background:var(--dk);border-color:var(--dk);color:var(--gold)}
 
-.logo-box {
-  background: var(--dk);
-  color: var(--gold);
-  font-weight: 700;
-  font-size: 14px;
-  padding: 4px 7px;
-  letter-spacing: 0.5px;
-  margin-right: 8px;
-}
+/* TABLA */
+.tabla-wrap{overflow-x:auto}
+table.plan{width:100%;border-collapse:collapse;font-size:12px}
+.plan thead th{background:var(--dk);color:rgba(255,255,255,.7);padding:8px 12px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
+.plan thead th.r{text-align:right}
+.plan tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.plan tbody tr:hover{background:rgba(26,13,71,.03)}
+.plan tbody tr.hidden{display:none}
+.plan td{padding:9px 12px;vertical-align:middle}
+.plan td.r{text-align:right}
 
-.nav-links { display: flex; gap: 36px; list-style: none; }
+/* SKU cell */
+.sku-cod{font-weight:700;color:var(--dk);font-size:12px}
+.sku-desc{font-size:10px;color:var(--text3);font-weight:300;margin-top:1px}
 
-.nav-links a {
-  font-family: 'Lato', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text2);
-  text-decoration: none;
-  padding-bottom: 4px;
-  transition: color 0.15s;
-}
+/* Retailer */
+.ret{font-weight:600;color:var(--dk)}
 
-.nav-links a.active { color: var(--dk); border-bottom: 2px solid var(--dk); }
-.nav-links a:hover { color: var(--dk); }
+/* Estado badge */
+.estado{display:inline-block;font-size:8px;font-weight:700;padding:2px 7px;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
+.estado.quiebre{background:var(--red);color:#fff}
+.estado.firesale{background:var(--amber);color:#fff}
+.estado.sobrestock{background:#7c3aed;color:#fff}
+.estado.ok{background:#e5e7eb;color:#374151}
+.estado.oportunidad{background:var(--aqua);color:#fff}
 
-.hero {
-  text-align: center;
-  padding: 80px 48px 64px;
-  max-width: 860px;
-  margin: 0 auto;
-}
+/* Acción */
+.accion-texto{font-size:11px;color:var(--text);line-height:1.4;max-width:320px}
+.accion-texto b{color:var(--dk)}
 
-.hero h1 {
-  font-family: 'Libre Baskerville', serif;
-  font-size: clamp(26px, 4vw, 42px);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--dk);
-  margin-bottom: 24px;
-  letter-spacing: -0.5px;
-}
+/* Urgencia */
+.urg{font-size:9px;font-weight:700;padding:2px 8px;border-radius:0;letter-spacing:.5px;white-space:nowrap}
+.urg.alta{background:#fee2e2;color:var(--red)}
+.urg.media{background:#fef3c7;color:#92400e}
+.urg.baja{background:#d1fae5;color:#065f46}
 
-.highlight {
-  background: var(--red);
-  padding: 0 6px 2px;
-  display: inline-block;
-  color: var(--dk);
-}
+/* Impacto */
+.impacto{font-family:'Courier New',monospace;font-weight:700;font-size:12px;white-space:nowrap}
+.impacto.neg{color:var(--red)}
+.impacto.pos{color:var(--aqua)}
+.impacto.warn{color:var(--amber)}
 
-.hero p {
-  font-family: 'Lato', sans-serif;
-  font-size: 16px;
-  color: var(--text2);
-  line-height: 1.7;
-  font-weight: 300;
-  max-width: 600px;
-  margin: 0 auto;
-}
+/* Detalle expandible */
+.fila-detalle{display:none;background:#fafaf8}
+.fila-detalle td{padding:10px 12px 14px 36px;font-size:11px;color:var(--text2);line-height:1.6;font-weight:300;border-bottom:2px solid var(--border)}
+.fila-detalle .detalle-accion{font-size:10px;font-weight:700;color:var(--aqua);margin-top:6px}
+.fila-detalle .detalle-fuentes{font-size:9px;color:var(--text3);margin-top:4px;font-style:italic}
 
-.section { padding: 48px 0; }
+/* resumen */
+.resumen-row{display:flex;gap:8px;margin-bottom:14px}
+.res-kpi{flex:1;background:var(--white);border:1px solid var(--border);border-left:3px solid;padding:10px 14px}
+.res-kpi.red{border-left-color:var(--red)}
+.res-kpi.amber{border-left-color:var(--amber)}
+.res-kpi.green{border-left-color:var(--aqua)}
+.res-kpi .kl{font-size:8px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.res-kpi .kv{font-size:20px;font-weight:700}
+.res-kpi.red .kv{color:var(--red)}
+.res-kpi.amber .kv{color:var(--amber)}
+.res-kpi.green .kv{color:var(--aqua)}
+.res-kpi .ks{font-size:9px;color:var(--text3);margin-top:2px}
 
-.section-label {
-  font-family: 'Lato', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 24px;
-  text-align: center;
-}
+.foda-f{display:inline-block;background:#0f7173;color:#fff;font-size:8px;font-weight:700;padding:2px 6px;letter-spacing:1px;margin-bottom:2px}
+.foda-o{display:inline-block;background:#0496ff;color:#fff;font-size:8px;font-weight:700;padding:2px 6px;letter-spacing:1px;margin-bottom:2px}
+.foda-d{display:inline-block;background:#c0392b;color:#fff;font-size:8px;font-weight:700;padding:2px 6px;letter-spacing:1px;margin-bottom:2px}
+.foda-a{display:inline-block;background:#b85c00;color:#fff;font-size:8px;font-weight:700;padding:2px 6px;letter-spacing:1px;margin-bottom:2px}
 
-.matrix-wrap {
-  overflow-x: auto;
-  width: 100%;
-  max-width: 1060px;
-  margin: 0 auto;
-  padding: 0 48px;
-}
+.decision-ia{font-size:11px;font-weight:700;color:var(--dk);line-height:1.4;max-width:160px}
+.decision-ia b{color:var(--aqua)}
+.decision-conf{font-size:8px;color:var(--text3);margin-top:3px;font-weight:400}
+.costo-no{font-size:13px;font-weight:700;color:var(--red);white-space:nowrap}
+.costo-no-label{font-size:8px;color:var(--text3);font-weight:400;margin-top:1px}
 
-.matrix { border-collapse: collapse; width: 100%; }
-
-.matrix th, .matrix td {
-  border: 1px solid var(--border);
-  padding: 12px 14px;
-  font-size: 13px;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.matrix thead th {
-  background: var(--dk);
-  color: rgba(255,255,255,0.75);
-  font-family: 'Lato', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.matrix thead th:first-child { background: var(--bg); border: 1px solid var(--border); }
-
-.matrix td.row-head {
-  background: var(--dk);
-  color: rgba(255,255,255,0.75);
-  font-family: 'Lato', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: left;
-}
-
-.matrix td.empty { background: #E8E5DF; color: #C0BCB5; font-size: 14px; }
-.matrix td.cell { background: var(--white); font-size: 12px; color: var(--text2); transition: background 0.12s; }
-.matrix td.cell:hover { background: #F5F3EF; }
-.matrix td.red { color: #c0392b; font-weight: 700; background: #fff5f5; }
-.matrix td.cell small { display:block; font-size:11px; font-weight:400; color: var(--text2); margin-top:4px; line-height:1.4; }
-.matrix td.red small { color: #7a2020; opacity: 0.8; }
-.matrix td.amber { color: #b85c00; font-weight: 700; background: #fffbf0; }
-.matrix td.amber small { color: #5a3a00; opacity: 0.8; }
-.matrix td.neutral { color: var(--text); font-weight: 600; background: #f7f6ff; }
-.matrix td.neutral small { color: var(--text2); opacity: 0.8; }
-
-.matrix-mobile { display: none; }
-.m-card { border-left: 4px solid; background: var(--white); padding: 14px 16px; border-bottom: 1px solid var(--border); }
-.m-card:last-child { border-bottom: none; }
-.m-card.blue { border-color: var(--orange); }
-.m-card.sky  { border-color: var(--red); }
-.m-card-sources { font-size: 10px; color: var(--text3); margin-bottom: 4px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.m-card-title { font-family: 'Libre Baskerville', serif; font-size: 15px; color: var(--dk); margin-bottom: 3px; }
-.m-card-title.blue { color: var(--orange); }
-.m-card-title.sky  { color: var(--red); }
-.m-card-sub { font-size: 12px; color: var(--text2); font-weight: 300; line-height: 1.45; }
-
-.does-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.does-item {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 20px 22px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-.does-icon { font-size: 24px; flex-shrink: 0; }
-.does-text { font-size: 14px; color: var(--text2); line-height: 1.5; font-weight: 300; }
-.does-text strong { color: var(--dk); font-weight: 700; display: block; margin-bottom: 2px; }
-@media (max-width:680px){ .does-grid { grid-template-columns: 1fr; } }
-
-.alt-card {
-  border: 1.5px solid var(--violet);
-  border-radius: 8px;
-  padding: 28px 32px;
-  background: rgba(15,113,115,0.03);
-  max-width: 660px;
-  margin: 0 auto;
-}
-.alt-card-title { font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700; color: var(--dk); margin-bottom: 16px; }
-.alt-card-title span { color: var(--violet); }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-.chip { border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--text2); background: var(--white); font-family: 'Lato', sans-serif; font-weight: 400; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
-.chip:hover { border-color: var(--violet); color: var(--violet); }
-.alt-desc { font-size: 13px; color: var(--text2); line-height: 1.6; font-weight: 300; }
-
-.foot { padding: 20px 56px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text3); text-align: center; font-family: 'Lato', sans-serif; font-weight: 300; }
-
-@media (max-width:680px) {
-  nav { padding: 16px 20px; }
-  .nav-links { gap: 20px; }
-  .hero { padding: 40px 20px 32px; }
-  .hero h1 { font-size: 26px; }
-  .section { padding: 32px 20px; }
-  .matrix-wrap { display: none; }
-  .matrix-mobile { display: block; }
-  .does-grid { grid-template-columns: 1fr; }
-  .alt-card { padding: 20px; }
-  .foot { padding: 16px 20px; }
-}
+.plan{table-layout:auto;min-width:900px}
+.plan td,.plan th{white-space:normal}
+.plan td:nth-child(4){max-width:140px;font-size:11px}
+.plan td:nth-child(5){max-width:100px}
+.plan td:nth-child(6){max-width:140px;font-size:11px}
+.plan td:nth-child(7){max-width:160px;font-size:11px}
+.plan td:nth-child(8){min-width:100px;font-size:13px;white-space:nowrap;font-weight:700}
 </style>
 </head>
 <body>
 
-<nav><div class="nav-inner">
-  <a class="logo" href="index.html">
-    <span class="logo-box">BB</span>
-    BBAPP
-  </a>
+<div id="loading">
+  <div class="sp"></div>
+  <div class="ld-msg" id="ld-msg">Calculando ratio SI/SO por SKU y retailer...</div>
+</div>
+
+<nav><div class="nav-in">
+  <a class="logo" href="index.html"><span class="logo-box">BB</span>BBAPP</a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active">Inicio</a></li>
-    <li><a href="demo.html">Probar</a></li>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="demo.html" class="login"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Acceder</a></li>
     <li><a href="backtest.html">Backtest</a></li>
-    <li><a href="demoelux.html">Demo</a></li>
+    <li><a href="demoelux.html" class="active">Demo</a></li>
   </ul>
 </div></nav>
 
-<div class="hero">
-  <h1>Tu data ya existe.<br>BBAPP la cruza y la hace <span class="highlight">conversar</span>.</h1>
-  <p>Sell Out · Sell In · Inv. Retail · Inv. Distrib. · GfK — cruzados con AI en tiempo real.</p>
-  <div class="does-grid" style="margin-top:40px;text-align:left">
-    <div class="does-item">
-      <div class="does-icon">📈</div>
-      <div class="does-text"><strong>Proyecta el forecast</strong> y mide tu accuracy en el tiempo</div>
+<div id="main">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="header-tag">Plan de acción · generado 6 jul 2026 · Data semana 29 jun – 5 jul 2026</div>
+      <div class="header-title">Electrolux Group — Lavadora Carga Superior</div>
+      <div class="header-meta">Sell Out · Sell In · Inv. Distribuidor · Inv. Retail · GfK · Semana 29 jun – 5 jul 2026 · 8,412 filas · Haz click en cualquier fila para ver el detalle</div>
     </div>
-    <div class="does-item">
-      <div class="does-icon">🚨</div>
-      <div class="does-text"><strong>Detecta riesgos</strong> antes de que cuesten plata</div>
+    <div class="header-badge">SEMANA 29 JUN – 5 JUL · 5 FUENTES</div>
+  </div>
+
+  <div class="resumen-row">
+    <div class="res-kpi red">
+      <div class="kl">Acciones urgentes</div>
+      <div class="kv">6</div>
+      <div class="ks">semana 29 jun – 5 jul</div>
     </div>
-    <div class="does-item">
-      <div class="does-icon">⚙️</div>
-      <div class="does-text"><strong>Optimiza recursos</strong> — inventario, caja y despachos</div>
+    <div class="res-kpi red">
+      <div class="kl">Impacto en riesgo</div>
+      <div class="kv" style="font-size:16px">5 SKUs<br>sin stock</div>
+      <div class="ks">o con sobrestock crítico</div>
     </div>
-    <div class="does-item">
-      <div class="does-icon">🎯</div>
-      <div class="does-text"><strong>Entrega acciones</strong> concretas para llegar al target</div>
+    <div class="res-kpi green">
+      <div class="kl">Oportunidad activa</div>
+      <div class="kv" style="font-size:16px">302 un</div>
+      <div class="ks">en bodega sin despachar</div>
+    </div>
+    <div class="res-kpi amber">
+      <div class="kl">SKUs con problema</div>
+      <div class="kv">8</div>
+      <div class="ks">de 14 SKUs esta semana</div>
     </div>
   </div>
-</div>
 
-<div class="section" style="padding-top:0;">
-  <div class="section-label">Qué pasa cuando cruzas tu data</div>
-  <div class="matrix-wrap">
-    <table class="matrix">
-      <thead>
-        <tr>
-          <th></th>
-          <th>🛍️ Sell Out</th>
-          <th>📦 Sell In</th>
-          <th>🏪 Inv. Retail</th>
-          <th>🚛 Inv. Distrib.</th>
-          <th>📊 GfK</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="row-head">🛍️ Sell Out</td>
-          <td class="empty">—</td>
-          <td class="cell amber">💸 Plata atrapada<small>Stock que no rota es plata que no vuelve</small></td>
-          <td class="cell red">🚨 Venta perdida<small>Plata que se fue a la competencia. Hoy.</small></td>
-          <td class="cell red">🚨 Sin stock<small>Cada día sin stock es una venta que no recuperas</small></td>
-          <td class="cell red">📉 Pierdes mercado<small>Subes en ventas pero pierdes participación</small></td>
-        </tr>
-        <tr>
-          <td class="row-head">📦 Sell In</td>
-          <td class="cell amber">⚠️ Mandaste de más<small>Evita devoluciones o capital congelado</small></td>
-          <td class="empty">—</td>
-          <td class="cell amber">⚠️ No reciben todo<small>Tu despacho llega incompleto y el retailer te cobra el faltante</small></td>
-          <td class="cell neutral">🔍 Qué viene<small>¿Lo que viene alcanza para el próximo ciclo?</small></td>
-          <td class="cell neutral">🎯 Mucho o poco<small>¿Estás pidiendo lo que el mercado demanda o le regalas cuota a la competencia?</small></td>
-        </tr>
-        <tr>
-          <td class="row-head">🏪 Inv. Retail</td>
-          <td class="cell amber">💸 Stock parado<small>Cuántos días lleva sin moverse. Cuánto te cuesta.</small></td>
-          <td class="cell neutral">🔍 ¿Alcanza?<small>¿El retailer llega al próximo despacho o se queda sin nada?</small></td>
-          <td class="empty">—</td>
-          <td class="cell neutral">🔄 Mover stock<small>Tienes en bodega lo que debería estar en góndola</small></td>
-          <td class="cell red">🚨 Vendes sin stock<small>El mercado demanda pero la góndola está vacía</small></td>
-        </tr>
-        <tr>
-          <td class="row-head">🚛 Inv. Distrib.</td>
-          <td class="cell red">🚨 Nada en camino<small>En 30 días no tienes con qué despachar</small></td>
-          <td class="cell neutral">🔍 ¿Cuándo?<small>¿Cuándo llega el próximo despacho y alcanza o no?</small></td>
-          <td class="cell neutral">📍 ¿Dónde falta?<small>Qué retailer está por quedarse sin stock</small></td>
-          <td class="empty">—</td>
-          <td class="cell neutral">⚖️ Stock vs mercado<small>¿Tu inventario alcanza para la demanda que viene?</small></td>
-        </tr>
-        <tr>
-          <td class="row-head">📊 GfK</td>
-          <td class="cell red">📉 Perdiendo<small>Tu mercado crece. Tu share no.</small></td>
-          <td class="cell neutral">🎯 Cuota óptima<small>¿Estás pidiendo tu parte del mercado?</small></td>
-          <td class="cell neutral">📍 ¿Dónde no estás?<small>Retailers donde el mercado crece pero tú no tienes presencia</small></td>
-          <td class="cell neutral">📦 Inv. mercado<small>¿Tu stock en tránsito está donde el mercado lo necesita?</small></td>
-          <td class="empty">—</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="filtros">
+    <button class="filtro-btn on" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('urgente',this)">🔴 Urgente</button>
+    <button class="filtro-btn" onclick="filtrar('quiebre',this)">Sin stock</button>
+    <button class="filtro-btn" onclick="filtrar('firesale',this)">Fire sale</button>
+    <button class="filtro-btn" onclick="filtrar('sobrestock',this)">Sobrestock</button>
+    <button class="filtro-btn" onclick="filtrar('oportunidad',this)">Oportunidad</button>
   </div>
-</div>
 
-<div class="matrix-mobile section" style="padding-top:0;">
-  <div class="section-label">Qué pasa cuando cruzas tu data</div>
-  <div style="border:1px solid var(--border);">
-    <div class="m-card sky"><div class="m-card-sources">SO + Inv. Retail</div><div class="m-card-title sky">Venta perdida</div><div class="m-card-sub">Plata que se fue a la competencia. Hoy.</div></div>
-    <div class="m-card sky"><div class="m-card-sources">SO + Inv. Distrib.</div><div class="m-card-title sky">Sin stock</div><div class="m-card-sub">Cada día sin stock es una venta que no recuperas.</div></div>
-    <div class="m-card sky"><div class="m-card-sources">SO + GfK</div><div class="m-card-title sky">Pierdes mercado</div><div class="m-card-sub">Subes en ventas pero pierdes participación.</div></div>
-    <div class="m-card blue"><div class="m-card-sources">SO + SI</div><div class="m-card-title blue">Plata atrapada</div><div class="m-card-sub">Stock que no rota es plata que no vuelve.</div></div>
-    <div class="m-card blue"><div class="m-card-sources">Inv. Retail + SO</div><div class="m-card-title blue">Stock parado</div><div class="m-card-sub">Cuántos días lleva sin moverse. Cuánto te cuesta.</div></div>
-    <div class="m-card blue"><div class="m-card-sources">Inv. Distrib. + SO</div><div class="m-card-title blue">Nada en camino</div><div class="m-card-sub">En 30 días no tienes con qué despachar.</div></div>
-    <div class="m-card blue"><div class="m-card-sources">GfK + SO</div><div class="m-card-title blue">Perdiendo</div><div class="m-card-sub">Tu mercado crece. Tu share no.</div></div>
-  </div>
-</div>
+  <div class="tabla-wrap">
+  <table class="plan">
+    <thead>
+      <tr>
+        <th>SKU</th>
+        <th>Retailer</th>
+        <th>Situación</th>
+        <th>Qué hacer</th>
+        <th>FODA</th>
+        <th>Decisión IA</th>
+        <th>Costo de no actuar</th>
+        <th class="r" style="cursor:pointer;user-select:none" onclick="sortByImpacto()">Impacto CLP ↕</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
 
-<div class="section" style="padding-top:0;">
-  <div style="max-width:1060px;margin:0 auto;padding:0 48px">
-    <div class="alt-card">
-      <div class="alt-card-title">+ 12 fuentes de <span>Alternative Data</span> que APP procesa</div>
-      <div class="chips">
-        <div class="chip">🔥 Precios web</div>
-        <div class="chip">🌐 Disponibilidad</div>
-        <div class="chip">🔍 Google Trends</div>
-        <div class="chip">🛒 MercadoLibre</div>
-        <div class="chip">🏛️ ChileCompra</div>
-        <div class="chip">🏦 Banco Central</div>
-        <div class="chip">🌤️ Clima</div>
-        <div class="chip">⚓ Puertos</div>
-        <div class="chip">⭐ Reviews + SERNAC</div>
-        <div class="chip">📣 Retail Ads</div>
-        <div class="chip">📅 Calendario</div>
-        <div class="chip">📱 Redes + Web</div>
+      <!-- FEN-PC9.5SZ -->
+      <tr data-tags="urgente quiebre" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#1</span>FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td><span class="ret">Falabella</span></td>
+        <td><span class="estado quiebre">Sin stock</span></td>
+        <td><div class="accion-texto"><b>Despachar desde bodega a Falabella esta semana.</b> 124 un disponibles en Inv. Distribuidor.</div></td>
+        <td><span class="foda-o">O</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Oportunidad: Midea con quiebre — stock propio disponible en bodega para reponer ahora</div></td>
+        <td><div class="decision-ia">Despachar 124 un desde Inv. Distribuidor a Falabella <b>esta semana</b><div class="decision-conf">Confianza 93%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Inv. Retail = 0 un</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Sell Out = 0 un</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Inv. Dist = 124 un disponibles</span></div></td>
+        <td class="r"><span class="impacto pos">124 un · DOH 0</span></td>
+        <td><span class="urg alta">Esta semana</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        GfK jun 2026: Midea bajó de 520 → 184 un en Falabella. Inv. Retail Falabella = 0 al 5 jul 2026. Sell Out semana = 0 un. GfK semana: Midea vendió 38 un en ese canal. Inv. Distribuidor disponible: 124 un — hay stock para reponer ahora.
+        <div class="detalle-accion">→ Despachar desde Inv. Distribuidor (124 un disponibles) a Falabella esta semana</div>
+        <div class="detalle-fuentes">Fuentes: GfK jun 2026 · Inv. Retail Falabella · Inv. Distribuidor</div>
+      </td></tr>
+
+      <tr data-tags="urgente firesale" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#2</span>FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td><span class="ret">Falabella + Ripley</span></td>
+        <td><span class="estado firesale">Precio destruido</span></td>
+        <td><div class="accion-texto"><b>Negociar precio piso $210K con Falabella y Ripley antes de agosto.</b></div></td>
+        <td><span class="foda-d">D</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Debilidad: precio de referencia destruido — competencia mantiene precio mientras tú bajaste</div></td>
+        <td><div class="decision-ia">Mantener PVP actual. <b>No bajar más.</b> Iniciar conversación con buyer sobre precio piso<div class="decision-conf">Confianza 88%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">PVP semana = $181K</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Samsung $248K</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">LG $235K</span><span style="display:block;font-size:11px;color:var(--text2);font-weight:300;line-height:1.6">Gap = $67K/un</span></div></td>
+        <td class="r"><span class="impacto warn">PVP -$67K/un</span></td>
+        <td><span class="urg alta">Antes de ago</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        PVP promedió $164K en sep 2025 (-30% vs histórico $235K). Samsung mantuvo $248K y LG $235K en los mismos meses. El consumidor ahora ancla el segmento 9.5kg en $179K (Midea). Recuperar precio requiere argumento de calidad, no promo.
+        <div class="detalle-accion">→ Bloquear precio piso $210K en todos los retailers antes de agosto 2026</div>
+        <div class="detalle-fuentes">Fuentes: Sell Out precio · GfK competencia sep-oct 2025</div>
+      </td></tr>
+
+      <tr data-tags="urgente quiebre" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#3</span>FEN-PC9.5SZ</div><div class="sku-desc">Fensa 9.5kg Silver CS</div></td>
+        <td><span class="ret">Todos</span></td>
+        <td><span class="estado quiebre">OC crítica</span></td>
+        <td><div class="accion-texto"><b>Emitir OC para Nov 2026 antes del 12 agosto.</b> Inv. Distribuidor: 21 días de cobertura al ritmo actual.</div></td>
+        <td><span class="foda-a">A</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Amenaza: sin reposición Samsung y Midea capturan Cyber Nov 2026 igual que Nov 2025</div></td>
+        <td><div class="decision-ia"><b>Emitir OC esta semana.</b> DOH = 21 días. Sin OC no hay stock en Cyber<div class="decision-conf">Confianza 97%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">DOH = 21 días</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 124 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out = 41 un esta semana</span></div></td>
+        <td class="r"><span class="impacto neg">DOH 21 días</span></td>
+        <td><span class="urg alta">12 ago — tope</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Inv. Distribuidor al 5 jul: 124 un · Sell Out semana: 41 un · DOH = 21 días. Si no repones antes de agosto, llegas sin stock a CyberDay noviembre — igual que el año pasado.
+        <div class="detalle-accion">→ Emitir OC antes del 12 agosto · No hay margen de error</div>
+        <div class="detalle-fuentes">Fuentes: Inv. Distribuidor · Sell Out semana · Sell In</div>
+      </td></tr>
+
+      <!-- FEN-PC18SZ -->
+      <tr data-tags="urgente oportunidad" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#4</span>FEN-PC18SZ</div><div class="sku-desc">Fensa 18kg Silver CS</div></td>
+        <td><span class="ret">Ripley</span></td>
+        <td><span class="estado oportunidad">Oportunidad</span></td>
+        <td><div class="accion-texto"><b>Reponer Inv. Retail Ripley esta semana.</b> Stock actual: 8 un. Quiebra en 6 días al ritmo actual.</div></td>
+        <td><span class="foda-o">O</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Oportunidad: segmento CS 18kg+ creciendo en Ripley — Inv. Dist disponible para reponer</div></td>
+        <td><div class="decision-ia">Reponer Inv. Retail Ripley. <b>Stock quiebra en 6 días</b> al ritmo actual<div class="decision-conf">Confianza 91%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 8 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 6 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Quiebra en ~6 días</span></div></td>
+        <td class="r"><span class="impacto warn">8 un · 6 días</span></td>
+        <td><span class="urg media">Este mes</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        GfK: segmento CS 18kg+ creció +12% YoY en Ripley. Falabella lidera con Samsung pero FEN-PC18SZ tiene el mejor margen del portafolio Fensa CS. Inv. Retail Ripley está bajo mínimo.
+        <div class="detalle-accion">→ Presentar propuesta exhibición premium Ripley antes del 20 jul</div>
+        <div class="detalle-fuentes">Fuentes: GfK por retailer · Sell Out Ripley CS 18kg+</div>
+      </td></tr>
+
+      <tr data-tags="sobrestock" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#5</span>FEN-PC18SZ</div><div class="sku-desc">Fensa 18kg Silver CS</div></td>
+        <td><span class="ret">Lider</span></td>
+        <td><span class="estado sobrestock">Sobrestock</span></td>
+        <td><div class="accion-texto"><b>Activar promo sell-out en Lider semana 28-30.</b> 312 un sin rotación, DOH 78 días.</div></td>
+        <td><span class="foda-d">D</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Debilidad: sobrestock en canal — capital inmovilizado, riesgo de penalización retailer</div></td>
+        <td><div class="decision-ia">Activar promo sell-out semana 28-30. <b>No tocar precio Falabella ni Ripley</b><div class="decision-conf">Confianza 84%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 312 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 4 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">DOH = 78 días</span></div></td>
+        <td class="r"><span class="impacto warn">DOH 78 días</span></td>
+        <td><span class="urg media">Semana 28-30</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Inv. Retail Lider muestra 78 DOH en PC18SZ. Sell Out lleva 6 semanas flat. Si no se mueve antes de agosto puede generar penalización o solicitud de devolución.
+        <div class="detalle-accion">→ Activar promo sell-out Lider semana 28-30 · No tocar precio en Falabella ni Ripley</div>
+        <div class="detalle-fuentes">Fuentes: Inv. Retail Lider · Sell Out histórico · Sell In</div>
+      </td></tr>
+
+      <!-- MAD-18SZG -->
+      <tr data-tags="urgente sobrestock" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#6</span>MAD-18SZG</div><div class="sku-desc">Mademsa 18kg Silver CS</div></td>
+        <td><span class="ret">Hites + La Polar</span></td>
+        <td><span class="estado sobrestock">Sobrestock</span></td>
+        <td><div class="accion-texto"><b>Negociar promo urgente con Hites y La Polar.</b> 847 un sin rotación, DOH 94 días. Riesgo devolución antes de agosto.</div></td>
+        <td><span class="foda-a">A</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Amenaza: Midea sustituyendo activamente en Hites y La Polar — si no vendes, pierdes la posición</div></td>
+        <td><div class="decision-ia">Negociar promo Hites + La Polar semana 28-32. <b>847 un, 94 DOH</b><div class="decision-conf">Confianza 86%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 847 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 9 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">DOH = 94 días</span></div></td>
+        <td class="r"><span class="impacto warn">DOH 94 días</span></td>
+        <td><span class="urg alta">Antes de ago</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Hites lleva 3 meses sin vender MAD-18SZG. La Polar 2 meses. DOH consolidado = 94 días. Midea compite fuerte en ese segmento ($179K vs $235K Mademsa). Si te devuelven el stock el costo de recolocación es alto.
+        <div class="detalle-accion">→ Promo coordinada Hites + La Polar semana 28-32 · Sin tocar precio en Falabella ni Ripley</div>
+        <div class="detalle-fuentes">Fuentes: Inv. Retail Hites + La Polar · Sell Out histórico · GfK Midea</div>
+      </td></tr>
+
+      <!-- MAD-9.5SZG -->
+      <tr data-tags="quiebre" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#7</span>MAD-9.5SZG</div><div class="sku-desc">Mademsa 9.5kg Silver CS</div></td>
+        <td><span class="ret">Paris</span></td>
+        <td><span class="estado quiebre">Sin stock</span></td>
+        <td><div class="accion-texto"><b>Despachar a Paris esta semana.</b> Inv. Retail = 0. 88 un disponibles en Inv. Distribuidor.</div></td>
+        <td><span class="foda-f">F</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Fortaleza: Inv. Distribuidor con 88 un disponibles — se puede reponer inmediatamente</div></td>
+        <td><div class="decision-ia">Despachar 88 un a Paris <b>esta semana.</b> Inv. Retail = 0, demanda activa<div class="decision-conf">Confianza 95%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 88 un disponibles</span></div></td>
+        <td class="r"><span class="impacto neg">Inv.Ret 0 un</span></td>
+        <td><span class="urg alta">Esta semana</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Inv. Retail Paris = 0 al 5 jul. Sell Out semana = 0 un. GfK: competencia vendió 22 un en Paris esa semana. Inv. Distribuidor disponible: 88 un.
+        <div class="detalle-accion">→ Verificar stock bodega MAD-9.5SZG · Reposición Paris esta semana si hay stock disponible</div>
+        <div class="detalle-fuentes">Fuentes: Inv. Retail Paris · Sell Out · GfK segmento entry</div>
+      </td></tr>
+
+      <!-- ELX-EFLWM14O -->
+      <tr data-tags="oportunidad" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#8</span>ELX-EFLWM14O</div><div class="sku-desc">Electrolux CF 14kg</div></td>
+        <td><span class="ret">Falabella</span></td>
+        <td><span class="estado oportunidad">Oportunidad</span></td>
+        <td><div class="accion-texto"><b>Reponer Inv. Retail Falabella CF.</b> Stock = 0. 34 un en Inv. Distribuidor disponibles ahora.</div></td>
+        <td><span class="foda-o">O</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Oportunidad: segmento CF creciendo — Inv. Dist con 34 un disponibles para reponer ahora</div></td>
+        <td><div class="decision-ia">Reponer 34 un CF a Falabella. <b>Samsung ocupa el espacio mientras no estás</b><div class="decision-conf">Confianza 89%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 34 un disponibles</span></div></td>
+        <td class="r"><span class="impacto pos">34 un · bodega</span></td>
+        <td><span class="urg media">Este mes</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        GfK: CF creció +18% YoY. Inv. Retail ELX CF Falabella = 0 hace 4 meses. Sell Out ELX CF cayó a 0 en ese período. Inv. Distribuidor tiene unidades disponibles — el problema es reposición, no demanda.
+        <div class="detalle-accion">→ Propuesta visibilidad CF Falabella: ELX-EFLWM12O + EFLWM14O · Antes del 25 jul</div>
+        <div class="detalle-fuentes">Fuentes: GfK CF por retailer · Sell Out Electrolux CF histórico</div>
+      </td></tr>
+
+      <!-- FEN-PERC11 -->
+      <tr data-tags="urgente oportunidad" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#9</span>FEN-PERC11</div><div class="sku-desc">Fensa Lava-Seca 11kg Inverter</div></td>
+        <td><span class="ret">Falabella</span></td>
+        <td><span class="estado oportunidad">Inv. Retail = 0</span></td>
+        <td><div class="accion-texto"><b>Incluir PERC11 en próxima OC y reponer Inv. Retail Falabella.</b> Stock = 0. 56 un en bodega disponibles.</div></td>
+        <td><span class="foda-o">O</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Oportunidad: mercado Lava-Seca creciendo y Inv. Dist tiene 56 un disponibles — LG ocupa el espacio</div></td>
+        <td><div class="decision-ia">Incluir PERC11 en próxima OC. <b>56 un en bodega disponibles ahora</b><div class="decision-conf">Confianza 87%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 56 un disponibles</span></div></td>
+        <td class="r"><span class="impacto pos">56 un · bodega</span></td>
+        <td><span class="urg alta">Antes de ago</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        GfK: Lava-Seca creció de 1,840 un/mes (H1 2025) a 2,350 un/mes (H1 2026) en Chile total. Inv. Retail PERC11 = 0 desde feb 2026. Sell Out cayó a 0 en el mismo mes. GfK muestra que el mercado Lava-Seca sigue creciendo. Inv. Distribuidor tiene stock disponible para reposición inmediata.
+        <div class="detalle-accion">→ Priorizar PERC11 en próxima OC · Reponer Inv. Retail Falabella agosto 2026</div>
+        <div class="detalle-fuentes">Fuentes: GfK Lava-Seca · Inv. Retail Falabella · Sell Out PERC11 histórico</div>
+      </td></tr>
+
+      <!-- MAD-7DBZG -->
+      <tr data-tags="quiebre" onclick="expand(this)">
+        <td><div class="sku-cod"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px;background:var(--border);padding:1px 5px">#10</span>MAD-7DBZG</div><div class="sku-desc">Mademsa Secadora 7kg Blanco</div></td>
+        <td><span class="ret">Todos</span></td>
+        <td><span class="estado quiebre">Sin stock</span></td>
+        <td><div class="accion-texto"><b>Decidir go/no-go reposición esta semana.</b> Inv. Dist = 0, Inv. Retail = 0. Sin OC no hay stock.</div></td>
+        <td><span class="foda-a">A</span><div style="font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4">Amenaza: Samsung y LG activos en secadoras 7kg — sin reposición, pérdida permanente de segmento</div></td>
+        <td><div class="decision-ia">Decidir go/no-go <b>esta semana.</b> Inv. Dist = 0. Cada semana sin stock es market share cedido<div class="decision-conf">Confianza 79%</div></div></td>
+        <td><div class="costo-no" style="font-size:11px;font-weight:400"><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Retail = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Inv. Dist = 0 un</span><br><span style="display:block;font-size:11px;color:var(--text2);font-weight:300">Sell Out semana = 0 un</span></div></td>
+        <td class="r"><span class="impacto neg">Inv 0/0 un</span></td>
+        <td><span class="urg alta">Decisión esta semana</span></td>
+      </tr>
+      <tr class="fila-detalle"><td colspan="7">
+        Inv. Dist = 0. Inv. Retail = 0. Sell Out = 0. GfK muestra que Samsung y LG vendieron secadoras 7kg esa semana en esos canales.
+        <div class="detalle-accion">→ Decidir si reponer o discontinuar · Si discontinúas: evaluar FEN-PC7D como sustituto</div>
+        <div class="detalle-fuentes">Fuentes: Inv. Distribuidor · Inv. Retail · Sell Out semana · GfK</div>
+      </td></tr>
+
+
+      <!-- TOTAL ROW -->
+      <tr style="background:var(--dk);border-top:3px solid var(--dk)">
+        <td colspan="2" style="padding:10px 12px;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.5px">IMPACTO TOTAL — 10 acciones identificadas esta semana</td>
+        <td style="padding:10px 12px"></td>
+        <td style="padding:10px 12px"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.6)">SIN ACTUAR</div><div style="font-size:13px;font-weight:700;color:#ff6b6b">5 SKUs sin stock · 2 con sobrestock</div></td>
+        <td style="padding:10px 12px;text-align:right"></td>
+        <td colspan="2" style="padding:10px 12px;text-align:right"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.6)">ACTUANDO</div><div style="font-size:20px;font-weight:700;color:var(--gold)">+$620M oportunidad</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  
+  <div style="margin-top:16px;background:var(--white);border:1px solid var(--border);padding:16px 20px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text3);margin-bottom:12px">RESUMEN — SEMANA 29 JUN – 5 JUL 2026</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+      <div>
+        <div style="font-size:8px;font-weight:700;color:var(--red);letter-spacing:.5px;margin-bottom:4px">SIN STOCK (3 filas)</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">#1 FEN-PC9.5SZ · Falabella · 0 un<br>#7 MAD-9.5SZG · Paris · 0 un<br>#10 MAD-7DBZG · Todos · 0 un</div>
       </div>
-      <div class="alt-desc">Datos alternativos de mercado que APP procesa y correlaciona diariamente.</div>
+      <div>
+        <div style="font-size:8px;font-weight:700;color:var(--amber);letter-spacing:.5px;margin-bottom:4px">SOBRESTOCK (2 filas)</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">#5 FEN-PC18SZ · Lider · 312 un · DOH 78d<br>#6 MAD-18SZG · Hites+LP · 847 un · DOH 94d</div>
+      </div>
+      <div>
+        <div style="font-size:8px;font-weight:700;color:var(--aqua);letter-spacing:.5px;margin-bottom:4px">DISPONIBLE EN BODEGA (3 filas)</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">#1 124 un → Falabella<br>#7 88 un → Paris<br>#8 34 un → Falabella CF<br>#9 56 un → PERC11</div>
+      </div>
+      <div>
+        <div style="font-size:8px;font-weight:700;color:var(--amber);letter-spacing:.5px;margin-bottom:4px">PRECIO / OC (2 filas)</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">#2 PVP $181K vs Samsung $248K<br>#3 DOH 21 días · OC urgente</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)">
+      Stock disponible en Inv. Distribuidor sin despachar esta semana: <b style="color:var(--dk)">302 unidades en 4 SKUs</b>
     </div>
   </div>
 </div>
 
-<div class="foot">BBAPP · 2026</div>
+</div>
 
+<script>
+const msgs = ['Leyendo Sell Out semana 29 jun – 5 jul...','Cruzando Sell In con Inv. Distribuidor...','Detectando SKUs sin reposición esta semana...','Calculando cobertura de inventario por canal...','Cruzando con GfK semana 29 jun – 5 jul...','Detectando quiebres y sobrestocks por SKU...','Generando plan de acción...'];
+let i = 0;
+const el = document.getElementById('ld-msg');
+const iv = setInterval(() => { i=(i+1)%msgs.length; el.textContent=msgs[i]; }, 1600);
+setTimeout(() => {
+  clearInterval(iv);
+  document.getElementById('loading').style.display='none';
+  document.getElementById('main').style.display='block';
+}, 4200);
+
+function expand(row) {
+  const next = row.nextElementSibling;
+  if (!next || !next.classList.contains('fila-detalle')) return;
+  next.style.display = next.style.display === 'table-row' ? 'none' : 'table-row';
+}
+
+function filtrar(tag, btn) {
+  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const rows = document.querySelectorAll('#tbody tr:not(.fila-detalle)');
+  rows.forEach(row => {
+    const tags = row.dataset.tags || '';
+    const show = tag === 'todos' || tags.includes(tag);
+    row.classList.toggle('hidden', !show);
+    const next = row.nextElementSibling;
+    if (next && next.classList.contains('fila-detalle')) {
+      next.style.display = 'none';
+      next.classList.toggle('hidden', !show);
+    }
+  });
+}
+
+function sortByImpacto() {
+  const tbody = document.getElementById('tbody');
+  const rows = [];
+  let i = 0;
+  const children = Array.from(tbody.children);
+  while (i < children.length) {
+    const row = children[i];
+    if (row.classList.contains('fila-detalle')) { i++; continue; }
+    const detail = children[i+1] && children[i+1].classList.contains('fila-detalle') ? children[i+1] : null;
+    const imp = row.querySelector('.impacto');
+    const txt = imp ? imp.textContent.replace(/[^0-9]/g,'') : '0';
+    rows.push({ row, detail, val: parseInt(txt) || 0 });
+    i += detail ? 2 : 1;
+  }
+  rows.sort((a,b) => b.val - a.val);
+  rows.forEach(r => {
+    tbody.appendChild(r.row);
+    if (r.detail) { r.detail.style.display='none'; tbody.appendChild(r.detail); }
+  });
+}
+// Auto-sort on load
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(sortByImpacto, 100); });
+
+</script>
 </body>
 </html>
