@@ -91,32 +91,6 @@ nav {
   margin: 0 auto;
 }
 
-.hero-cta {
-  font-family: 'Lato', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--dk);
-  margin-top: 20px;
-}
-
-.hero-greeting {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 18px;
-  font-style: italic;
-  color: var(--violet);
-  margin-bottom: 16px;
-}
-
-.hero-date {
-  font-family: 'Lato', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 24px;
-}
-
 .hero h1 {
   font-family: 'Libre Baskerville', serif;
   font-size: clamp(26px, 4vw, 42px);
@@ -261,26 +235,8 @@ nav {
   .section { padding: 32px 20px; }
   .matrix-wrap { display: none; }
   .matrix-mobile { display: block; }
-  .does-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.does-item {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 20px 22px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-.does-icon { font-size: 24px; flex-shrink: 0; }
-.does-text { font-size: 14px; color: var(--text2); line-height: 1.5; font-weight: 300; }
-.does-text strong { color: var(--dk); font-weight: 700; display: block; margin-bottom: 2px; }
-@media (max-width:680px){ .does-grid { grid-template-columns: 1fr; } }
-
-.alt-card { padding: 20px; }
+  .does-grid { grid-template-columns: 1fr; }
+  .alt-card { padding: 20px; }
   .foot { padding: 16px 20px; }
 }
 </style>
@@ -288,12 +244,14 @@ nav {
 <body>
 
 <nav><div class="nav-inner">
-  <a class="logo" href="#">
+  <a class="logo" href="index.html">
     <span class="logo-box">BB</span>
     BBAPP
   </a>
   <ul class="nav-links">
-    <li><a href="#" class="active">Inicio</a></li>
+    <li><a href="index.html" class="active">Inicio</a></li>
+    <li><a href="demo.html">Probar</a></li>
+    <li><a href="backtest.html">Backtest</a></li>
   </ul>
 </div></nav>
 
@@ -420,4 +378,3 @@ nav {
 
 </body>
 </html>
-
